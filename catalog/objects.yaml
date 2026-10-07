@@ -1,0 +1,251 @@
+# Objets célestes : un objet existe une seule fois et peut avoir plusieurs cartes (séries, variantes).
+# Clé unique : slug. Modifier un objet ici le met à jour dans toutes ses cartes.
+
+objets:
+- slug: terre
+  nom: Terre
+  type: Planète tellurique
+  constellation: Système solaire
+  description: Seule planète connue abritant la vie.
+  faits: Ø 12 742 km · 1 UA
+- slug: saturne
+  nom: Saturne
+  type: Géante gazeuse
+  constellation: Système solaire
+  description: Planète aux anneaux spectaculaires.
+  faits: Ø 116 460 km · 9,6 UA
+- slug: jupiter
+  nom: Jupiter
+  type: Géante gazeuse
+  constellation: Système solaire
+  description: Plus grande planète du Système solaire.
+  faits: Ø 139 820 km · 5,2 UA
+- slug: lune
+  nom: Lune
+  type: Satellite naturel
+  constellation: Système solaire
+  description: Unique satellite naturel de la Terre.
+  faits: Ø 3 474 km · 384 400 km
+- slug: mars
+  nom: Mars
+  type: Planète tellurique
+  constellation: Système solaire
+  description: La planète rouge, cible des missions d'exploration.
+  faits: Ø 6 779 km · 1,5 UA
+- slug: neptune
+  nom: Neptune
+  type: Géante de glaces
+  constellation: Système solaire
+  description: Planète la plus lointaine, balayée par des vents record.
+  faits: Ø 49 244 km · 30 UA
+- slug: pluton
+  nom: Pluton
+  type: Planète naine
+  constellation: Système solaire
+  description: Planète naine de la ceinture de Kuiper.
+  faits: Ø 2 377 km · 39,5 UA
+- slug: io
+  nom: Io
+  type: Satellite de Jupiter
+  constellation: Système solaire
+  description: Monde le plus volcanique du Système solaire.
+  faits: Ø 3 643 km · lune de Jupiter
+- slug: titan
+  nom: Titan
+  type: Satellite de Saturne
+  constellation: Système solaire
+  description: Lune à l'atmosphère dense et aux lacs de méthane.
+  faits: Ø 5 150 km · lune de Saturne
+- slug: charon
+  nom: Charon
+  type: Satellite de Pluton
+  constellation: Système solaire
+  description: Compagne de Pluton, presque aussi grande qu'elle.
+  faits: Ø 1 212 km · lune de Pluton
+- slug: n5128
+  nom: Centaurus A
+  type: Galaxie
+  constellation: Centaure
+  description: Galaxie de la constellation du Centaure, référencé NGC 5128.
+  faits: Galaxie active · ~12 millions al
+- slug: m83
+  nom: Galaxie du Moulinet austral
+  type: Galaxie
+  constellation: Hydre
+  description: Galaxie de la constellation de l'Hydre, objet n°83 du catalogue de Messier, référencé NGC 5236.
+  faits: Galaxie spirale barrée · ~15 millions al
+- slug: n7023
+  nom: Nébuleuse de l'Iris
+  type: Nébuleuse
+  constellation: Céphée
+  description: Nébuleuse de la constellation de Céphée, référencé NGC 7023.
+- slug: n7009
+  nom: Nébuleuse Saturne
+  type: Nébuleuse planétaire
+  constellation: Verseau
+  description: Nébuleuse planétaire de la constellation du Verseau, référencé NGC 7009.
+- slug: n4755
+  nom: Boîte à bijoux
+  type: Amas ouvert
+  constellation: Croix du Sud
+  description: Amas ouvert de la constellation de la Croix du Sud, référencé NGC 4755.
+- slug: n6822
+  nom: Galaxie de Barnard
+  type: Galaxie
+  constellation: Sagittaire
+  description: Galaxie de la constellation du Sagittaire, référencé NGC 6822.
+- slug: n6537
+  nom: Nébuleuse de l'Araignée rouge
+  type: Nébuleuse planétaire
+  constellation: Sagittaire
+  description: Nébuleuse planétaire de la constellation du Sagittaire, référencé NGC 6537.
+- slug: n2261
+  nom: Nébuleuse variable de Hubble
+  type: Nébuleuse par réflexion
+  constellation: Licorne
+  description: Nébuleuse par réflexion de la constellation de la Licorne, référencé NGC 2261.
+- slug: n2736
+  nom: Nébuleuse du Crayon
+  type: Région HII
+  constellation: Voiles
+  description: Région HII de la constellation des Voiles, référencé NGC 2736.
+- slug: n3532
+  nom: Amas du Puits aux souhaits
+  type: Amas ouvert
+  constellation: Carène
+  description: Amas ouvert de la constellation de la Carène, référencé NGC 3532.
+- slug: n6369
+  nom: Nébuleuse du Petit Fantôme
+  type: Nébuleuse planétaire
+  constellation: Ophiuchus
+  description: Nébuleuse planétaire de la constellation d'Ophiuchus, référencé NGC 6369.
+- slug: n1232
+  nom: NGC 1232
+  type: Galaxie
+  constellation: Éridan
+  description: Galaxie de la constellation d'Éridan.
+- slug: n1365
+  nom: NGC 1365
+  type: Galaxie
+  constellation: Fourneau
+  description: Galaxie de la constellation du Fourneau.
+- slug: n1792
+  nom: NGC 1792
+  type: Galaxie
+  constellation: Colombe
+  description: Galaxie de la constellation de la Colombe.
+- slug: n2207
+  nom: NGC 2207
+  type: Galaxie
+  constellation: Grand Chien
+  description: Galaxie de la constellation du Grand Chien.
+- slug: n3621
+  nom: NGC 3621
+  type: Galaxie
+  constellation: Hydre
+  description: Galaxie de la constellation de l'Hydre.
+- slug: n4945
+  nom: NGC 4945
+  type: Galaxie
+  constellation: Centaure
+  description: Galaxie de la constellation du Centaure.
+- slug: n5189
+  nom: NGC 5189
+  type: Nébuleuse planétaire
+  constellation: Mouche
+  description: Nébuleuse planétaire de la constellation de la Mouche.
+- slug: n3293
+  nom: NGC 3293
+  type: Amas ouvert
+  constellation: Carène
+  description: Amas ouvert de la constellation de la Carène.
+- slug: rho-a00
+  nom: Nuage de Rho Ophiuchi
+  type: Nébuleuse obscure
+  constellation: Ophiuchus
+  description: Complexe de nuages moléculaires parmi les plus proches de nous, berceau d'étoiles.
+- slug: rcw49
+  nom: RCW 49
+  type: Région HII
+  constellation: Carène
+  description: Pouponnière stellaire géante autour de l'amas Westerlund 2.
+- slug: ic418
+  nom: IC 418
+  type: Nébuleuse planétaire
+  constellation: Lièvre
+  description: Nébuleuse planétaire de la constellation du Lièvre.
+- slug: ic4406
+  nom: IC 4406
+  type: Nébuleuse planétaire
+  constellation: Loup
+  description: Nébuleuse planétaire de la constellation du Loup.
+- slug: n2818
+  nom: NGC 2818
+  type: Nébuleuse planétaire
+  constellation: Boussole
+  description: Nébuleuse planétaire de la constellation de la Boussole.
+- slug: n5315
+  nom: NGC 5315
+  type: Nébuleuse planétaire
+  constellation: Compas
+  description: Nébuleuse planétaire de la constellation du Compas.
+- slug: u10214
+  nom: Galaxie du Têtard
+  type: Galaxie perturbée
+  constellation: Dragon
+  description: Galaxie spirale étirée par une collision, avec une queue d'étoiles de 280 000 années-lumière.
+- slug: red-rectangle
+  nom: Nébuleuse du Rectangle rouge
+  type: Nébuleuse protoplanétaire
+  constellation: Licorne
+  description: Nébuleuse en forme de X sculptée par une étoile double vieillissante.
+- slug: calabash
+  nom: Nébuleuse de la Calebasse
+  type: Nébuleuse protoplanétaire
+  constellation: Poupe
+  description: Étoile mourante expulsant de la matière à près d'un million de km/h.
+- slug: n2623
+  nom: NGC 2623
+  type: Galaxie
+  constellation: Cancer
+  description: Galaxie de la constellation du Cancer.
+- slug: n7742
+  nom: NGC 7742
+  type: Galaxie
+  constellation: Pégase
+  description: Galaxie de la constellation de Pégase.
+- slug: n2867
+  nom: NGC 2867
+  type: Nébuleuse planétaire
+  constellation: Carène
+  description: Nébuleuse planétaire de la constellation de la Carène.
+- slug: n6572
+  nom: NGC 6572
+  type: Nébuleuse planétaire
+  constellation: Ophiuchus
+  description: Nébuleuse planétaire de la constellation d'Ophiuchus.
+- slug: n5882
+  nom: NGC 5882
+  type: Nébuleuse planétaire
+  constellation: Loup
+  description: Nébuleuse planétaire de la constellation du Loup.
+- slug: n3314
+  nom: NGC 3314
+  type: Paire de galaxies
+  constellation: Hydre
+  description: Paire de galaxies de la constellation de l'Hydre.
+- slug: n3808
+  nom: NGC 3808
+  type: Paire de galaxies
+  constellation: Lion
+  description: Paire de galaxies de la constellation du Lion.
+- slug: n3603
+  nom: NGC 3603
+  type: Amas et nébuleuse
+  constellation: Carène
+  description: Amas et nébuleuse de la constellation de la Carène.
+- slug: hercules-cluster
+  nom: Amas de galaxies d'Hercule
+  type: Amas de galaxies
+  constellation: Hercule
+  description: Amas d'environ 200 galaxies riches en gaz, situé à 500 millions d'années-lumière.
