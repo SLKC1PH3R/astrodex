@@ -46,7 +46,7 @@ cartes:
     defense: 79
     vitesse: 62
   image: terre.webp
-  credit: NASA
+  credit: NASA · Apollo 17 (1972)
   licence: Domaine public
   cadrage: globe
 - numero: 2
@@ -57,7 +57,7 @@ cartes:
     defense: 83
     vitesse: 41
   image: saturne.webp
-  credit: NASA/JPL · Cassini (globe reconstitué)
+  credit: NASA/JPL · Voyager 1 (1980)
   licence: Domaine public
   cadrage: globe-large
 - numero: 3
@@ -68,7 +68,7 @@ cartes:
     defense: 86
     vitesse: 42
   image: jupiter.webp
-  credit: NASA/JPL · Cassini (globe reconstitué)
+  credit: NASA/ESA · Hubble (image composée, 2023)
   licence: Domaine public
   cadrage: globe
 - numero: 4
@@ -79,7 +79,7 @@ cartes:
     defense: 64
     vitesse: 80
   image: lune.webp
-  credit: NASA
+  credit: NASA/JPL · Galileo (1992)
   licence: Domaine public
   cadrage: globe
 - numero: 5
@@ -90,7 +90,7 @@ cartes:
     defense: 75
     vitesse: 48
   image: mars.webp
-  credit: NASA/USGS · Viking (globe reconstitué)
+  credit: NASA/ESA · Hubble (image composée, 2001)
   licence: Domaine public
   cadrage: globe
 - numero: 6
@@ -101,7 +101,7 @@ cartes:
     defense: 81
     vitesse: 32
   image: neptune.webp
-  credit: NASA/JPL · Voyager 2 (globe reconstitué)
+  credit: NASA/JPL · Voyager 2 (image composée, 1989)
   licence: Domaine public
   cadrage: globe
 - numero: 7
@@ -112,7 +112,7 @@ cartes:
     defense: 62
     vitesse: 33
   image: pluton.webp
-  credit: NASA/JHUAPL/SwRI · New Horizons (globe reconstitué)
+  credit: NASA/JHUAPL/SwRI · New Horizons (image composée, 2015)
   licence: Domaine public
   cadrage: globe
 - numero: 8
@@ -123,7 +123,7 @@ cartes:
     defense: 61
     vitesse: 78
   image: io.webp
-  credit: NASA/JPL/USGS · Galileo (globe reconstitué)
+  credit: NASA/JPL · Galileo (image composée, 1999)
   licence: Domaine public
   cadrage: globe
 - numero: 9
@@ -134,7 +134,7 @@ cartes:
     defense: 70
     vitesse: 68
   image: titan.webp
-  credit: NASA/JPL · Cassini (globe reconstitué)
+  credit: NASA/JPL/SSI · Cassini (image composée, 2004)
   licence: Domaine public
   cadrage: globe
 - numero: 10
@@ -145,7 +145,7 @@ cartes:
     defense: 40
     vitesse: 85
   image: charon.webp
-  credit: NASA/JHUAPL/SwRI · New Horizons (globe reconstitué)
+  credit: NASA/JHUAPL/SwRI · New Horizons (image composée, 2015)
   licence: Domaine public
   cadrage: globe
 - numero: 11
