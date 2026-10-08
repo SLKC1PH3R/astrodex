@@ -31,15 +31,29 @@ async function handle(res) {
   return data;
 }
 
+async function createPlayer(pseudo) {
+  const res = await fetch("/api/players", {
+    method: "POST", headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(pseudo ? { pseudo } : {}),
+  });
+  const p = await handle(res);
+  writeToken(p.token);
+  memoryToken = p.token;
+  return p;
+}
+
 export async function ensurePlayer() {
   if (memoryToken) return memoryToken;
   const saved = readToken();
   if (saved) return (memoryToken = saved);
-  const res = await fetch("/api/players", { method: "POST", headers: { "Content-Type": "application/json" }, body: "{}" });
-  const p = await handle(res);
-  writeToken(p.token);
-  return (memoryToken = p.token);
+  return (await createPlayer()).token;
 }
+
+/* Inscription : crée un joueur avec son pseudo. E-mail et mot de passe ne sont pas encore gérés par le backend
+   (voir README : brancher Authentik / NextAuth et associer l'identité à players.id). */
+export const signup = pseudo => createPlayer(pseudo?.trim() || null);
+export function logout() { memoryToken = null; writeToken(""); }
+export const hasPlayer = () => !!(memoryToken || readToken());
 
 export const api = {
   boosters: () => request("/api/boosters"),
