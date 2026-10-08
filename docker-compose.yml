@@ -1,7 +1,5 @@
-version: "3.9"
-
 services:
-  postgres:
+  astrodex-postgres:
     image: postgres:16
     restart: unless-stopped
     environment:
@@ -18,29 +16,29 @@ services:
     expose:
       - "5432"
 
-  backend:
+  astrodex-backend:
     build:
       context: .
       dockerfile: backend/Dockerfile
     restart: unless-stopped
     depends_on:
-      postgres:
+      astrodex-postgres:
         condition: service_healthy
     environment:
-      DATABASE_URL: postgresql://astrodex:${POSTGRES_PASSWORD}@postgres:5432/astrodex
+      DATABASE_URL: postgresql://astrodex:${POSTGRES_PASSWORD}@astrodex-postgres:5432/astrodex
       IMPORT_CATALOG_ON_START: "true"
       PACKS_PER_DAY: ${PACKS_PER_DAY:-0}
     expose:
       - "8000"
 
-  frontend:
+  astrodex-frontend:
     build:
       context: ./frontend
       args:
-        BACKEND_URL: http://backend:8000
+        BACKEND_URL: http://astrodex-backend:8000
     restart: unless-stopped
     depends_on:
-      - backend
+      - astrodex-backend
     expose:
       - "3000"
 
