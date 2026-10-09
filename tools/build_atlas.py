@@ -72,6 +72,7 @@ LUNES = {
     "rhea": ("saturne", 527070), "titan": ("saturne", 1221870), "japet": ("saturne", 3560820), "phoebe": ("saturne", 12960000),
     "miranda": ("uranus", 129900), "ariel": ("uranus", 190900), "umbriel": ("uranus", 266000), "titania": ("uranus", 436300),
     "oberon": ("uranus", 583500), "triton": ("neptune", 354760), "nereide": ("neptune", 5513800), "charon": ("pluton", 19591),
+    "dactyl": ("ida", 108), "dimorphos": ("didymos", 1.19),
 }
 
 # Éléments orbitaux approchés (écliptique J2000) : a (UA), e, i, nœud, périhélie (degrés), anomalie moyenne à l'époque, époque (JJ)
@@ -80,6 +81,20 @@ PETITS_CORPS = {
     "tempel1": dict(a=3.145, e=0.510, i=10.47, node=68.75, peri=179.2, M0=0.0, epoch=2459642.5),   # périhélie mars 2022
     "wild2": dict(a=3.45, e=0.537, i=3.24, node=136.1, peri=41.7, M0=0.0, epoch=2459928.5),        # périhélie déc. 2022
     "borrelly": dict(a=3.61, e=0.638, i=29.3, node=74.3, peri=351.9, M0=0.0, epoch=2459611.5),     # périhélie févr. 2022
+    "67p": dict(a=3.463, e=0.641, i=7.04, node=50.1, peri=12.8, M0=0.0, epoch=2459550.5),          # périhélie nov. 2021
+    "halley": dict(a=17.8, e=0.967, i=162.3, node=58.4, peri=111.3, M0=0.0, epoch=2446470.5),      # périhélie févr. 1986
+    "vesta": dict(a=2.362, e=0.089, i=7.14, node=103.8, peri=151.2, M0=0.0, epoch=2460000.5),
+    "eros": dict(a=1.458, e=0.223, i=10.83, node=304.3, peri=178.8, M0=0.0, epoch=2460000.5),
+    "itokawa": dict(a=1.324, e=0.280, i=1.62, node=69.1, peri=162.8, M0=0.0, epoch=2460000.5),
+    "ryugu": dict(a=1.190, e=0.190, i=5.88, node=251.6, peri=211.4, M0=0.0, epoch=2460000.5),
+    "bennu": dict(a=1.126, e=0.204, i=6.03, node=2.06, peri=66.2, M0=0.0, epoch=2460000.5),
+    "ida": dict(a=2.862, e=0.045, i=1.13, node=324.9, peri=108.7, M0=0.0, epoch=2460000.5),
+    "mathilde": dict(a=2.646, e=0.266, i=6.74, node=179.6, peri=157.5, M0=0.0, epoch=2460000.5),
+    "gaspra": dict(a=2.210, e=0.174, i=4.10, node=253.2, peri=129.8, M0=0.0, epoch=2460000.5),
+    "steins": dict(a=2.363, e=0.146, i=9.95, node=250.1, peri=250.0, M0=0.0, epoch=2460000.5),
+    "lutetia": dict(a=2.435, e=0.164, i=3.06, node=80.9, peri=250.1, M0=0.0, epoch=2460000.5),
+    "didymos": dict(a=1.644, e=0.384, i=3.41, node=73.2, peri=319.3, M0=0.0, epoch=2460000.5),
+    "annefrank": dict(a=2.214, e=0.098, i=4.25, node=93.0, peri=357.0, M0=0.0, epoch=2460000.5),
 }
 
 # Distances (années-lumière) : valeurs usuelles de la littérature, arrondies.
@@ -96,11 +111,41 @@ DSO = {
     "n7742": ("NGC7742", 72e6), "n2867": ("NGC2867", 5500), "n6572": ("NGC6572", 2000),
     "n5882": ("NGC5882", 7000), "n3314": ("NGC3314", 117e6), "n3808": ("NGC3808", 300e6),
     "n3603": ("NGC3603", 20000),
+    # -- série 3 : nébuleuses --
+    "ring-m57": ("NGC6720", 2570), "dumbbell-m27": ("NGC6853", 1360), "helix": ("NGC7293", 650),
+    "eskimo": ("NGC2392", 6500), "cat-eye": ("NGC6543", 3300), "jewelbug": ("NGC7027", 3000),
+    "blinking": ("NGC6826", 2200), "figure8": ("NGC3132", 2000), "ic4593": ("IC4593", 7800),
+    "ngc2440": ("NGC2440", 4000), "turtle": ("NGC6210", 6500), "ngc6881": ("NGC6881", 7000),
+    "butterfly": ("NGC6302", 3800),
+    "cheeseburger": ("NGC7026", 6500), "witchhead": ("IC2118", 900), "ngc1999": ("NGC1999", 1500),
+    "ngc2023": ("NGC2023", 1300), "ic2631": ("IC2631", 500), "ngc7129": ("NGC7129", 3300),
+    "tobacco": ("IC2220", 1200), "crab-m1": ("NGC1952", 6500), "veil": ("NGC6960", 2400),
+    "orion-m42": ("NGC1976", 1344), "carina-neb": ("NGC3372", 7500), "tarantula": ("NGC2070", 161000),
+    "trifid": ("NGC6514", 5200), "lagoon": ("NGC6523", 4100), "pillars-m16": ("NGC6611", 7000),
+    "rosette": ("NGC2237", 5200), "flame-neb": ("NGC2024", 1350), "catspaw": ("NGC6334", 5500),
+    "crescent-neb": ("NGC6888", 5000), "warpeace": ("NGC6357", 8000), "seagull-neb": ("IC2177", 3700),
 }
 MANUEL = {  # objets absents d'OpenNGC : (ascension droite, déclinaison, distance)
     "rho-a00": ("16 25 35", "-23 26 49", 460), "rcw49": ("10 24 01", "-57 45 00", 20000),
     "red-rectangle": ("06 19 58.2", "-10 38 15", 2300), "calabash": ("07 42 16.9", "-14 42 50", 5000),
     "u10214": ("16 06 03.9", "+55 25 32", 420e6), "hercules-cluster": ("16 05 15", "+17 44 55", 500e6),
+    # -- série 3 : nébuleuses sans désignation NGC/IC --
+    "necklace": ("19 02 05", "+20 05 51", 15000), "medusa": ("07 29 02", "+13 14 45", 1500),
+    "stingray": ("17 16 21", "-59 29 23", 2700), "minkowski": ("17 05 38", "-10 08 32", 2000),
+    "ant": ("16 17 13", "-51 59 10", 3000), "southerncrab": ("14 11 19", "-61 19 00", 7600),
+    "boomerang": ("12 44 46", "-54 31 11", 5000), "egg": ("21 02 18", "+36 41 38", 3000),
+    "frostyleo": ("09 39 54", "+11 58 51", 3300), "westbrook": ("04 42 53", "+36 06 53", 3000),
+    "gomez": ("18 09 13", "-32 10 48", 6500), "merope": ("03 46 19", "+23 56 54", 440),
+    "cas-a": ("23 23 24", "+58 48 54", 11000), "kepler-snr": ("17 30 42", "-21 29 00", 20000),
+    "vela-snr": ("08 35 20", "-45 10 36", 815), "tycho-snr": ("00 25 24", "+64 09 00", 9000),
+    "rcw86": ("14 42 54", "-62 30 00", 8200), "sn1006": ("15 02 48", "-41 54 00", 7200),
+    "n49": ("05 25 59", "-66 05 02", 160000), "n63a": ("05 35 44", "-66 02 00", 160000),
+    "w49b": ("19 11 09", "+09 06 24", 26000), "horsehead": ("05 40 59", "-02 27 30", 1375),
+    "sh2-106": ("20 27 26", "+37 22 48", 2000), "pipe-neb": ("17 21 00", "-27 00 00", 600),
+    "coalsack": ("12 53 00", "-63 00 00", 590), "barnard68": ("17 22 38", "-23 49 34", 410),
+    "inkspot": ("18 03 00", "-27 53 00", 2000), "blackwolf": ("17 15 00", "-40 00 00", 5500),
+    "thackeray": ("11 36 36", "-63 02 00", 5900), "homunculus": ("10 45 03.5", "-59 41 04", 7500),
+    "friedegg": ("17 19 49", "-39 10 54", 13000),
 }
 
 
@@ -124,7 +169,9 @@ def main():
         slug = o["slug"]
         item = {"slug": slug, "nom": o["nom"], "type": o["type"], "constellation": o.get("constellation") or "",
                 "description": o.get("description") or "", "faits": o.get("faits") or "", "image": image_for(slug)}
-        if slug in PLANETES:
+        if slug == "soleil":
+            item["pos"], item["dist"] = [0, 0, 0], 0
+        elif slug in PLANETES:
             item["planete"] = PLANETES[slug]
         elif slug in LUNES:
             item["hote"], item["dist_km"] = LUNES[slug]
