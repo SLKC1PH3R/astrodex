@@ -62,6 +62,144 @@ objets:
   constellation: Système solaire
   description: Compagne de Pluton, presque aussi grande qu'elle.
   faits: Ø 1 212 km · lune de Pluton
+- slug: mercure
+  nom: Mercure
+  type: Planète tellurique
+  constellation: Système solaire
+  description: La plus proche du Soleil, criblée de cratères comme la Lune.
+  faits: Ø 4 879 km · 0,39 UA
+- slug: venus
+  nom: Vénus
+  type: Planète tellurique
+  constellation: Système solaire
+  description: Voilée de nuages d'acide sulfurique, la planète la plus chaude du Système solaire.
+  faits: Ø 12 104 km · 0,72 UA
+- slug: europe
+  nom: Europe
+  type: Satellite de Jupiter
+  constellation: Système solaire
+  description: Croûte de glace striée dissimulant un océan salé, candidate à l'habitabilité.
+  faits: Ø 3 122 km · lune de Jupiter
+- slug: ganymede
+  nom: Ganymède
+  type: Satellite de Jupiter
+  constellation: Système solaire
+  description: Plus grande lune du Système solaire, plus grande que Mercure.
+  faits: Ø 5 268 km · lune de Jupiter
+- slug: encelade
+  nom: Encelade
+  type: Satellite de Saturne
+  constellation: Système solaire
+  description: Geysers de glace au pôle sud jaillissant d'un océan souterrain.
+  faits: Ø 504 km · lune de Saturne
+- slug: mimas
+  nom: Mimas
+  type: Satellite de Saturne
+  constellation: Système solaire
+  description: Surnommée « Étoile de la Mort » à cause de son immense cratère Herschel.
+  faits: Ø 396 km · lune de Saturne
+- slug: japet
+  nom: Japet
+  type: Satellite de Saturne
+  constellation: Système solaire
+  description: Dichotomie extrême entre un hémisphère sombre et un hémisphère clair.
+  faits: Ø 1 469 km · lune de Saturne
+- slug: rhea
+  nom: Rhéa
+  type: Satellite de Saturne
+  constellation: Système solaire
+  description: Deuxième plus grande lune de Saturne, glacée et criblée de cratères.
+  faits: Ø 1 527 km · lune de Saturne
+- slug: dione
+  nom: Dioné
+  type: Satellite de Saturne
+  constellation: Système solaire
+  description: Falaises de glace brillantes nées de fractures tectoniques.
+  faits: Ø 1 123 km · lune de Saturne
+- slug: tethys
+  nom: Téthys
+  type: Satellite de Saturne
+  constellation: Système solaire
+  description: Traversée par Ithaca Chasma, un canyon de 2 000 km de long.
+  faits: Ø 1 066 km · lune de Saturne
+- slug: phoebe
+  nom: Phoebé
+  type: Satellite de Saturne
+  constellation: Système solaire
+  description: Lune irrégulière probablement capturée depuis la ceinture de Kuiper.
+  faits: Ø 213 km · lune de Saturne
+- slug: uranus
+  nom: Uranus
+  type: Géante de glaces
+  constellation: Système solaire
+  description: Planète inclinée à 98°, elle roule presque sur le côté.
+  faits: Ø 50 724 km · 19,2 UA
+- slug: miranda
+  nom: Miranda
+  type: Satellite d'Uranus
+  constellation: Système solaire
+  description: Porte Verona Rupes, l'une des plus hautes falaises du Système solaire.
+  faits: Ø 472 km · lune d'Uranus
+- slug: ariel
+  nom: Ariel
+  type: Satellite d'Uranus
+  constellation: Système solaire
+  description: Surface la plus jeune et la plus brillante des lunes d'Uranus.
+  faits: Ø 1 158 km · lune d'Uranus
+- slug: umbriel
+  nom: Umbriel
+  type: Satellite d'Uranus
+  constellation: Système solaire
+  description: La lune la plus sombre d'Uranus, à la surface très ancienne.
+  faits: Ø 1 169 km · lune d'Uranus
+- slug: titania
+  nom: Titania
+  type: Satellite d'Uranus
+  constellation: Système solaire
+  description: Plus grande lune d'Uranus, traversée par un immense canyon.
+  faits: Ø 1 578 km · lune d'Uranus
+- slug: oberon
+  nom: Obéron
+  type: Satellite d'Uranus
+  constellation: Système solaire
+  description: La plus externe des grandes lunes d'Uranus, aux cratères sombres.
+  faits: Ø 1 523 km · lune d'Uranus
+- slug: triton
+  nom: Triton
+  type: Satellite de Neptune
+  constellation: Système solaire
+  description: Geysers d'azote actifs et orbite rétrograde unique parmi les grandes lunes.
+  faits: Ø 2 707 km · lune de Neptune
+- slug: nereide
+  nom: Néréide
+  type: Satellite de Neptune
+  constellation: Système solaire
+  description: Orbite la plus excentrique connue d'une grande lune, à peine photographiée.
+  faits: Ø 340 km · lune de Neptune
+- slug: ceres
+  nom: Cérès
+  type: Planète naine
+  constellation: Système solaire
+  description: Taches brillantes d'Occator, dépôts de sels issus d'un cryo-volcanisme.
+  faits: Ø 940 km · ceinture d'astéroïdes
+- slug: tempel1
+  nom: Tempel 1
+  type: Comète
+  constellation: Système solaire
+  description: Cible du premier impact artificiel délibéré sur un noyau cométaire.
+  faits: Noyau ~7,6 km · comète périodique
+- slug: wild2
+  nom: Wild 2
+  type: Comète
+  constellation: Système solaire
+  description: Surface criblée de dépressions circulaires en forme de mesas.
+  faits: Noyau ~5,5 km · comète périodique
+- slug: borrelly
+  nom: Borrelly
+  type: Comète
+  constellation: Système solaire
+  description: Noyau en forme de quille de bowling, avec jets de poussière actifs.
+  faits: Noyau ~8 km · comète périodique
 - slug: n5128
   nom: Centaurus A
   type: Galaxie

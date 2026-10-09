@@ -1,0 +1,415 @@
+# Série I — Système solaire
+# Raretés : C (Commune), PC (Peu commune), R (Rare), UR (Ultra rare), L (Légendaire).
+# Les taux de chaque emplacement doivent totaliser 1. Images : catalog/images/<fichier>.
+
+serie:
+  code: S1
+  nom: Système solaire
+  description: 'Première série : planètes, lunes, planètes naines et comètes du Système solaire, en vraies photos
+    de sondes et télescopes officiels (NASA, ESA, CSA).'
+  date_sortie: '2026-10-07'
+  active: true
+boosters:
+- code: S1-STD
+  nom: Booster Système solaire
+  nb_cartes: 5
+  image: saturne.webp
+  emplacements:
+  - position: 1
+    taux:
+      C: 0.75
+      PC: 0.25
+  - position: 2
+    taux:
+      C: 0.75
+      PC: 0.25
+  - position: 3
+    taux:
+      C: 0.6
+      PC: 0.4
+  - position: 4
+    taux:
+      PC: 0.55
+      R: 0.38
+      UR: 0.07
+  - position: 5
+    taux:
+      R: 0.72
+      UR: 0.22
+      L: 0.06
+cartes:
+- numero: 1
+  objet: terre
+  rarete: L
+  stats:
+    attaque: 74
+    defense: 79
+    vitesse: 62
+  image: terre.webp
+  credit: NASA · Apollo 17 (1972)
+  licence: Domaine public
+  cadrage: globe
+- numero: 2
+  objet: saturne
+  rarete: L
+  stats:
+    attaque: 84
+    defense: 83
+    vitesse: 41
+  image: saturne.webp
+  credit: NASA/ESA/CSA · James Webb (NIRCam, 2023)
+  licence: Domaine public
+  cadrage: globe-large
+- numero: 3
+  objet: jupiter
+  rarete: L
+  stats:
+    attaque: 84
+    defense: 86
+    vitesse: 42
+  image: jupiter.webp
+  credit: NASA/ESA · Hubble (image composée, 2023)
+  licence: Domaine public
+  cadrage: globe
+- numero: 4
+  objet: lune
+  rarete: L
+  stats:
+    attaque: 60
+    defense: 64
+    vitesse: 80
+  image: lune.webp
+  credit: NASA/JPL · Galileo (1992)
+  licence: Domaine public
+  cadrage: globe
+- numero: 5
+  objet: mars
+  rarete: UR
+  stats:
+    attaque: 70
+    defense: 75
+    vitesse: 48
+  image: mars.webp
+  credit: NASA/ESA · Hubble (image composée, 2001)
+  licence: Domaine public
+  cadrage: globe
+- numero: 6
+  objet: neptune
+  rarete: UR
+  stats:
+    attaque: 83
+    defense: 81
+    vitesse: 32
+  image: neptune.webp
+  credit: NASA/JPL · Voyager 2 (image composée, 1989)
+  licence: Domaine public
+  cadrage: globe
+- numero: 7
+  objet: pluton
+  rarete: UR
+  stats:
+    attaque: 52
+    defense: 62
+    vitesse: 33
+  image: pluton.webp
+  credit: NASA/JHUAPL/SwRI · New Horizons (image composée, 2015)
+  licence: Domaine public
+  cadrage: globe
+- numero: 8
+  objet: io
+  rarete: UR
+  stats:
+    attaque: 57
+    defense: 61
+    vitesse: 78
+  image: io.webp
+  credit: NASA/JPL · Galileo (image composée, 1999)
+  licence: Domaine public
+  cadrage: globe
+- numero: 9
+  objet: titan
+  rarete: UR
+  stats:
+    attaque: 63
+    defense: 70
+    vitesse: 68
+  image: titan.webp
+  credit: NASA/JPL/SSI · Cassini (image composée, 2004)
+  licence: Domaine public
+  cadrage: globe
+- numero: 10
+  objet: charon
+  rarete: PC
+  stats:
+    attaque: 38
+    defense: 40
+    vitesse: 85
+  image: charon.webp
+  credit: NASA/JHUAPL/SwRI · New Horizons (image composée, 2015)
+  licence: Domaine public
+  cadrage: globe
+- numero: 11
+  objet: mercure
+  rarete: UR
+  stats:
+    attaque: 55
+    defense: 58
+    vitesse: 76
+  image: mercure.webp
+  credit: NASA/JHUAPL · MESSENGER (image composée, 2009)
+  licence: Domaine public
+  cadrage: globe
+- numero: 12
+  objet: venus
+  rarete: UR
+  stats:
+    attaque: 78
+    defense: 72
+    vitesse: 20
+  image: venus.webp
+  credit: NASA/JPL · Mariner 10 (1974)
+  licence: Domaine public
+  cadrage: globe
+- numero: 13
+  objet: europe
+  rarete: UR
+  stats:
+    attaque: 50
+    defense: 66
+    vitesse: 57
+  image: europe.webp
+  credit: NASA/JPL/SETI · Galileo (image composée)
+  licence: Domaine public
+  cadrage: globe
+- numero: 14
+  objet: ganymede
+  rarete: UR
+  stats:
+    attaque: 68
+    defense: 74
+    vitesse: 44
+  image: ganymede.webp
+  credit: NASA/JPL · Galileo (1996)
+  licence: Domaine public
+  cadrage: globe
+- numero: 15
+  objet: encelade
+  rarete: UR
+  stats:
+    attaque: 46
+    defense: 58
+    vitesse: 52
+  image: encelade.webp
+  credit: NASA/JPL/SSI · Cassini
+  licence: Domaine public
+  cadrage: photo
+- numero: 16
+  objet: mimas
+  rarete: R
+  stats:
+    attaque: 44
+    defense: 55
+    vitesse: 49
+  image: mimas.webp
+  credit: NASA/JPL/SSI · Cassini (2017)
+  licence: Domaine public
+  cadrage: globe
+- numero: 17
+  objet: japet
+  rarete: R
+  stats:
+    attaque: 48
+    defense: 60
+    vitesse: 38
+  image: japet.webp
+  credit: NASA/JPL/SSI · Cassini (image composée, 2004)
+  licence: Domaine public
+  cadrage: globe
+- numero: 18
+  objet: rhea
+  rarete: R
+  stats:
+    attaque: 50
+    defense: 62
+    vitesse: 35
+  image: rhea.webp
+  credit: NASA/JPL/SSI · Cassini (image composée, 2005)
+  licence: Domaine public
+  cadrage: globe
+- numero: 19
+  objet: dione
+  rarete: C
+  stats:
+    attaque: 42
+    defense: 54
+    vitesse: 40
+  image: dione.webp
+  credit: NASA/JPL/SSI · Cassini (image composée, 2005)
+  licence: Domaine public
+  cadrage: globe
+- numero: 20
+  objet: tethys
+  rarete: C
+  stats:
+    attaque: 40
+    defense: 50
+    vitesse: 42
+  image: tethys.webp
+  credit: NASA/JPL/SSI · Cassini (image composée, 2005)
+  licence: Domaine public
+  cadrage: globe
+- numero: 21
+  objet: phoebe
+  rarete: C
+  stats:
+    attaque: 36
+    defense: 45
+    vitesse: 30
+  image: phoebe.webp
+  credit: NASA/JPL/SSI · Cassini (image composée, 2004)
+  licence: Domaine public
+  cadrage: globe
+- numero: 22
+  objet: uranus
+  rarete: UR
+  stats:
+    attaque: 66
+    defense: 70
+    vitesse: 36
+  image: uranus.webp
+  credit: NASA/JPL · Voyager 2 (1986)
+  licence: Domaine public
+  cadrage: globe
+- numero: 23
+  objet: miranda
+  rarete: R
+  stats:
+    attaque: 41
+    defense: 52
+    vitesse: 46
+  image: miranda.webp
+  credit: NASA/JPL · Voyager 2 (image composée, 1986)
+  licence: Domaine public
+  cadrage: globe
+- numero: 24
+  objet: ariel
+  rarete: C
+  stats:
+    attaque: 38
+    defense: 48
+    vitesse: 43
+  image: ariel.webp
+  credit: NASA/JPL · Voyager 2 (image composée, 1986)
+  licence: Domaine public
+  cadrage: globe
+- numero: 25
+  objet: umbriel
+  rarete: C
+  stats:
+    attaque: 37
+    defense: 49
+    vitesse: 28
+  image: umbriel.webp
+  credit: NASA/JPL · Voyager 2 (1986)
+  licence: Domaine public
+  cadrage: globe
+- numero: 26
+  objet: titania
+  rarete: R
+  stats:
+    attaque: 43
+    defense: 56
+    vitesse: 33
+  image: titania.webp
+  credit: NASA/JPL · Voyager 2 (1986)
+  licence: Domaine public
+  cadrage: globe
+- numero: 27
+  objet: oberon
+  rarete: C
+  stats:
+    attaque: 39
+    defense: 53
+    vitesse: 27
+  image: oberon.webp
+  credit: NASA/JPL · Voyager 2 (1986)
+  licence: Domaine public
+  cadrage: globe
+- numero: 28
+  objet: triton
+  rarete: R
+  stats:
+    attaque: 49
+    defense: 57
+    vitesse: 54
+  image: triton.webp
+  credit: NASA/JPL · Voyager 2 (image composée, 1989)
+  licence: Domaine public
+  cadrage: globe
+- numero: 29
+  objet: nereide
+  rarete: C
+  stats:
+    attaque: 24
+    defense: 30
+    vitesse: 60
+  image: nereide.webp
+  credit: NASA/JPL · Voyager 2 (1989)
+  licence: Domaine public
+  cadrage: globe
+- numero: 30
+  objet: ceres
+  rarete: R
+  stats:
+    attaque: 45
+    defense: 53
+    vitesse: 39
+  image: ceres.webp
+  credit: NASA/JPL · Dawn (image composée, 2015)
+  licence: Domaine public
+  cadrage: globe
+- numero: 31
+  objet: tempel1
+  rarete: C
+  stats:
+    attaque: 34
+    defense: 20
+    vitesse: 58
+  image: tempel1.webp
+  credit: NASA/JPL-Caltech/UMD · Deep Impact (2005)
+  licence: Domaine public
+  cadrage: globe
+- numero: 32
+  objet: wild2
+  rarete: C
+  stats:
+    attaque: 33
+    defense: 19
+    vitesse: 61
+  image: wild2.webp
+  credit: NASA/JPL-Caltech · Stardust (2004)
+  licence: Domaine public
+  cadrage: globe
+- numero: 33
+  objet: borrelly
+  rarete: C
+  stats:
+    attaque: 35
+    defense: 18
+    vitesse: 63
+  image: borrelly.webp
+  credit: NASA/JPL · Deep Space 1 (2001)
+  licence: Domaine public
+  cadrage: globe
+- numero: 34
+  objet: saturne
+  variante: anneaux
+  rarete: R
+  stats:
+    attaque: 80
+    defense: 79
+    vitesse: 41
+  image: saturne_anneaux.webp
+  credit: NASA/JPL/SSI · Cassini (2005)
+  licence: Domaine public
+  cadrage: photo

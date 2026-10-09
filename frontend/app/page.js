@@ -1,156 +1,170 @@
 "use client";
 import { useEffect, useState } from "react";
 import Link from "next/link";
-import Carte, { RAR } from "@/components/Carte";
+import Carte, { ORDER, RAR } from "@/components/Carte";
+import { BorderBeam, Marquee, NumberTicker, ShimmerButton } from "@/components/MagicUI";
 import { api } from "@/lib/api";
 
-const HERO = [13, 2, 12];                // Iris, Saturne, Moulinet austral
-const SHOWCASE = [46, 38, 31, 5, 1];     // une carte par rareté, de C à L
-
-const STEPS = [
-  { icon: "ph-package", t: "Ouvre un booster", d: "Chaque booster contient 5 cartes. Le tirage est fait par le serveur, avec un aléa cryptographique : personne ne peut le prévoir." },
-  { icon: "ph-cards", t: "Révèle tes cartes", d: "Retourne-les une à une. La tranche trahit déjà les rares, les ultra rares et les légendaires avant que tu ne les découvres." },
-  { icon: "ph-squares-four", t: "Complète ta collection", d: "Ta collection garde chaque carte et ses doubles. Vise toute la série, puis les suivantes." },
-];
+const LEGENDAIRES = [1, 3, 11];                               // Terre, Jupiter, Centaurus A
+const LADDER = [[46, "C"], [38, "PC"], [31, "R"], [5, "UR"], [1, "L"]];
 const FEATURES = [
-  { icon: "ph-cards", t: "Collection", d: "Toutes tes cartes, leurs quantités et celles qui te manquent, filtrées par rareté.", menu: "Collection · Toutes les cartes" },
-  { icon: "ph-arrows-left-right", t: "Échanges et marché", d: "Propose tes doubles à d'autres joueurs, ou mets-les en vente sur le marché.", menu: "Échanges · Marché" },
-  { icon: "ph-sword", t: "Bataille", d: "Attaque, défense, vitesse : compose une main et affronte d'autres collectionneurs.", menu: "Bataille" },
-  { icon: "ph-shield", t: "Guilde et amis", d: "Rejoins une guilde, ajoute tes amis et discute avec eux par messages.", menu: "Guilde · Amis · Messages" },
-  { icon: "ph-trophy", t: "Succès et classement", d: "Débloque des succès en complétant des séries et grimpe au classement.", menu: "Succès · Classement" },
-  { icon: "ph-percent", t: "Taux publics", d: "Les probabilités de chaque emplacement sont affichées. Pas de surprise sur les chances.", menu: "Paquets" },
+  { icon: "ph-cards", t: "Collection", d: "Quantités, cartes manquantes, filtres par rareté." },
+  { icon: "ph-arrows-left-right", t: "Échanges et marché", d: "Tes doubles deviennent une monnaie." },
+  { icon: "ph-sword", t: "Bataille", d: "ATQ, DÉF, VIT : chaque carte a son rôle." },
+  { icon: "ph-shield", t: "Guilde, amis, messages", d: "Joue avec ceux qui regardent le même ciel." },
+  { icon: "ph-trophy", t: "Succès et classement", d: "Chaque série complétée laisse une trace." },
 ];
-
 const pct = x => `${Math.round(x * 100)} %`;
 
+function mixRarities(cards, n) {
+  const lists = [...ORDER].reverse().map(r => cards.filter(c => c.rarete === r));
+  const out = [];
+  for (let i = 0; out.length < Math.min(n, cards.length); i++) lists.forEach(l => l[i] && out.length < n && out.push(l[i]));
+  return out;
+}
+
 export default function LandingPage() {
+  const [serie, setSerie] = useState(null);
   const [cards, setCards] = useState([]);
   const [booster, setBooster] = useState(null);
 
   useEffect(() => {
-    api.series().then(list => list[0] && api.seriesDetail(list[0].code)).then(d => {
-      if (!d) return;
-      setCards(d.cartes);
-      setBooster(d.boosters?.[0] || null);
-    }).catch(() => {});
+    api.series()
+      .then(list => { if (list[0]) { setSerie(list[0]); return api.seriesDetail(list[0].code); } })
+      .then(d => { if (d) { setCards(d.cartes); setBooster(d.boosters?.[0] || null); } })
+      .catch(() => {});
   }, []);
 
   const byNum = n => cards.find(c => c.numero === n);
-  const hero = HERO.map(byNum).filter(Boolean);
-  const show = SHOWCASE.map(byNum).filter(Boolean);
   const slots = booster?.emplacements || [];
   const lastL = slots.at(-1)?.taux?.L;
-
-  // chance par rareté décrite à partir des vrais taux
-  const odds = r => {
-    const at = slots.filter(s => s.taux[r]);
-    if (!at.length) return "";
-    if (r === "C") return `Emplacements ${at[0].position} à ${at.at(-1).position}`;
-    return at.map(s => `${pct(s.taux[r])} en carte ${s.position}`).join(" · ");
-  };
+  const hero = byNum(46), m83 = byNum(12);
+  const odds = r => r === "C"
+    ? (() => { const at = slots.filter(s => s.taux.C); return at.length ? `Emplacements ${at[0].position} à ${at.at(-1).position}` : ""; })()
+    : slots.filter(s => s.taux[r]).map(s => `${pct(s.taux[r])} en carte ${s.position}`).join(" · ");
 
   return (
-    <div className="ax-landing">
-      <nav className="nav ax-topnav">
-        <Link className="ax-brand" href="/"><span className="ax-mark" /><b>ASTRODEX</b></Link>
-        <a href="#concept">Concept</a>
-        <a href="#cartes">Cartes</a>
-        <a href="#fonctionnalites">Fonctionnalités</a>
-        <div className="ax-actions" style={{ gap: 8 }}>
+    <div className="lp">
+      <header className="lp-hero">
+        {hero && (
+          // eslint-disable-next-line @next/next/no-img-element
+          <div className="lighten lp-hero-photo"><img src={hero.image_url} alt="" /></div>
+        )}
+        <div className="lp-hero-shade" />
+        <nav className="nav lp-nav">
+          <Link className="ax-brand" href="/"><span className="ax-mark" /><b>ASTRODEX</b></Link>
+          <a href="#raretes">Raretés</a>
+          <a href="#jeu">Le jeu</a>
           <Link className="btn btn-secondary" href="/inscription?mode=connexion">Se connecter</Link>
-          <Link className="btn btn-primary" href="/inscription">Créer un compte</Link>
+          <Link className="btn btn-primary" href="/inscription">Commencer</Link>
+        </nav>
+        <div className="lp-hero-meta">
+          <span>SÉRIE {serie?.code?.replace(/^S/, "") === "1" ? "I" : serie?.code || "I"}</span>
+          <span>{(serie?.nom || "Ciel profond").toUpperCase()}</span>
+          {hero && <span className="lp-push">{hero.nom.toUpperCase()} · {hero.constellation.toUpperCase()}</span>}
         </div>
-      </nav>
-
-      <header className="ax-wrap ax-hero">
-        <div>
-          <span className="tag tag-accent">Série I · Ciel profond</span>
-          <h1>Le ciel profond, carte par carte.</h1>
-          <p>Astrodex est un jeu de cartes à collectionner sur l'univers. Ouvre des boosters, découvre planètes, nébuleuses et galaxies photographiées par Hubble, l'ESO et la NASA, et complète ta collection.</p>
-          <div className="ax-actions">
-            <Link className="btn btn-primary btn-lg" href="/inscription"><i className="ph ph-package" style={{ fontSize: 18 }} />Ouvrir mon premier booster</Link>
-            <a className="btn btn-secondary btn-lg" href="#concept" style={{ color: "var(--color-text)" }}>Comment ça marche</a>
-          </div>
-        </div>
-        <div className="ax-fan">
-          {hero.map(c => <div key={c.id}><Carte c={c} /></div>)}
+        <div className="lp-hero-body">
+          <h1>{cards.length || 47} fragments<br /><span>du ciel profond.</span></h1>
+          <p>Chaque carte est une vraie photographie d'un objet céleste. Ouvre des boosters, réunis la série, échange tes doubles.</p>
+          <div><ShimmerButton href="/inscription">Ouvrir un booster</ShimmerButton></div>
         </div>
       </header>
 
-      <section id="concept" className="ax-wrap ax-section">
-        <h6 className="ax-kicker">Le concept</h6>
-        <h2>Trois gestes : ouvrir, révéler, collectionner.</h2>
-        <div className="ax-steps">
-          {STEPS.map((s, i) => (
-            <div className="ax-step" key={s.t}>
-              <div className="ax-step-n">{String(i + 1).padStart(2, "0")}<span className="ax-fade-rule" /></div>
-              <i className={`ph ${s.icon}`} />
-              <h4>{s.t}</h4>
-              <p>{s.d}</p>
-            </div>
-          ))}
+      {cards.length > 0 && (
+        <div className="lp-marquee">
+          <Marquee>{mixRarities(cards, 16).map(c => <div key={c.id} className="lp-marquee-card"><Carte c={c} /></div>)}</Marquee>
         </div>
-      </section>
-
-      <section id="cartes" className="ax-wrap ax-section">
-        <div className="ax-sec-head">
-          <div>
-            <h6 className="ax-kicker">Les cartes</h6>
-            <h2>Cinq raretés, de la nébuleuse discrète à la planète légendaire.</h2>
-          </div>
-          <p>Chaque carte porte une vraie photographie, sa constellation et trois statistiques : attaque, défense, vitesse.</p>
-        </div>
-        <div className="ax-showcase">
-          {show.map(c => (
-            <div className="ax-show ax-lift" key={c.id}>
-              <Carte c={c} />
-              <div>
-                <div className="ax-show-label"><i className="ax-dot" style={{ background: RAR[c.rarete].color }} />{RAR[c.rarete].label}</div>
-                <div className="ax-show-odds">{odds(c.rarete)}</div>
-              </div>
-            </div>
-          ))}
-        </div>
-      </section>
-
-      {booster && (
-        <section className="ax-band">
-          <div className="ax-wrap">
-            <div><b>{cards.length}</b><span>cartes dans la série {booster.serie}</span></div>
-            <div><b>{booster.nb_cartes}</b><span>cartes par booster, une rare garantie</span></div>
-            {lastL != null && <div><b>{pct(lastL)}</b><span>de chance de légendaire au dernier emplacement</span></div>}
-          </div>
-        </section>
       )}
 
-      <section id="fonctionnalites" className="ax-wrap ax-section" style={{ paddingTop: 96 }}>
-        <h6 className="ax-kicker">Fonctionnalités</h6>
-        <h2 style={{ marginBottom: 40 }}>Une collection, puis tout un univers de joueurs.</h2>
-        <div className="ax-features">
-          {FEATURES.map(f => (
-            <div className="card elev-sm" key={f.t}>
-              <i className={`ph ${f.icon}`} />
-              <div className="card-title">{f.t}</div>
-              <p className="card-body">{f.d}</p>
-              <div className="card-meta">{f.menu}</div>
-            </div>
-          ))}
-        </div>
-      </section>
+      <div className="lp-wrap lp-tickers">
+        <div><b><NumberTicker value={cards.length || 47} /></b><span>cartes dans la série {serie?.nom || "Ciel profond"}</span></div>
+        <div><b><NumberTicker value={booster?.nb_cartes || 5} /></b><span>cartes par booster, une rare garantie</span></div>
+        {lastL != null && <div><b><NumberTicker value={Math.round(lastL * 100)} /> %</b><span>de chance de Légendaire au 5e emplacement</span></div>}
+      </div>
 
-      <section className="ax-wrap" style={{ paddingBlock: "32px 112px" }}>
-        <div className="ax-close">
-          <div>
-            <h2>Ton premier booster t'attend.</h2>
-            <p>Crée ton compte en quelques secondes, ta collection est sauvegardée sur le serveur.</p>
+      <section className="lp-lamp-section">
+        <div className="lp-lamp">
+          <div className="lp-lamp-cone l" /><div className="lp-lamp-cone r" />
+          <div className="lp-lamp-glow" /><div className="lp-lamp-core" /><div className="lp-lamp-line" />
+          <div className="lp-lamp-text">
+            <h2>Six chances sur cent de tomber sur une Légendaire.</h2>
+            <p>Au cinquième emplacement de chaque booster. Et quand elle sort, elle sort en holo, pleine illustration.</p>
           </div>
-          <Link className="btn btn-primary btn-lg" href="/inscription">Créer un compte<i className="ph ph-arrow-right" /></Link>
+        </div>
+        <div className="lp-legend-row">
+          {LEGENDAIRES.map(byNum).filter(Boolean).map(c => <div key={c.id}><Carte c={c} /></div>)}
         </div>
       </section>
 
-      <footer className="ax-wrap ax-footer">
+      <section id="raretes" className="lp-wrap lp-block">
+        <div className="lp-head">
+          <h2>De la Commune<br />à la Légendaire.</h2>
+          <p>Cinq raretés. Les taux de chaque emplacement sont publics : tu sais exactement ce que tu peux espérer.</p>
+        </div>
+        <div className="lp-ladder">
+          {LADDER.map(([n, r], i) => {
+            const c = byNum(n);
+            if (!c) return null;
+            return (
+              <div key={r}>
+                <div className="lp-ladder-card" style={{ width: `${72 + i * 7}%` }}><Carte c={c} /></div>
+                <div className="lp-ladder-info" style={{ "--rc": RAR[r].color }}>
+                  <b>{RAR[r].label}</b>
+                  <span>{cards.filter(x => x.rarete === r).length} cartes dans la série</span>
+                  <small>{odds(r)}</small>
+                </div>
+              </div>
+            );
+          })}
+        </div>
+      </section>
+
+      <section className="lp-wrap lp-duo">
+        <div className="lp-photos">
+          {m83 && (
+            // eslint-disable-next-line @next/next/no-img-element
+            <div className="lighten"><img src={m83.image_url} alt="" /></div>
+          )}
+          <h4>Des photos qui existent</h4>
+          <p>Hubble, ESO, NASA. Chaque carte crédite sa source.</p>
+        </div>
+        <div className="lp-count">
+          <span className="lp-gems">{ORDER.map(r => <i key={r} style={{ background: RAR[r].color }} />)}</span>
+          <div><b>{cards.length || 47}</b><span>cartes disponibles dans la série {serie?.nom || "Ciel profond"}</span></div>
+        </div>
+      </section>
+
+      <section id="jeu" className="lp-wrap lp-features">
+        <div>
+          <h2>Une collection,<br />puis tout un univers.</h2>
+          <p>Ce que tu débloques en jouant.</p>
+        </div>
+        <ol>
+          {FEATURES.map((f, i) => (
+            <li key={f.t}>
+              <span>{String(i + 1).padStart(2, "0")}</span>
+              <div><h4>{f.t}</h4><p>{f.d}</p></div>
+              <i className={`ph ${f.icon}`} />
+            </li>
+          ))}
+        </ol>
+      </section>
+
+      <section className="lp-wrap lp-block">
+        <div className="lp-cta">
+          <BorderBeam />
+          <BorderBeam delay={4.5} from="#ffcf6b" to="var(--color-accent-700)" />
+          <div>
+            <h2>Ton premier booster est prêt.</h2>
+            <p>Un pseudo, un clic, cinq cartes.</p>
+          </div>
+          <ShimmerButton href="/inscription">Créer mon compte</ShimmerButton>
+        </div>
+      </section>
+
+      <footer className="lp-wrap lp-footer">
         <span>Astrodex · un jeu de cartes sur l'univers</span>
-        <span>Images NASA, ESA/Hubble et ESO — domaine public et CC BY 4.0</span>
+        <span>Images NASA, ESA/Hubble, ESO — domaine public et CC BY 4.0</span>
       </footer>
     </div>
   );
