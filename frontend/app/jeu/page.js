@@ -1,29 +1,40 @@
 "use client";
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { useRouter } from "next/navigation";
 import Carte, { ORDER, RAR } from "@/components/Carte";
 import Topbar from "@/components/Topbar";
 import OddsDialog from "@/components/OddsDialog";
+import SeriesTabs from "@/components/SeriesTabs";
 import { usePlayer } from "@/components/PlayerProvider";
 import { api } from "@/lib/api";
 
 export default function PaquetsPage() {
   const router = useRouter();
   const { stats, refresh } = usePlayer();
-  const [booster, setBooster] = useState(null);
+  const [series, setSeries] = useState([]);
+  const [serieCode, setSerieCode] = useState(null);
+  const [boosters, setBoosters] = useState([]);
   const [drawn, setDrawn] = useState([]);
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState(null);
   const [odds, setOdds] = useState(false);
 
   useEffect(() => {
-    api.boosters()
-      .then(list => (list.length ? setBooster(list[0]) : setError("Aucun booster actif dans le catalogue.")))
+    Promise.all([api.series(), api.boosters()])
+      .then(([s, b]) => {
+        setSeries(s); setBoosters(b);
+        if (s[0]) setSerieCode(s[0].code);
+        else setError("Aucun booster actif dans le catalogue.");
+      })
       .catch(() => setError("Le serveur de jeu ne répond pas. Réessaie dans un instant."));
   }, []);
 
+  const booster = useMemo(() => boosters.find(b => b.serie === serieCode) || null, [boosters, serieCode]);
+
   const left = stats?.boosters_restants;
   const noPacks = left === 0;
+
+  const changeSerie = code => { if (code !== serieCode) { setSerieCode(code); setDrawn([]); setError(null); } };
 
   const open = async () => {
     if (!booster || busy || noPacks) return;
@@ -47,6 +58,9 @@ export default function PaquetsPage() {
     <>
       <Topbar title="Paquets" sub={booster ? `${booster.nom} · ${booster.nb_cartes} cartes` : ""} onOdds={booster ? () => setOdds(true) : null} />
       <section className="ax-stage">
+        {series.length > 1 && drawn.length === 0 && (
+          <SeriesTabs series={series} value={serieCode} onChange={changeSerie} />
+        )}
         {error && <p className="ax-notice"><strong>Oups.</strong> {error}</p>}
 
         {drawn.length === 0 && booster && (

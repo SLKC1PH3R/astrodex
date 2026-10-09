@@ -2,9 +2,11 @@
 import { useEffect, useState } from "react";
 import Topbar from "@/components/Topbar";
 import CardGrid from "@/components/CardGrid";
+import SeriesTabs from "@/components/SeriesTabs";
 import { api } from "@/lib/api";
 
 export default function CollectionPage() {
+  const [series, setSeries] = useState([]);
   const [serie, setSerie] = useState(null);
   const [cards, setCards] = useState([]);
   const [owned, setOwned] = useState(new Map());
@@ -12,24 +14,27 @@ export default function CollectionPage() {
 
   useEffect(() => {
     api.series()
-      .then(list => {
-        if (!list[0]) return;
-        setSerie(list[0]);
-        return Promise.all([api.seriesDetail(list[0].code), api.collection(list[0].code)]);
-      })
-      .then(res => {
-        if (!res) return;
-        const [detail, mine] = res;
+      .then(list => { setSeries(list); if (list[0]) setSerie(list[0]); else setError("Aucune série disponible."); })
+      .catch(() => setError("Impossible de charger la collection."));
+  }, []);
+
+  useEffect(() => {
+    if (!serie) return;
+    Promise.all([api.seriesDetail(serie.code), api.collection(serie.code)])
+      .then(([detail, mine]) => {
         setCards(detail.cartes);
         setOwned(new Map(mine.map(c => [c.id, c.quantite])));
       })
       .catch(() => setError("Impossible de charger la collection."));
-  }, []);
+  }, [serie]);
+
+  const changeSerie = code => setSerie(series.find(s => s.code === code) || null);
 
   return (
     <>
       <Topbar title="Collection" sub={serie ? `${serie.nom} · série ${serie.code}` : ""} />
       {error && <p className="ax-notice" style={{ padding: "0 32px" }}>{error}</p>}
+      <SeriesTabs series={series} value={serie?.code} onChange={changeSerie} />
       <CardGrid cards={cards} owned={owned} />
     </>
   );
