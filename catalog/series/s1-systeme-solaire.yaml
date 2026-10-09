@@ -57,9 +57,9 @@ cartes:
     defense: 83
     vitesse: 41
   image: saturne.webp
-  credit: NASA/ESA/CSA · James Webb (NIRCam, 2023)
+  credit: NASA/JPL/SSI · Cassini (mosaïque, 2004)
   licence: Domaine public
-  cadrage: globe-large
+  cadrage: photo
 - numero: 3
   objet: jupiter
   rarete: L
