@@ -413,3 +413,61 @@ cartes:
   credit: NASA/JPL/SSI · Cassini (2005)
   licence: Domaine public
   cadrage: photo
+- numero: 35
+  objet: soleil
+  variante: photosphere
+  rarete: L
+  stats:
+    attaque: 98
+    defense: 95
+    vitesse: 30
+  image: soleil_photosphere.webp
+  credit: NASA/SDO (AIA 171 Å, 2025)
+  licence: Domaine public
+  cadrage: globe
+- numero: 36
+  objet: soleil
+  variante: couronne
+  rarete: L
+  stats:
+    attaque: 95
+    defense: 90
+    vitesse: 45
+  image: soleil_couronne.webp
+  credit: NASA/SDO (AIA 193 Å)
+  licence: Domaine public
+  cadrage: globe
+- numero: 37
+  objet: soleil
+  variante: eruption
+  rarete: UR
+  stats:
+    attaque: 99
+    defense: 70
+    vitesse: 88
+  image: soleil_eruption.webp
+  credit: NASA/SDO (AIA, éruption X8, 2017)
+  licence: Domaine public
+  cadrage: photo
+- numero: 38
+  objet: 67p
+  rarete: UR
+  stats:
+    attaque: 37
+    defense: 21
+    vitesse: 55
+  image: 67p.webp
+  credit: ESA/Rosetta/MPS (OSIRIS NAC, 2014)
+  licence: CC BY-SA 4.0
+  cadrage: globe
+- numero: 39
+  objet: halley
+  rarete: UR
+  stats:
+    attaque: 40
+    defense: 16
+    vitesse: 72
+  image: halley.webp
+  credit: ESA/Giotto (HMC, 1986)
+  licence: CC BY-SA 3.0 IGO
+  cadrage: photo

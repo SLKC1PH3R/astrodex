@@ -383,3 +383,30 @@ a:hover { color: var(--color-accent-300); }
 @media (prefers-reduced-motion: reduce) {
   .mu-shimmer-spark > span, .mu-shimmer-spark > span > span, .mu-beam > div { animation: none; }
 }
+
+/* Carte recto verso de la page /inscription. À ajouter à la fin de app/astrodex.css. */
+.auth-stack { width: 100%; max-width: 400px; margin: auto 0; padding: 48px 0; display: grid; gap: 18px; }
+.auth-stack > .seg { justify-self: start; }
+.auth-scene { perspective: 1600px; }
+.auth-flip { display: grid; transform-style: preserve-3d; transition: transform .8s cubic-bezier(.16,1,.3,1); }
+.auth-flip[data-back] { transform: rotateY(180deg); }
+.auth-face { grid-area: 1 / 1; position: relative; display: grid; gap: 16px; align-content: start; padding: 30px; border-radius: var(--radius-lg);
+  backface-visibility: hidden; -webkit-backface-visibility: hidden;
+  background: radial-gradient(ellipse 90% 60% at 100% 0%, color-mix(in srgb, var(--color-accent-900) 80%, transparent), transparent 70%), var(--color-surface);
+  box-shadow: 0 0 0 1px rgba(233,233,237,.08), inset 0 1px 0 rgba(233,233,237,.05), 0 30px 60px -24px rgba(0,0,0,.7), 0 0 60px -30px var(--color-accent); }
+.auth-face.back { transform: rotateY(180deg); }
+.auth-face-ring { position: absolute; inset: 7px; border-radius: calc(var(--radius-lg) - 4px); box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--color-accent) 22%, transparent); pointer-events: none; }
+.auth-face-top { display: flex; justify-content: space-between; align-items: center; font-size: 11px; letter-spacing: .16em; color: var(--color-neutral-500); }
+.auth-gems { display: flex; gap: 4px; }
+.auth-gems i { width: 7px; height: 7px; transform: rotate(45deg); background: var(--color-neutral-700); }
+.auth-gems i.on { background: var(--color-accent); }
+.auth-face h2 { margin: 4px 0 6px; }
+.auth-face .sub { margin: 0; font-size: 14px; color: var(--color-neutral-400); }
+.auth-label-row { display: flex; justify-content: space-between; }
+.auth-label-row a { font-size: 12px; }
+.auth-submit { padding: 11px; font-size: 15px; }
+.auth-guest { padding: 10px; font-size: 14px; }
+.auth-flip-link { display: flex; align-items: center; justify-content: center; gap: 8px; margin-top: 2px; padding: 8px; border: 0; background: none; font: inherit; font-size: 13px; color: var(--color-neutral-400); cursor: pointer; }
+.auth-flip-link:hover { color: var(--color-accent-200); }
+.auth-flip-link i { font-size: 15px; color: var(--color-accent); }
+@media (prefers-reduced-motion: reduce) { .auth-flip { transition: none; } }

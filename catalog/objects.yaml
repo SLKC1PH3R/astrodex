@@ -200,6 +200,24 @@ objets:
   constellation: Système solaire
   description: Noyau en forme de quille de bowling, avec jets de poussière actifs.
   faits: Noyau ~8 km · comète périodique
+- slug: soleil
+  nom: Soleil
+  type: Étoile
+  constellation: Système solaire
+  description: Étoile du Système solaire, une naine jaune qui concentre 99,8 % de sa masse.
+  faits: Ø 1 392 000 km · type G2V
+- slug: 67p
+  nom: 67P/Tchourioumov-Guérassimenko
+  type: Comète
+  constellation: Système solaire
+  description: Noyau en deux lobes reliés par un cou, surnommé « canard en plastique ».
+  faits: Noyau ~4 km · survolée par Rosetta
+- slug: halley
+  nom: Halley
+  type: Comète
+  constellation: Système solaire
+  description: La plus célèbre des comètes périodiques, visible à l'œil nu tous les 76 ans.
+  faits: Noyau ~15 km · première comète photographiée de près
 - slug: n5128
   nom: Centaurus A
   type: Galaxie
