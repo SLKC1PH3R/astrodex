@@ -26,7 +26,10 @@ frontend/
   app/collection/page.js    collection du joueur
   components/engine.js      animations (booster, pile, retournement)
   components/card.js        rendu d'une carte
-tools/                      génération du catalogue de 50 000 objets et des globes
+  app/jeu/atlas/             page Atlas (carte 3D de l'univers)
+  components/atlas/engine.js moteur 3D de l'atlas (Three.js)
+  public/atlas/atlas.json   positions des objets et des étoiles (généré par tools/build_atlas.py)
+tools/                      génération du catalogue, des globes et des données de l'atlas
 ```
 
 ## Ajouter du contenu
@@ -73,6 +76,28 @@ python -m app.catalog_import --check
 ```
 
 La validation refuse : des taux qui ne totalisent pas 1, un objet ou une image introuvable, un numéro en double, un emplacement de booster qui demande une rareté absente de la série. La même vérification tourne dans GitHub Actions (`.github/workflows/ci.yml`) à chaque push.
+
+## Atlas
+
+La page **Atlas** (`/jeu/atlas`) place les objets du catalogue à leurs vraies positions, sur cinq échelles : Système solaire, voisinage du Soleil, Voie lactée, Groupe local et univers proche. On passe d'une échelle à l'autre au bout du zoom (molette) ou par le panneau de gauche. Toucher un objet ouvre sa fiche avec ses cartes, retournées si le joueur ne les possède pas encore ; « Mesurer une distance » calcule l'écart entre deux objets, même sur deux échelles différentes.
+
+Les positions viennent de `frontend/public/atlas/atlas.json`, généré depuis le catalogue :
+
+```bash
+pip install pyyaml
+python tools/build_atlas.py     # télécharge HYG et OpenNGC dans tools/cache/ au premier lancement
+```
+
+Relance-le après avoir ajouté des objets dans `catalog/objects.yaml`, puis commite le JSON. Le script signale les objets dont il ne connaît pas la position ; on les déclare en haut de `tools/build_atlas.py` :
+
+- planète : `PLANETES` (position calculée dans le navigateur à la date du jour) ;
+- lune : `LUNES` (planète hôte et distance en km) ;
+- planète naine ou comète : `PETITS_CORPS` (éléments orbitaux) ;
+- ciel profond : `DSO` pour un objet du catalogue OpenNGC, `MANUEL` sinon (ascension droite, déclinaison, distance en années-lumière).
+
+Les cartes et la collection viennent de l'API : un objet qui n'a pas encore de carte apparaît avec un liseré neutre et l'indication qu'il arrivera dans une prochaine série.
+
+Ce qui est illustratif : la forme spirale de la Voie lactée, les orbites des lunes (agrandies, dans l'ordre réel), les positions de Cérès et des comètes (éléments orbitaux simplifiés). Les distances du ciel profond sont des valeurs usuelles de la littérature ; celles des nébuleuses sont incertaines.
 
 ## Lancer en local
 

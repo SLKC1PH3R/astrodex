@@ -1,3 +1,14 @@
+# Crédits
+
+## Données de l'atlas
+
+`frontend/public/atlas/atlas.json` est dérivé de :
+
+- [HYG Database v4.1](https://github.com/astronexus/HYG-Database) (David Nash), licence CC BY-SA 4.0 ;
+- [OpenNGC](https://github.com/mattiaverga/OpenNGC) (Mattia Verga), licence CC BY-SA 4.0.
+
+Ce fichier est donc redistribué sous licence CC BY-SA 4.0. Les éléments orbitaux des planètes proviennent des tables approchées du JPL (E. M. Standish).
+
 # Crédits des images
 
 Les photos du ciel profond proviennent des télescopes de l'ESO (CC BY 4.0), de NASA/ESA Hubble (domaine public pour la NASA, CC BY 4.0 pour ESA/Hubble) et de NOIRLab. Elles ont été récupérées via le catalogue d'images du projet Stellarium, en ne gardant que celles dont le crédit correspond à ces organismes.

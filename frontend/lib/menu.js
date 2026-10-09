@@ -2,6 +2,7 @@
 export const MENU = [
   { slug: "",           label: "Paquets",           icon: "ph-package" },
   { slug: "collection", label: "Collection",        icon: "ph-cards" },
+  { slug: "atlas",      label: "Atlas",             icon: "ph-planet" },
   { slug: "echanges",   label: "Échanges",          icon: "ph-arrows-left-right", empty: "Propose tes doubles à d'autres joueurs. Tes échanges en cours apparaîtront ici." },
   { slug: "marche",     label: "Marché",            icon: "ph-storefront",        empty: "Achète et vends des cartes. Aucune annonce pour le moment." },
   { slug: "profil",     label: "Profil",            icon: "ph-user-circle",       empty: "Ton pseudo, ton avatar et tes cartes favorites." },
