@@ -405,3 +405,477 @@ objets:
   type: Amas de galaxies
   constellation: Hercule
   description: Amas d'environ 200 galaxies riches en gaz, situé à 500 millions d'années-lumière.
+- slug: vesta
+  nom: Vesta
+  type: Astéroïde
+  constellation: Système solaire
+  description: Deuxième plus gros corps de la ceinture principale, presque une planète naine.
+  faits: Ø 525 km · ceinture d'astéroïdes
+- slug: eros
+  nom: Éros
+  type: Astéroïde
+  constellation: Système solaire
+  description: Premier astéroïde orbité puis touché par une sonde.
+  faits: 33 × 13 × 13 km · géocroiseur
+- slug: itokawa
+  nom: Itokawa
+  type: Astéroïde
+  constellation: Système solaire
+  description: Tas de gravats sans cratères, en forme de cacahuète.
+  faits: 535 × 294 × 209 m · géocroiseur
+- slug: ryugu
+  nom: Ryugu
+  type: Astéroïde
+  constellation: Système solaire
+  description: Astéroïde en forme de toupie, échantillonné par Hayabusa2.
+  faits: Ø ~1 km · géocroiseur
+- slug: bennu
+  nom: Bennu
+  type: Astéroïde
+  constellation: Système solaire
+  description: Surface couverte de blocs rocheux, bien plus accidentée que prévu.
+  faits: Ø ~490 m · géocroiseur
+- slug: ida
+  nom: Ida
+  type: Astéroïde
+  constellation: Système solaire
+  description: Premier astéroïde découvert avec sa propre lune, Dactyl.
+  faits: 59,8 × 25,4 × 18,6 km · ceinture principale
+- slug: dactyl
+  nom: Dactyl
+  type: Satellite d'astéroïde
+  constellation: Système solaire
+  description: 'Minuscule lune d''Ida, probablement un fragment du même impact.'
+  faits: Ø ~1,6 km · lune d'Ida
+- slug: mathilde
+  nom: Mathilde
+  type: Astéroïde
+  constellation: Système solaire
+  description: 'Astéroïde extrêmement sombre, criblé d''un cratère profond de plus de 10 km.'
+  faits: Ø ~53 km · ceinture principale
+- slug: gaspra
+  nom: Gaspra
+  type: Astéroïde
+  constellation: Système solaire
+  description: Premier astéroïde jamais photographié de près par une sonde.
+  faits: 18,2 × 10,5 × 8,9 km · ceinture principale
+- slug: steins
+  nom: Steins
+  type: Astéroïde
+  constellation: Système solaire
+  description: 'Forme en diamant taillé, couronnée d''une chaîne de petits cratères.'
+  faits: Ø ~5,3 km · ceinture principale
+- slug: lutetia
+  nom: Lutetia
+  type: Astéroïde
+  constellation: Système solaire
+  description: Plus gros astéroïde visité par une sonde avant Vesta, criblé de cratères superposés.
+  faits: Ø ~100 km · ceinture principale
+- slug: didymos
+  nom: Didymos
+  type: Astéroïde binaire
+  constellation: Système solaire
+  description: Astéroïde principal du couple visé par la mission de défense planétaire DART.
+  faits: Ø ~780 m · géocroiseur binaire
+- slug: dimorphos
+  nom: Dimorphos
+  type: Satellite d'astéroïde
+  constellation: Système solaire
+  description: Lune de Didymos percutée par la sonde DART pour tester la défense planétaire.
+  faits: Ø ~151 m · lune de Didymos
+- slug: annefrank
+  nom: Annefrank
+  type: Astéroïde
+  constellation: Système solaire
+  description: 'Photographiée lors d''un vol d''essai de la sonde Stardust avant sa vraie cible.'
+  faits: Ø ~6,6 km · ceinture principale
+- slug: ring-m57
+  nom: 'Nébuleuse de l''Anneau (M57)'
+  type: Nébuleuse planétaire
+  constellation: Lyre
+  description: Anneau de gaz éjecté par une étoile mourante semblable au Soleil.
+  faits: 'Sa forme réelle serait un tonneau déformé vu dans l''axe.'
+- slug: dumbbell-m27
+  nom: 'Nébuleuse de l''Haltère (M27)'
+  type: Nébuleuse planétaire
+  constellation: Petit Renard
+  description: Première nébuleuse planétaire découverte, par Messier en 1764.
+  faits: Visible aux jumelles depuis la Terre.
+- slug: helix
+  nom: 'Nébuleuse de l''Hélice'
+  type: Nébuleuse planétaire
+  constellation: Verseau
+  description: 'L''une des nébuleuses planétaires les plus proches de la Terre.'
+  faits: 'Surnommée « l''Œil de Dieu ».'
+- slug: eskimo
+  nom: Nébuleuse Eskimo
+  type: Nébuleuse planétaire
+  constellation: Gémeaux
+  description: Filaments évoquant une capuche de parka.
+  faits: Ses filaments externes mesurent environ 1 année-lumière.
+- slug: cat-eye
+  nom: 'Nébuleuse de l''Œil de Chat'
+  type: Nébuleuse planétaire
+  constellation: Dragon
+  description: Structures internes parmi les plus complexes connues.
+  faits: Des anneaux concentriques se forment tous les ~1500 ans.
+- slug: jewelbug
+  nom: NGC 7027
+  type: Nébuleuse planétaire
+  constellation: Cygne
+  description: Jeune nébuleuse très dense en poussière.
+  faits: Riche en molécules organiques complexes.
+- slug: blinking
+  nom: Nébuleuse Clignotante
+  type: Nébuleuse planétaire
+  constellation: Cygne
+  description: 'Nébuleuse connue pour un effet de clignotement visuel à l''oculaire.'
+  faits: Possède deux paires de « fliers » riches en azote.
+- slug: figure8
+  nom: Le Huit Explosif
+  type: Nébuleuse planétaire
+  constellation: Voiles
+  description: 'Équivalent austral de la nébuleuse de l''Anneau.'
+  faits: Son étoile centrale est masquée par une compagne plus brillante.
+- slug: ic4593
+  nom: IC 4593
+  type: Nébuleuse planétaire
+  constellation: Hercule
+  description: Une des nébuleuses planétaires les plus lointaines jamais imagées en détail.
+  faits: Présente des jets symétriques polaires.
+- slug: ngc2440
+  nom: NGC 2440
+  type: Nébuleuse planétaire
+  constellation: Poupe
+  description: 'Formes chaotiques de gaz autour d''une naine blanche.'
+  faits: Son étoile centrale dépasse 200 000 °C.
+- slug: turtle
+  nom: Nébuleuse Tortue
+  type: Nébuleuse planétaire
+  constellation: Hercule
+  description: Coquilles de gaz superposées évoquant une carapace.
+  faits: Découverte en 1825 par Friedrich Struve.
+- slug: necklace
+  nom: Nébuleuse du Collier
+  type: Nébuleuse planétaire
+  constellation: Flèche
+  description: Anneau de gaz ponctué de nœuds brillants.
+  faits: 'Née de l''engloutissement d''une compagne il y a ~25 000 ans.'
+- slug: butterfly
+  nom: Nébuleuse du Papillon (NGC 6302)
+  type: Nébuleuse planétaire
+  constellation: Scorpion
+  description: 'Ailes de gaz s''étendant sur plus de 2 années-lumière.'
+  faits: Son étoile centrale est parmi les plus chaudes connues (>250 000 °C).
+- slug: medusa
+  nom: Nébuleuse de la Méduse
+  type: Nébuleuse planétaire
+  constellation: Gémeaux
+  description: Vieille nébuleuse planétaire aux filaments ténus.
+  faits: Longtemps confondue avec un reste de supernova.
+- slug: ngc6881
+  nom: NGC 6881
+  type: Nébuleuse planétaire
+  constellation: Cygne
+  description: Nébuleuse en forme de papillon symétrique.
+  faits: Sa symétrie suggère une étoile binaire centrale.
+- slug: stingray
+  nom: Nébuleuse de la Raie
+  type: Nébuleuse planétaire
+  constellation: Autel
+  description: La plus jeune nébuleuse planétaire connue, apparue dans les années 1980.
+  faits: A pâli et changé de forme entre 1996 et 2016.
+- slug: minkowski
+  nom: Papillon de Minkowski (M2-9)
+  type: Nébuleuse planétaire
+  constellation: Ophiuchus
+  description: 'Lobes bipolaires issus d''un système binaire.'
+  faits: 'Ses jets filent à plus d''un million de km/h.'
+- slug: ant
+  nom: Nébuleuse de la Fourmi
+  type: Nébuleuse planétaire
+  constellation: Norma
+  description: 'Lobes de gaz évoquant le corps d''une fourmi.'
+  faits: A bousculé les modèles de mort stellaire symétrique.
+- slug: southerncrab
+  nom: Crabe du Sud
+  type: Nébuleuse planétaire
+  constellation: Centaure
+  description: 'Sablier de gaz né d''une naine blanche et d''une variable Mira.'
+  faits: Publiée pour le 29e anniversaire de Hubble.
+- slug: cheeseburger
+  nom: NGC 7026
+  type: Nébuleuse planétaire
+  constellation: Cygne
+  description: Nuage de gaz en forme de papillon.
+  faits: Émet des rayons X détectés par le satellite XMM-Newton.
+- slug: boomerang
+  nom: Nébuleuse du Boomerang
+  type: Nébuleuse protoplanétaire
+  constellation: Centaure
+  description: Lobes symétriques en forme de nœud papillon.
+  faits: 'Longtemps considérée comme l''endroit le plus froid de l''Univers.'
+- slug: egg
+  nom: 'Nébuleuse de l''Œuf'
+  type: Nébuleuse protoplanétaire
+  constellation: Cygne
+  description: Arcs concentriques de poussière éclairés en faisceaux.
+  faits: Éjections de matière périodiques tous les ~100 ans.
+- slug: frostyleo
+  nom: Frosty Leo
+  type: Nébuleuse protoplanétaire
+  constellation: Lion
+  description: Nébuleuse protoplanétaire riche en glace cristalline.
+  faits: Seule nébuleuse de ce type dominée spectralement par la glace.
+- slug: westbrook
+  nom: Nébuleuse de Westbrook (CRL 618)
+  type: Nébuleuse protoplanétaire
+  constellation: Cocher
+  description: Éjection de gaz à 200 km/s depuis une étoile mourante.
+  faits: 'Structure jet/lobes très complexe sur seulement 12 secondes d''arc.'
+- slug: gomez
+  nom: Hamburger de Gomez
+  type: Nébuleuse protoplanétaire
+  constellation: Sagittaire
+  description: 'Disque de poussière vu par la tranche autour d''une étoile mourante.'
+  faits: 'Pourrait être un disque protoplanétaire plutôt qu''une étoile mourante.'
+- slug: witchhead
+  nom: Nébuleuse de la Tête de Sorcière
+  type: Nébuleuse par réflexion
+  constellation: Éridan
+  description: 'Nuage de poussière éclairé par l''étoile Rigel.'
+  faits: Sa couleur bleutée vient de la diffusion préférentielle de la lumière bleue.
+- slug: ngc1999
+  nom: NGC 1999
+  type: Nébuleuse par réflexion
+  constellation: Orion
+  description: Nébuleuse entourant la jeune étoile variable V380 Orionis.
+  faits: Son « trou noir » apparent est une cavité creusée par des jets stellaires.
+- slug: merope
+  nom: Nébuleuse de Mérope
+  type: Nébuleuse par réflexion
+  constellation: Taureau
+  description: 'Nuage de poussière des Pléiades traversé par l''étoile Mérope.'
+  faits: 'N''est pas physiquement liée à l''amas des Pléiades.'
+- slug: ngc2023
+  nom: NGC 2023
+  type: Nébuleuse par réflexion
+  constellation: Orion
+  description: Grande nébuleuse par réflexion de 4 années-lumière, proche de la Tête de Cheval.
+  faits: Une des plus grandes nébuleuses par réflexion connues.
+- slug: ic2631
+  nom: IC 2631
+  type: Nébuleuse par réflexion
+  constellation: Caméléon
+  description: La plus brillante du complexe nébuleux du Caméléon.
+  faits: Pépinière stellaire à 500 années-lumière du Soleil.
+- slug: ngc7129
+  nom: NGC 7129
+  type: Nébuleuse par réflexion
+  constellation: Céphée
+  description: Amas stellaire jeune entouré de gaz et de poussière, surnommé « Rose cosmique ».
+  faits: Des jets de protoétoiles y sont encore en formation.
+- slug: tobacco
+  nom: Le Pot à Tabac (IC 2220)
+  type: Nébuleuse par réflexion
+  constellation: Carène
+  description: Nébuleuse éclairée par la géante rouge HD 65750.
+  faits: 'Structure en papillon rare, large d''environ 1 année-lumière.'
+- slug: crab-m1
+  nom: Nébuleuse du Crabe (M1)
+  type: Rémanent de supernova
+  constellation: Taureau
+  description: 'Filaments issus de l''explosion d''une étoile observée en 1054.'
+  faits: Mosaïque assemblée à partir de 24 expositions Hubble.
+- slug: veil
+  nom: Dentelles du Cygne
+  type: Rémanent de supernova
+  constellation: Cygne
+  description: 'Filaments d''une explosion vieille de 5000 à 10 000 ans.'
+  faits: 'Couvrirait l''équivalent de 6 pleines Lunes dans le ciel.'
+- slug: cas-a
+  nom: Cassiopée A
+  type: Rémanent de supernova
+  constellation: Cassiopée
+  description: Coquille de débris riche en soufre, oxygène, argon et néon.
+  faits: Des échos de lumière ont été détectés dans la poussière lointaine.
+- slug: kepler-snr
+  nom: Rémanent de Kepler
+  type: Rémanent de supernova
+  constellation: Ophiuchus
+  description: Nœuds filamenteux issus de la supernova de 1604.
+  faits: 'Dernière supernova galactique vue à l''œil nu avant Cassiopée A.'
+- slug: vela-snr
+  nom: Rémanent de Véla
+  type: Rémanent de supernova
+  constellation: Voiles
+  description: 'Mosaïque géante d''une explosion vieille de 11 000 ans.'
+  faits: Contient un pulsar tournant plus de 10 fois par seconde.
+- slug: tycho-snr
+  nom: Rémanent de Tycho
+  type: Rémanent de supernova
+  constellation: Cassiopée
+  description: Onde de choc de la supernova de 1572.
+  faits: Premières « stries » en rayons X observées dans un rémanent.
+- slug: rcw86
+  nom: RCW 86
+  type: Rémanent de supernova
+  constellation: Compas
+  description: Arcs de choc visibles en rayons X et lumière visible.
+  faits: 'Pourrait être l''« étoile invitée » chinoise de 185 après J.-C.'
+- slug: sn1006
+  nom: SN 1006
+  type: Rémanent de supernova
+  constellation: Loup
+  description: 'Ruban fin issu de l''explosion la plus brillante jamais enregistrée.'
+  faits: 'A surpassé l''éclat de Vénus dans le ciel de l''an 1006.'
+- slug: n49
+  nom: N49
+  type: Rémanent de supernova
+  constellation: Dorade (Grand Nuage de Magellan)
+  description: Filaments asymétriques dans le Grand Nuage de Magellan.
+  faits: 'Son expansion se fait dans une région de gaz plus dense d''un côté.'
+- slug: n63a
+  nom: N63A
+  type: Rémanent de supernova
+  constellation: Dorade (Grand Nuage de Magellan)
+  description: 'Issue d''une étoile environ 50 fois plus massive que le Soleil.'
+  faits: 'Fait partie de la région de formation d''étoiles N63 du LMC.'
+- slug: w49b
+  nom: W49B
+  type: Rémanent de supernova
+  constellation: Aigle
+  description: Rémanent en forme de tonneau, riche en fer et nickel à 15 millions de degrés.
+  faits: 'Pourrait avoir laissé un trou noir plutôt qu''une étoile à neutrons.'
+- slug: orion-m42
+  nom: 'Nébuleuse d''Orion (M42)'
+  type: Région HII
+  constellation: Orion
+  description: Pépinière stellaire révélant plus de 3000 étoiles.
+  faits: Vue assemblée à partir de 520 images Hubble distinctes.
+- slug: carina-neb
+  nom: Nébuleuse de la Carène
+  type: Région HII
+  constellation: Carène
+  description: 'Pilier de gaz sculpté par les vents d''étoiles massives.'
+  faits: 'Première grande image prise après l''installation de la WFC3 en 2009.'
+- slug: tarantula
+  nom: Nébuleuse de la Tarentule
+  type: Région HII
+  constellation: Dorade (Grand Nuage de Magellan)
+  description: Plus grande pépinière stellaire connue du Groupe local.
+  faits: 'Contient l''amas R136 et certaines des étoiles les plus massives connues.'
+- slug: trifid
+  nom: Nébuleuse Trifide (M20)
+  type: Région HII
+  constellation: Sagittaire
+  description: Grand champ et gros plan révélant un jet stellaire (HH 399).
+  faits: Première image combinant un grand champ Rubin et un zoom Hubble.
+- slug: lagoon
+  nom: Nébuleuse de la Lagune (M8)
+  type: Région HII
+  constellation: Sagittaire
+  description: Tourbillons de gaz lumineux sculptés par de jeunes étoiles.
+  faits: De nouvelles « tornades » stellaires y ont été révélées par Hubble.
+- slug: pillars-m16
+  nom: Piliers de la Création (M16)
+  type: Région HII
+  constellation: Serpent
+  description: Colonnes de gaz sculptées par le rayonnement de jeunes étoiles.
+  faits: 'Nouvelle version 2015, vingt ans après l''image originale de 1995.'
+- slug: rosette
+  nom: Nébuleuse de la Rosette
+  type: Région HII
+  constellation: Licorne
+  description: 'Nuages d''hydrogène striés de poussière, en forme de rose.'
+  faits: Ondes de choc créées par une jeune étoile en formation.
+- slug: flame-neb
+  nom: Nébuleuse de la Flamme
+  type: Région HII
+  constellation: Orion
+  description: 'L''infrarouge révèle un amas d''étoiles caché derrière la poussière.'
+  faits: Partage le même champ que la proche nébuleuse de la Tête de Cheval.
+- slug: catspaw
+  nom: Nébuleuse de la Patte de Chat
+  type: Région HII
+  constellation: Scorpion
+  description: Pépinière stellaire active à environ 5500 années-lumière.
+  faits: 'Ses lobes évoquent les coussinets d''une patte féline.'
+- slug: crescent-neb
+  nom: Nébuleuse du Croissant
+  type: Région HII
+  constellation: Cygne
+  description: Coquille de gaz soufflée par une étoile Wolf-Rayet.
+  faits: 'Son étoile centrale, WR 136, est d''un type rare à vie très courte.'
+- slug: horsehead
+  nom: Nébuleuse de la Tête de Cheval
+  type: Nébuleuse obscure
+  constellation: Orion
+  description: Vue infrarouge révélant des structures invisibles en lumière visible.
+  faits: Publiée pour le 23e anniversaire du télescope Hubble.
+- slug: sh2-106
+  nom: Sharpless 2-106
+  type: Région HII
+  constellation: Cygne
+  description: Jeune étoile sculptant un sablier de gaz et de poussière.
+  faits: Surnommée « ange de neige cosmique ».
+- slug: warpeace
+  nom: Nébuleuse Guerre et Paix (NGC 6357)
+  type: Région HII
+  constellation: Scorpion
+  description: 'Étoiles jeunes et chaudes sculptant des colonnes en trompe d''éléphant.'
+  faits: 'L''une des vues les plus détaillées jamais prises de cette région en visible.'
+- slug: seagull-neb
+  nom: Nébuleuse de la Mouette
+  type: Région HII
+  constellation: Licorne / Grand Chien
+  description: 'Région en forme d''oiseau s''étendant sur une centaine d''années-lumière.'
+  faits: 'Trois nuages distincts forment la tête et les ailes de l''oiseau.'
+- slug: pipe-neb
+  nom: Nébuleuse de la Pipe
+  type: Nébuleuse obscure
+  constellation: Ophiuchus
+  description: 'Nuage moléculaire sombre occultant les étoiles d''arrière-plan.'
+  faits: 'Visible à l''œil nu depuis l''hémisphère sud, sous un ciel noir.'
+- slug: coalsack
+  nom: Sac à Charbon
+  type: Nébuleuse obscure
+  constellation: Croix du Sud
+  description: Nuage moléculaire sombre bloquant la lumière de la Voie lactée.
+  faits: Figure sacrée dans plusieurs mythologies aborigènes australiennes.
+- slug: barnard68
+  nom: Barnard 68
+  type: Nébuleuse obscure
+  constellation: Ophiuchus
+  description: 'Globule de gaz opaque, futur berceau d''étoiles.'
+  faits: 'Environ 3700 étoiles d''arrière-plan révélées en infrarouge.'
+- slug: inkspot
+  nom: Barnard 86
+  type: Nébuleuse obscure
+  constellation: Sagittaire
+  description: 'Petit nuage sombre en forme de silhouette, près de l''amas NGC 6520.'
+  faits: 'Décrit par l''astronome Barnard comme « une goutte d''encre sur le ciel ».'
+- slug: blackwolf
+  nom: Nébuleuse du Loup Noir
+  type: Nébuleuse obscure
+  constellation: Scorpion
+  description: 'Traînée de poussière dessinant la silhouette d''un loup.'
+  faits: Découverte récente (2024) grâce au relevé VPHAS+.
+- slug: thackeray
+  nom: Globules de Thackeray
+  type: Nébuleuse obscure
+  constellation: Centaure
+  description: 'Globules de Bok sombres se détachant sur un fond rouge d''hydrogène.'
+  faits: Le plus grand globule pèse plus de 15 masses solaires.
+- slug: homunculus
+  nom: Homoncule (Eta Carinae)
+  type: Nébuleuse circumstellaire
+  constellation: Carène
+  description: Nuage bilobé issu de la « Grande Éruption » des années 1840.
+  faits: Contient assez de matière pour fabriquer dix étoiles comme le Soleil.
+- slug: friedegg
+  nom: 'Nébuleuse de l''Œuf au Plat'
+  type: Nébuleuse circumstellaire
+  constellation: Scorpion
+  description: 'Coquilles de matière autour d''une hypergéante jaune rarissime.'
+  faits: 500 000 fois plus lumineuse que le Soleil.

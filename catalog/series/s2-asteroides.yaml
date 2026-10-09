@@ -1,0 +1,206 @@
+# Série II — Astéroïdes
+# Raretés : C (Commune), PC (Peu commune), R (Rare), UR (Ultra rare), L (Légendaire).
+
+serie:
+  code: S2
+  nom: Astéroïdes
+  description: 'Deuxième série : astéroïdes et corps mineurs visités de près par des sondes spatiales, en vraies
+    photos NASA/ESA/JAXA.'
+  date_sortie: '2026-10-09'
+  active: true
+boosters:
+- code: S2-STD
+  nom: Booster Astéroïdes
+  nb_cartes: 5
+  image: ast-vesta.webp
+  emplacements:
+  - position: 1
+    taux:
+      C: 0.75
+      PC: 0.25
+  - position: 2
+    taux:
+      C: 0.75
+      PC: 0.25
+  - position: 3
+    taux:
+      C: 0.6
+      PC: 0.4
+  - position: 4
+    taux:
+      PC: 0.55
+      R: 0.38
+      UR: 0.07
+  - position: 5
+    taux:
+      R: 0.72
+      UR: 0.22
+      L: 0.06
+cartes:
+- numero: 1
+  objet: vesta
+  rarete: L
+  stats:
+    attaque: 60
+    defense: 64
+    vitesse: 52
+  image: ast-vesta.webp
+  credit: NASA/JPL-Caltech/UCLA/MPS/DLR/IDA · Dawn (2011)
+  licence: Domaine public
+  cadrage: globe
+- numero: 2
+  objet: vesta
+  variante: rheasilvia
+  rarete: R
+  stats:
+    attaque: 55
+    defense: 58
+    vitesse: 30
+  image: ast-vesta_rheasilvia.webp
+  credit: NASA/JPL-Caltech/UCLA/MPS/DLR/IDA · Dawn (2011)
+  licence: Domaine public
+  cadrage: photo
+- numero: 3
+  objet: eros
+  rarete: UR
+  stats:
+    attaque: 52
+    defense: 56
+    vitesse: 40
+  image: ast-eros.webp
+  credit: NASA/JHUAPL · NEAR Shoemaker (2000)
+  licence: Domaine public
+  cadrage: globe
+- numero: 4
+  objet: itokawa
+  rarete: R
+  stats:
+    attaque: 38
+    defense: 44
+    vitesse: 46
+  image: ast-itokawa.webp
+  credit: JAXA · Hayabusa (2005)
+  licence: JAXA (usage libre avec attribution)
+  cadrage: globe
+- numero: 5
+  objet: ryugu
+  rarete: UR
+  stats:
+    attaque: 44
+    defense: 50
+    vitesse: 38
+  image: ast-ryugu.webp
+  credit: JAXA/U. Tokyo et al. · Hayabusa2 (2018)
+  licence: JAXA (usage libre avec attribution)
+  cadrage: globe
+- numero: 6
+  objet: bennu
+  rarete: UR
+  stats:
+    attaque: 40
+    defense: 52
+    vitesse: 34
+  image: ast-bennu.webp
+  credit: NASA/Goddard/U. Arizona · OSIRIS-REx (2018)
+  licence: Domaine public
+  cadrage: globe
+- numero: 7
+  objet: ida
+  rarete: R
+  stats:
+    attaque: 46
+    defense: 52
+    vitesse: 36
+  image: ast-ida_dactyl.webp
+  credit: NASA/JPL · Galileo (1993)
+  licence: Domaine public
+  cadrage: globe
+- numero: 8
+  objet: dactyl
+  rarete: C
+  stats:
+    attaque: 20
+    defense: 24
+    vitesse: 28
+  image: ast-dactyl.webp
+  credit: NASA/JPL · Galileo (1993)
+  licence: Domaine public
+  cadrage: globe
+- numero: 9
+  objet: mathilde
+  rarete: C
+  stats:
+    attaque: 30
+    defense: 38
+    vitesse: 20
+  image: ast-mathilde.webp
+  credit: NASA/JHUAPL · NEAR Shoemaker (1997)
+  licence: Domaine public
+  cadrage: globe
+- numero: 10
+  objet: gaspra
+  rarete: C
+  stats:
+    attaque: 32
+    defense: 38
+    vitesse: 34
+  image: ast-gaspra.webp
+  credit: NASA/JPL · Galileo (1991)
+  licence: Domaine public
+  cadrage: globe
+- numero: 11
+  objet: steins
+  rarete: C
+  stats:
+    attaque: 26
+    defense: 30
+    vitesse: 24
+  image: ast-steins.webp
+  credit: ESA/OSIRIS · Rosetta (2008)
+  licence: CC BY-SA 3.0 IGO
+  cadrage: globe
+- numero: 12
+  objet: lutetia
+  rarete: R
+  stats:
+    attaque: 44
+    defense: 50
+    vitesse: 26
+  image: ast-lutetia.webp
+  credit: ESA/OSIRIS · Rosetta (2010)
+  licence: CC BY-SA 3.0 IGO
+  cadrage: globe
+- numero: 13
+  objet: didymos
+  variante: duo
+  rarete: UR
+  stats:
+    attaque: 42
+    defense: 46
+    vitesse: 44
+  image: ast-didymos_dimorphos.webp
+  credit: NASA/JHUAPL · DART (2022)
+  licence: Domaine public
+  cadrage: globe
+- numero: 14
+  objet: dimorphos
+  rarete: UR
+  stats:
+    attaque: 36
+    defense: 22
+    vitesse: 50
+  image: ast-dimorphos.webp
+  credit: NASA/JHUAPL · DART, DRACO (2022)
+  licence: Domaine public
+  cadrage: photo
+- numero: 15
+  objet: annefrank
+  rarete: PC
+  stats:
+    attaque: 22
+    defense: 26
+    vitesse: 22
+  image: ast-annefrank.webp
+  credit: NASA/JPL · Stardust (2002)
+  licence: Domaine public
+  cadrage: globe

@@ -1,0 +1,754 @@
+# Série III — Nébuleuses
+# Raretés : C (Commune), PC (Peu commune), R (Rare), UR (Ultra rare), L (Légendaire).
+
+serie:
+  code: S3
+  nom: Nébuleuses
+  description: 'Troisième série : nébuleuses planétaires, régions de formation d''étoiles et rémanents de
+    supernova, en vraies photos Hubble, JWST et ESO.'
+  date_sortie: '2026-10-09'
+  active: true
+boosters:
+- code: S3-STD
+  nom: Booster Nébuleuses
+  nb_cartes: 5
+  image: neb-pillars_m16.webp
+  emplacements:
+  - position: 1
+    taux:
+      C: 0.75
+      PC: 0.25
+  - position: 2
+    taux:
+      C: 0.75
+      PC: 0.25
+  - position: 3
+    taux:
+      C: 0.6
+      PC: 0.4
+  - position: 4
+    taux:
+      PC: 0.55
+      R: 0.38
+      UR: 0.07
+  - position: 5
+    taux:
+      R: 0.72
+      UR: 0.22
+      L: 0.06
+cartes:
+- numero: 1
+  objet: ring-m57
+  rarete: L
+  stats:
+    attaque: 35
+    defense: 58
+    vitesse: 43
+  image: neb-ring_m57.webp
+  credit: NASA/ESA · Hubble (WFC3)
+  licence: CC BY 4.0
+  cadrage: photo
+- numero: 2
+  objet: dumbbell-m27
+  rarete: L
+  stats:
+    attaque: 19
+    defense: 38
+    vitesse: 18
+  image: neb-dumbbell_m27.webp
+  credit: NASA/ESA · Hubble (WFPC2)
+  licence: CC BY 4.0
+  cadrage: photo
+- numero: 3
+  objet: helix
+  rarete: R
+  stats:
+    attaque: 63
+    defense: 52
+    vitesse: 37
+  image: neb-helix.webp
+  credit: NASA/ESA · Hubble/CTIO
+  licence: CC BY 4.0
+  cadrage: photo
+- numero: 4
+  objet: eskimo
+  rarete: R
+  stats:
+    attaque: 36
+    defense: 35
+    vitesse: 37
+  image: neb-eskimo.webp
+  credit: NASA/ESA · Hubble (WFPC2)
+  licence: CC BY 4.0
+  cadrage: photo
+- numero: 5
+  objet: cat-eye
+  rarete: C
+  stats:
+    attaque: 31
+    defense: 34
+    vitesse: 15
+  image: neb-cat_eye.webp
+  credit: NASA/ESA · Hubble (ACS)
+  licence: CC BY 4.0
+  cadrage: photo
+- numero: 6
+  objet: jewelbug
+  rarete: R
+  stats:
+    attaque: 57
+    defense: 55
+    vitesse: 57
+  image: neb-jewelbug.webp
+  credit: NASA/ESA · Hubble (WFC3)
+  licence: CC BY 4.0
+  cadrage: photo
+- numero: 7
+  objet: blinking
+  rarete: R
+  stats:
+    attaque: 42
+    defense: 49
+    vitesse: 53
+  image: neb-blinking.webp
+  credit: NASA/ESA · Hubble (WFPC2)
+  licence: CC BY 4.0
+  cadrage: photo
+- numero: 8
+  objet: figure8
+  rarete: C
+  stats:
+    attaque: 42
+    defense: 15
+    vitesse: 39
+  image: neb-figure8.webp
+  credit: NASA/ESA · Hubble (WFPC2)
+  licence: CC BY 4.0
+  cadrage: photo
+- numero: 9
+  objet: ic4593
+  rarete: UR
+  stats:
+    attaque: 72
+    defense: 63
+    vitesse: 60
+  image: neb-ic4593.webp
+  credit: NASA/ESA · Hubble (WFPC2)
+  licence: CC BY 4.0
+  cadrage: photo
+- numero: 10
+  objet: ngc2440
+  rarete: C
+  stats:
+    attaque: 21
+    defense: 45
+    vitesse: 39
+  image: neb-ngc2440.webp
+  credit: NASA/ESA · Hubble (WFPC2)
+  licence: CC BY 4.0
+  cadrage: photo
+- numero: 11
+  objet: turtle
+  rarete: PC
+  stats:
+    attaque: 27
+    defense: 37
+    vitesse: 28
+  image: neb-turtle.webp
+  credit: NASA/ESA · Hubble (WFPC2)
+  licence: CC BY 4.0
+  cadrage: photo
+- numero: 12
+  objet: necklace
+  rarete: PC
+  stats:
+    attaque: 36
+    defense: 44
+    vitesse: 33
+  image: neb-necklace.webp
+  credit: NASA/ESA · Hubble (WFC3)
+  licence: CC BY 4.0
+  cadrage: photo
+- numero: 13
+  objet: butterfly
+  rarete: UR
+  stats:
+    attaque: 73
+    defense: 64
+    vitesse: 67
+  image: neb-butterfly.webp
+  credit: NASA/ESA · Hubble (WFC3)
+  licence: CC BY 4.0
+  cadrage: photo
+- numero: 14
+  objet: medusa
+  rarete: C
+  stats:
+    attaque: 44
+    defense: 27
+    vitesse: 17
+  image: neb-medusa.webp
+  credit: ESO · VLT (FORS2)
+  licence: CC BY 4.0
+  cadrage: photo
+- numero: 15
+  objet: ngc6881
+  rarete: R
+  stats:
+    attaque: 61
+    defense: 55
+    vitesse: 54
+  image: neb-ngc6881.webp
+  credit: NASA/ESA · Hubble (WFPC2)
+  licence: CC BY 4.0
+  cadrage: photo
+- numero: 16
+  objet: stingray
+  rarete: UR
+  stats:
+    attaque: 61
+    defense: 68
+    vitesse: 56
+  image: neb-stingray.webp
+  credit: NASA/ESA · Hubble (WFPC2)
+  licence: CC BY 4.0
+  cadrage: photo
+- numero: 17
+  objet: minkowski
+  rarete: R
+  stats:
+    attaque: 36
+    defense: 56
+    vitesse: 42
+  image: neb-minkowski.webp
+  credit: NASA/ESA · Hubble (STIS/WFPC2)
+  licence: CC BY 4.0
+  cadrage: photo
+- numero: 18
+  objet: ant
+  rarete: R
+  stats:
+    attaque: 37
+    defense: 62
+    vitesse: 42
+  image: neb-ant.webp
+  credit: NASA/ESA · Hubble (WFPC2)
+  licence: CC BY 4.0
+  cadrage: photo
+- numero: 19
+  objet: southerncrab
+  rarete: UR
+  stats:
+    attaque: 62
+    defense: 58
+    vitesse: 64
+  image: neb-southerncrab.webp
+  credit: NASA/ESA · Hubble (WFC3)
+  licence: CC BY 4.0
+  cadrage: photo
+- numero: 20
+  objet: cheeseburger
+  rarete: R
+  stats:
+    attaque: 46
+    defense: 40
+    vitesse: 46
+  image: neb-cheeseburger.webp
+  credit: NASA/ESA · Hubble (WFPC2)
+  licence: CC BY 4.0
+  cadrage: photo
+- numero: 21
+  objet: boomerang
+  rarete: PC
+  stats:
+    attaque: 46
+    defense: 33
+    vitesse: 47
+  image: neb-boomerang.webp
+  credit: NASA/ESA · Hubble (ACS)
+  licence: CC BY 4.0
+  cadrage: photo
+- numero: 22
+  objet: egg
+  rarete: UR
+  stats:
+    attaque: 70
+    defense: 52
+    vitesse: 69
+  image: neb-egg.webp
+  credit: NASA/ESA · Hubble (WFPC2)
+  licence: CC BY 4.0
+  cadrage: photo
+- numero: 23
+  objet: frostyleo
+  rarete: R
+  stats:
+    attaque: 52
+    defense: 58
+    vitesse: 42
+  image: neb-frostyleo.webp
+  credit: NASA/ESA · Hubble (ACS-HRC)
+  licence: CC BY 4.0
+  cadrage: photo
+- numero: 24
+  objet: westbrook
+  rarete: C
+  stats:
+    attaque: 27
+    defense: 23
+    vitesse: 44
+  image: neb-westbrook.webp
+  credit: NASA/ESA · Hubble (WFPC2)
+  licence: CC BY 4.0
+  cadrage: photo
+- numero: 25
+  objet: gomez
+  rarete: R
+  stats:
+    attaque: 52
+    defense: 42
+    vitesse: 56
+  image: neb-gomez.webp
+  credit: NASA/ESA · Hubble (WFPC2)
+  licence: CC BY 4.0
+  cadrage: photo
+- numero: 26
+  objet: witchhead
+  rarete: PC
+  stats:
+    attaque: 49
+    defense: 49
+    vitesse: 26
+  image: neb-witchhead.webp
+  credit: ESO
+  licence: CC BY 4.0
+  cadrage: photo
+- numero: 27
+  objet: ngc1999
+  rarete: C
+  stats:
+    attaque: 16
+    defense: 40
+    vitesse: 25
+  image: neb-ngc1999.webp
+  credit: NASA/ESA · Hubble (WFPC2)
+  licence: CC BY 4.0
+  cadrage: photo
+- numero: 28
+  objet: merope
+  rarete: PC
+  stats:
+    attaque: 27
+    defense: 31
+    vitesse: 54
+  image: neb-merope.webp
+  credit: NASA/ESA · Hubble (WFPC2)
+  licence: CC BY 4.0
+  cadrage: photo
+- numero: 29
+  objet: ngc2023
+  rarete: UR
+  stats:
+    attaque: 78
+    defense: 72
+    vitesse: 60
+  image: neb-ngc2023.webp
+  credit: NASA/ESA · Hubble (ACS)
+  licence: CC BY 4.0
+  cadrage: photo
+- numero: 30
+  objet: ic2631
+  rarete: C
+  stats:
+    attaque: 30
+    defense: 27
+    vitesse: 43
+  image: neb-ic2631.webp
+  credit: ESO (WFI)
+  licence: CC BY 4.0
+  cadrage: photo
+- numero: 31
+  objet: ngc7129
+  rarete: UR
+  stats:
+    attaque: 64
+    defense: 54
+    vitesse: 58
+  image: neb-ngc7129.webp
+  credit: NASA/ESA/CSA · JWST (NIRCam)
+  licence: CC BY 4.0
+  cadrage: photo
+- numero: 32
+  objet: tobacco
+  rarete: C
+  stats:
+    attaque: 38
+    defense: 32
+    vitesse: 32
+  image: neb-tobacco.webp
+  credit: ESO · VLT (FORS1)
+  licence: CC BY 4.0
+  cadrage: photo
+- numero: 33
+  objet: crab-m1
+  rarete: C
+  stats:
+    attaque: 33
+    defense: 28
+    vitesse: 43
+  image: neb-crab_m1.webp
+  credit: NASA/ESA · Hubble (WFPC2)
+  licence: CC BY 4.0
+  cadrage: photo
+- numero: 34
+  objet: veil
+  rarete: R
+  stats:
+    attaque: 46
+    defense: 42
+    vitesse: 39
+  image: neb-veil.webp
+  credit: NASA/ESA · Hubble (WFPC2)
+  licence: CC BY 4.0
+  cadrage: photo
+- numero: 35
+  objet: cas-a
+  rarete: PC
+  stats:
+    attaque: 27
+    defense: 49
+    vitesse: 26
+  image: neb-casA.webp
+  credit: NASA/ESA/CSA · JWST (NIRCam)
+  licence: Domaine public
+  cadrage: photo
+- numero: 36
+  objet: kepler-snr
+  rarete: UR
+  stats:
+    attaque: 54
+    defense: 70
+    vitesse: 55
+  image: neb-kepler.webp
+  credit: NASA/ESA · Hubble (ACS)
+  licence: CC BY 4.0
+  cadrage: photo
+- numero: 37
+  objet: vela-snr
+  rarete: UR
+  stats:
+    attaque: 63
+    defense: 69
+    vitesse: 52
+  image: neb-vela_snr.webp
+  credit: ESO · VST/OmegaCAM
+  licence: CC BY 4.0
+  cadrage: photo
+- numero: 38
+  objet: tycho-snr
+  rarete: PC
+  stats:
+    attaque: 44
+    defense: 39
+    vitesse: 41
+  image: neb-tycho.webp
+  credit: NASA/CXC · Chandra
+  licence: Domaine public
+  cadrage: photo
+- numero: 39
+  objet: rcw86
+  rarete: C
+  stats:
+    attaque: 32
+    defense: 42
+    vitesse: 45
+  image: neb-rcw86.webp
+  credit: NASA/CXC · Chandra + ESO/VLT
+  licence: Domaine public
+  cadrage: photo
+- numero: 40
+  objet: sn1006
+  rarete: C
+  stats:
+    attaque: 38
+    defense: 18
+    vitesse: 36
+  image: neb-sn1006.webp
+  credit: NASA/ESA · Hubble (ACS-WFPC2)
+  licence: CC BY 4.0
+  cadrage: photo
+- numero: 41
+  objet: n49
+  rarete: UR
+  stats:
+    attaque: 74
+    defense: 58
+    vitesse: 74
+  image: neb-n49.webp
+  credit: NASA/ESA · Hubble (WFPC2)
+  licence: CC BY 4.0
+  cadrage: photo
+- numero: 42
+  objet: n63a
+  rarete: R
+  stats:
+    attaque: 38
+    defense: 44
+    vitesse: 48
+  image: neb-n63a.webp
+  credit: NASA/ESA · Hubble (WFPC2)
+  licence: CC BY 4.0
+  cadrage: photo
+- numero: 43
+  objet: w49b
+  rarete: C
+  stats:
+    attaque: 15
+    defense: 45
+    vitesse: 38
+  image: neb-w49b.webp
+  credit: NASA/CXC · Chandra/VLA/Palomar
+  licence: Domaine public
+  cadrage: photo
+- numero: 44
+  objet: orion-m42
+  rarete: UR
+  stats:
+    attaque: 58
+    defense: 66
+    vitesse: 74
+  image: neb-orion_m42.webp
+  credit: NASA/ESA · Hubble (mosaïque Treasury)
+  licence: CC BY 4.0
+  cadrage: photo
+- numero: 45
+  objet: carina-neb
+  rarete: C
+  stats:
+    attaque: 44
+    defense: 18
+    vitesse: 42
+  image: neb-carina.webp
+  credit: NASA/ESA · Hubble (WFC3)
+  licence: CC BY 4.0
+  cadrage: photo
+- numero: 46
+  objet: tarantula
+  rarete: R
+  stats:
+    attaque: 61
+    defense: 55
+    vitesse: 51
+  image: neb-tarantula.webp
+  credit: NASA/ESA · Hubble + ESO
+  licence: CC BY 4.0
+  cadrage: photo
+- numero: 47
+  objet: trifid
+  rarete: R
+  stats:
+    attaque: 39
+    defense: 46
+    vitesse: 59
+  image: neb-trifid.webp
+  credit: NASA/ESA · Rubin + Hubble
+  licence: CC BY 4.0
+  cadrage: photo
+- numero: 48
+  objet: lagoon
+  rarete: C
+  stats:
+    attaque: 45
+    defense: 39
+    vitesse: 44
+  image: neb-lagoon.webp
+  credit: NASA/ESA · Hubble (ACS-WFC3)
+  licence: CC BY 4.0
+  cadrage: photo
+- numero: 49
+  objet: pillars-m16
+  rarete: R
+  stats:
+    attaque: 35
+    defense: 54
+    vitesse: 45
+  image: neb-pillars_m16.webp
+  credit: NASA/ESA · Hubble (WFC3)
+  licence: CC BY 4.0
+  cadrage: photo
+- numero: 50
+  objet: rosette
+  rarete: PC
+  stats:
+    attaque: 28
+    defense: 54
+    vitesse: 36
+  image: neb-rosette.webp
+  credit: NASA/ESA · Hubble
+  licence: CC BY 4.0
+  cadrage: photo
+- numero: 51
+  objet: flame-neb
+  rarete: UR
+  stats:
+    attaque: 76
+    defense: 75
+    vitesse: 59
+  image: neb-flame.webp
+  credit: ESO · VISTA (infrarouge)
+  licence: CC BY 4.0
+  cadrage: photo
+- numero: 52
+  objet: catspaw
+  rarete: C
+  stats:
+    attaque: 22
+    defense: 43
+    vitesse: 33
+  image: neb-catspaw.webp
+  credit: ESO (DSS2/WFI)
+  licence: CC BY 4.0
+  cadrage: photo
+- numero: 53
+  objet: crescent-neb
+  rarete: UR
+  stats:
+    attaque: 52
+    defense: 73
+    vitesse: 65
+  image: neb-crescent.webp
+  credit: NASA/ESA · Hubble (WFPC2)
+  licence: CC BY 4.0
+  cadrage: photo
+- numero: 54
+  objet: horsehead
+  rarete: UR
+  stats:
+    attaque: 74
+    defense: 67
+    vitesse: 74
+  image: neb-horsehead.webp
+  credit: NASA/ESA · Hubble (WFC3 IR)
+  licence: CC BY 4.0
+  cadrage: photo
+- numero: 55
+  objet: sh2-106
+  rarete: C
+  stats:
+    attaque: 36
+    defense: 30
+    vitesse: 45
+  image: neb-sh2_106.webp
+  credit: NASA/ESA · Hubble (WFC3)
+  licence: CC BY 4.0
+  cadrage: photo
+- numero: 56
+  objet: warpeace
+  rarete: R
+  stats:
+    attaque: 43
+    defense: 51
+    vitesse: 62
+  image: neb-warpeace.webp
+  credit: ESO · VLT (FORS2)
+  licence: CC BY 4.0
+  cadrage: photo
+- numero: 57
+  objet: seagull-neb
+  rarete: R
+  stats:
+    attaque: 65
+    defense: 41
+    vitesse: 64
+  image: neb-seagull.webp
+  credit: ESO (DSS2)
+  licence: CC BY 4.0
+  cadrage: photo
+- numero: 58
+  objet: pipe-neb
+  rarete: R
+  stats:
+    attaque: 58
+    defense: 57
+    vitesse: 41
+  image: neb-pipe.webp
+  credit: ESO (WFI)
+  licence: CC BY 4.0
+  cadrage: photo
+- numero: 59
+  objet: coalsack
+  rarete: R
+  stats:
+    attaque: 47
+    defense: 56
+    vitesse: 55
+  image: neb-coalsack.webp
+  credit: ESO (WFI)
+  licence: CC BY 4.0
+  cadrage: photo
+- numero: 60
+  objet: barnard68
+  rarete: PC
+  stats:
+    attaque: 53
+    defense: 41
+    vitesse: 39
+  image: neb-barnard68.webp
+  credit: ESO · NTT/SOFI + VLT
+  licence: CC BY 4.0
+  cadrage: photo
+- numero: 61
+  objet: inkspot
+  rarete: C
+  stats:
+    attaque: 22
+    defense: 17
+    vitesse: 25
+  image: neb-inkspot.webp
+  credit: ESO (WFI)
+  licence: CC BY 4.0
+  cadrage: photo
+- numero: 62
+  objet: blackwolf
+  rarete: C
+  stats:
+    attaque: 32
+    defense: 22
+    vitesse: 33
+  image: neb-blackwolf.webp
+  credit: ESO · VST (VPHAS+)
+  licence: CC BY 4.0
+  cadrage: photo
+- numero: 63
+  objet: thackeray
+  rarete: C
+  stats:
+    attaque: 17
+    defense: 37
+    vitesse: 35
+  image: neb-thackeray.webp
+  credit: NASA/ESA · Hubble (WFPC2)
+  licence: CC BY 4.0
+  cadrage: photo
+- numero: 64
+  objet: homunculus
+  rarete: C
+  stats:
+    attaque: 17
+    defense: 43
+    vitesse: 16
+  image: neb-homunculus.webp
+  credit: NASA/ESA · Hubble (ACS-HRC)
+  licence: CC BY 4.0
+  cadrage: photo
+- numero: 65
+  objet: friedegg
+  rarete: UR
+  stats:
+    attaque: 52
+    defense: 66
+    vitesse: 57
+  image: neb-friedegg.webp
+  credit: ESO · VLT (VISIR)
+  licence: CC BY 4.0
+  cadrage: photo
