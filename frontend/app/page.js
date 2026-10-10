@@ -5,8 +5,8 @@ import Carte, { ORDER, RAR } from "@/components/Carte";
 import { BorderBeam, Marquee, NumberTicker, ShimmerButton } from "@/components/MagicUI";
 import { api } from "@/lib/api";
 
-const LEGENDAIRES = [1, 3, 11];                               // Terre, Jupiter, Centaurus A
-const LADDER = [[46, "C"], [38, "PC"], [31, "R"], [5, "UR"], [1, "L"]];
+const LEGENDAIRES = [1, 2, 3];                                // Terre, Saturne, Jupiter
+const LADDER = [[31, "C"], [10, "PC"], [30, "R"], [11, "UR"], [2, "L"]];
 const FEATURES = [
   { icon: "ph-cards", t: "Collection", d: "Quantités, cartes manquantes, filtres par rareté." },
   { icon: "ph-arrows-left-right", t: "Échanges et marché", d: "Tes doubles deviennent une monnaie." },
@@ -38,7 +38,8 @@ export default function LandingPage() {
   const byNum = n => cards.find(c => c.numero === n);
   const slots = booster?.emplacements || [];
   const lastL = slots.at(-1)?.taux?.L;
-  const hero = byNum(46), m83 = byNum(12);
+  const hero = byNum(1);           // Terre, pour le nom/constellation affichés sous le titre
+  const photo2 = byNum(34);        // Anneaux de Saturne (Cassini), gros plan
   const odds = r => r === "C"
     ? (() => { const at = slots.filter(s => s.taux.C); return at.length ? `Emplacements ${at[0].position} à ${at.at(-1).position}` : ""; })()
     : slots.filter(s => s.taux[r]).map(s => `${pct(s.taux[r])} en carte ${s.position}`).join(" · ");
@@ -46,10 +47,8 @@ export default function LandingPage() {
   return (
     <div className="lp">
       <header className="lp-hero">
-        {hero && (
-          // eslint-disable-next-line @next/next/no-img-element
-          <div className="lighten lp-hero-photo"><img src={hero.image_url} alt="" /></div>
-        )}
+        {/* eslint-disable-next-line @next/next/no-img-element */}
+        <div className="lighten lp-hero-photo"><img src="/hero/pillars.webp" alt="" /></div>
         <div className="lp-hero-shade" />
         <nav className="nav lp-nav">
           <Link className="ax-brand" href="/"><span className="ax-mark" /><b>ASTRODEX</b></Link>
@@ -60,11 +59,11 @@ export default function LandingPage() {
         </nav>
         <div className="lp-hero-meta">
           <span>SÉRIE {serie?.code?.replace(/^S/, "") === "1" ? "I" : serie?.code || "I"}</span>
-          <span>{(serie?.nom || "Ciel profond").toUpperCase()}</span>
+          <span>{(serie?.nom || "Système solaire").toUpperCase()}</span>
           {hero && <span className="lp-push">{hero.nom.toUpperCase()} · {hero.constellation.toUpperCase()}</span>}
         </div>
         <div className="lp-hero-body">
-          <h1>{cards.length || 47} fragments<br /><span>du ciel profond.</span></h1>
+          <h1>{cards.length || 39} vraies photos<br /><span>de l'espace.</span></h1>
           <p>Chaque carte est une vraie photographie d'un objet céleste. Ouvre des boosters, réunis la série, échange tes doubles.</p>
           <div><ShimmerButton href="/inscription">Ouvrir un booster</ShimmerButton></div>
         </div>
@@ -77,7 +76,7 @@ export default function LandingPage() {
       )}
 
       <div className="lp-wrap lp-tickers">
-        <div><b><NumberTicker value={cards.length || 47} /></b><span>cartes dans la série {serie?.nom || "Ciel profond"}</span></div>
+        <div><b><NumberTicker value={cards.length || 39} /></b><span>cartes dans la série {serie?.nom || "Système solaire"}</span></div>
         <div><b><NumberTicker value={booster?.nb_cartes || 5} /></b><span>cartes par booster, une rare garantie</span></div>
         {lastL != null && <div><b><NumberTicker value={Math.round(lastL * 100)} /> %</b><span>de chance de Légendaire au 5e emplacement</span></div>}
       </div>
@@ -121,16 +120,16 @@ export default function LandingPage() {
 
       <section className="lp-wrap lp-duo">
         <div className="lp-photos">
-          {m83 && (
+          {photo2 && (
             // eslint-disable-next-line @next/next/no-img-element
-            <div className="lighten"><img src={m83.image_url} alt="" /></div>
+            <div className="lighten"><img src={photo2.image_url} alt="" /></div>
           )}
           <h4>Des photos qui existent</h4>
           <p>Hubble, ESO, NASA. Chaque carte crédite sa source.</p>
         </div>
         <div className="lp-count">
           <span className="lp-gems">{ORDER.map(r => <i key={r} style={{ background: RAR[r].color }} />)}</span>
-          <div><b>{cards.length || 47}</b><span>cartes disponibles dans la série {serie?.nom || "Ciel profond"}</span></div>
+          <div><b>{cards.length || 39}</b><span>cartes disponibles dans la série {serie?.nom || "Système solaire"}</span></div>
         </div>
       </section>
 
