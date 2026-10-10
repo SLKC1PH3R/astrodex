@@ -74,3 +74,18 @@
   .cf-box, .cf-lid, .co-card, .co-box { transition: none; }
   .cf-shake, .co-rays { animation: none; }
 }
+
+/* ---------- Carrousel de coffrets ---------- */
+.co-carousel { display: flex; gap: 18px; width: 100%; max-width: 1100px; overflow-x: auto; overflow-y: visible;
+  padding: 10px 32px 22px; scroll-snap-type: x proximity; }
+.co-carousel-item { position: relative; flex: none; width: 118px; height: 150px; scroll-snap-align: center; }
+.co-carousel-item .cf { transform: scale(.59); transform-origin: top left; transition: transform .25s ease, filter .25s ease; }
+.co-carousel-item:hover .cf { transform: scale(.62); }
+.co-carousel-item[data-selected] .cf { filter: drop-shadow(0 0 16px var(--cc)); }
+.co-carousel-item[data-selected] .cf-box { transform: rotateX(-10deg) rotateY(-22deg); }
+.co-carousel-btn { all: unset; display: block; width: 200px; height: 250px; cursor: pointer; }
+.co-carousel-btn:focus-visible .cf-box { transform: rotateX(-12deg) rotateY(-28deg) translateY(-6px); }
+.co-carousel-item[data-selected] .co-carousel-label { color: var(--cc); font-weight: 600; }
+.co-carousel-label { position: absolute; left: -41px; right: -41px; bottom: 0; text-align: center; font-size: 11px;
+  letter-spacing: .04em; color: var(--color-neutral-400); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+@media (prefers-reduced-motion: reduce) { .co-carousel-item .cf { transition: none; } }

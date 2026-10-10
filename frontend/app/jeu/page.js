@@ -3,6 +3,7 @@ import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { ORDER, RAR } from "@/components/Carte";
 import CoffretOpening from "@/components/CoffretOpening";
+import BoosterCarousel from "@/components/BoosterCarousel";
 import Topbar from "@/components/Topbar";
 import OddsDialog from "@/components/OddsDialog";
 import { usePlayer } from "@/components/PlayerProvider";
@@ -43,15 +44,8 @@ export default function PaquetsPage() {
     <>
       <Topbar title="Paquets" sub={booster ? `${booster.nom} · ${booster.nb_cartes} cartes` : ""} onOdds={booster ? () => setOdds(true) : null} />
       <section className="ax-stage">
-        {boosters.length > 1 && (
-          <div className="seg" role="radiogroup" aria-label="Série">
-            {boosters.map(b => (
-              <label key={b.code} className="seg-opt">
-                <input type="radio" name="booster" checked={booster?.code === b.code} onChange={() => { setBooster(b); setResult(null); setRun(n => n + 1); }} />{b.nom}
-              </label>
-            ))}
-          </div>
-        )}
+        <BoosterCarousel boosters={boosters} selected={booster}
+          onSelect={b => { if (b.code !== booster?.code) { setBooster(b); setResult(null); setRun(n => n + 1); } }} />
         {error && <p className="ax-notice"><strong>Oups.</strong> {error}</p>}
         {booster && (
           <CoffretOpening key={`${booster.code}-${run}`} booster={booster} disabled={noPacks}
