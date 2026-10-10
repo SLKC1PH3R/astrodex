@@ -3,6 +3,7 @@ import { useEffect, useState } from "react";
 import Link from "next/link";
 import Carte, { ORDER, RAR } from "@/components/Carte";
 import { BorderBeam, Marquee, NumberTicker, ShimmerButton } from "@/components/MagicUI";
+import { coffretTheme } from "@/lib/coffrets";
 import { api } from "@/lib/api";
 
 const LEGENDAIRES = [1, 2, 3];                                // Terre, Saturne, Jupiter
@@ -24,13 +25,17 @@ function mixRarities(cards, n) {
 }
 
 export default function LandingPage() {
+  const [allSeries, setAllSeries] = useState([]);
   const [serie, setSerie] = useState(null);
   const [cards, setCards] = useState([]);
   const [booster, setBooster] = useState(null);
 
   useEffect(() => {
     api.series()
-      .then(list => { if (list[0]) { setSerie(list[0]); return api.seriesDetail(list[0].code); } })
+      .then(list => {
+        setAllSeries(list);
+        if (list[0]) { setSerie(list[0]); return api.seriesDetail(list[0].code); }
+      })
       .then(d => { if (d) { setCards(d.cartes); setBooster(d.boosters?.[0] || null); } })
       .catch(() => {});
   }, []);
@@ -43,6 +48,7 @@ export default function LandingPage() {
   const odds = r => r === "C"
     ? (() => { const at = slots.filter(s => s.taux.C); return at.length ? `Emplacements ${at[0].position} à ${at.at(-1).position}` : ""; })()
     : slots.filter(s => s.taux[r]).map(s => `${pct(s.taux[r])} en carte ${s.position}`).join(" · ");
+  const totalCards = allSeries.reduce((s, x) => s + (x.nb_cartes || 0), 0);
 
   return (
     <div className="lp">
@@ -52,6 +58,7 @@ export default function LandingPage() {
         <div className="lp-hero-shade" />
         <nav className="nav lp-nav">
           <Link className="ax-brand" href="/"><span className="ax-mark" /><b>ASTRODEX</b></Link>
+          <a href="#series">Séries</a>
           <a href="#raretes">Raretés</a>
           <a href="#jeu">Le jeu</a>
           <Link className="btn btn-secondary" href="/inscription?mode=connexion">Se connecter</Link>
@@ -63,7 +70,7 @@ export default function LandingPage() {
           {hero && <span className="lp-push">{hero.nom.toUpperCase()} · {hero.constellation.toUpperCase()}</span>}
         </div>
         <div className="lp-hero-body">
-          <h1>{cards.length || 39} vraies photos<br /><span>de l'espace.</span></h1>
+          <h1>{totalCards || 119} vraies photos<br /><span>de l'espace.</span></h1>
           <p>Chaque carte est une vraie photographie d'un objet céleste. Ouvre des boosters, réunis la série, échange tes doubles.</p>
           <div><ShimmerButton href="/inscription">Ouvrir un booster</ShimmerButton></div>
         </div>
@@ -76,10 +83,33 @@ export default function LandingPage() {
       )}
 
       <div className="lp-wrap lp-tickers">
-        <div><b><NumberTicker value={cards.length || 39} /></b><span>cartes dans la série {serie?.nom || "Système solaire"}</span></div>
+        <div><b><NumberTicker value={totalCards || 119} /></b><span>cartes au total, toutes séries confondues</span></div>
+        <div><b><NumberTicker value={allSeries.length || 3} /></b><span>séries à collectionner</span></div>
         <div><b><NumberTicker value={booster?.nb_cartes || 5} /></b><span>cartes par booster, une rare garantie</span></div>
         {lastL != null && <div><b><NumberTicker value={Math.round(lastL * 100)} /> %</b><span>de chance de Légendaire au 5e emplacement</span></div>}
       </div>
+
+      {allSeries.length > 0 && (
+        <section id="series" className="lp-wrap lp-block">
+          <div className="lp-head">
+            <h2>Une série,<br />un morceau d'univers.</h2>
+            <p>Chaque série a son propre coffret, ses propres couleurs, ses propres taux de rareté.</p>
+          </div>
+          <div className="lp-series-grid">
+            {allSeries.map(s => {
+              const t = coffretTheme({ serie: s.code, nom: s.nom });
+              return (
+                <Link key={s.code} href="/inscription" className="lp-series-card" style={{ "--rc": t.couleur }}>
+                  <span className="lp-series-num">SÉRIE {s.code?.replace(/^S/, "") || ""}</span>
+                  <h3>{s.nom}</h3>
+                  {s.description && <p>{s.description}</p>}
+                  <b>{s.nb_cartes} cartes</b>
+                </Link>
+              );
+            })}
+          </div>
+        </section>
+      )}
 
       <section className="lp-lamp-section">
         <div className="lp-lamp">
@@ -129,7 +159,7 @@ export default function LandingPage() {
         </div>
         <div className="lp-count">
           <span className="lp-gems">{ORDER.map(r => <i key={r} style={{ background: RAR[r].color }} />)}</span>
-          <div><b>{cards.length || 39}</b><span>cartes disponibles dans la série {serie?.nom || "Système solaire"}</span></div>
+          <div><b>{totalCards || 119}</b><span>cartes disponibles dans {allSeries.length || 3} séries</span></div>
         </div>
       </section>
 
