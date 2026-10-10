@@ -1,12 +1,15 @@
 "use client";
 import { useEffect, useRef, useState } from "react";
-import Carte from "@/components/Carte";
+import Carte, { ORDER, RAR } from "@/components/Carte";
 import Coffret from "@/components/Coffret";
 import { coffretTheme } from "@/lib/coffrets";
 
 const PHASES = ["idle", "shake", "lid", "rise", "fan", "done"];
 const sleep = ms => new Promise(r => setTimeout(r, ms));
 const ROMAN = ["", "I", "II", "III", "IV", "V", "VI", "VII", "VIII", "IX", "X"];
+/* Rareté la plus haute d'un tirage ; R/UR/L déclenchent une ouverture plus spectaculaire (.co-stage[data-tier]). */
+const bestRarity = cards => cards.reduce((b, c) => (!b || ORDER.indexOf(c.rarete) > ORDER.indexOf(b) ? c.rarete : b), null);
+const BIG_TIERS = new Set(["R", "UR", "L"]);
 
 /* Ouverture animée : tremblement → couvercle qui s'envole → cartes qui montent → éventail → retournement une à une.
    onOpen() doit renvoyer une promesse de la liste de cartes (api.open). */
@@ -21,6 +24,8 @@ export default function CoffretOpening({ booster, onOpen, onDone, onError, disab
   const theme = coffretTheme(booster);
   const P = PHASES.indexOf(phase);
   const roman = ROMAN[Number(String(booster?.serie || "").replace(/\D/g, ""))] || booster?.serie || "I";
+  const tier = bestRarity(cards);
+  const big = BIG_TIERS.has(tier);
 
   const wait = async ms => { if (!skip.current) await sleep(ms); return alive.current; };
 
@@ -58,9 +63,11 @@ export default function CoffretOpening({ booster, onOpen, onDone, onError, disab
 
   const fanned = P >= 4;
   return (
-    <div className="co-stage" style={{ "--cc": theme.couleur }} data-phase={phase}>
+    <div className="co-stage" style={{ "--cc": theme.couleur, "--rc": big ? RAR[tier].color : theme.couleur }}
+      data-phase={phase} data-tier={big ? tier : undefined}>
       <div className="co-rays" />
       <div className="co-glow" />
+      {big && <div className="co-burst" />}
 
       <div className="co-cards" style={{ zIndex: fanned ? 4 : 2 }}>
         {cards.map((c, k) => {
@@ -68,8 +75,10 @@ export default function CoffretOpening({ booster, onOpen, onDone, onError, disab
           const tf = P < 3 ? "translate(0, 60px) scale(.7)"
             : !fanned ? `translate(${o * 6}px, ${-150 - k * 8}px) scale(.8) rotate(${o * 2}deg)`
             : `translate(calc(var(--step) * ${o}), ${-60 + Math.abs(o) * 22}px) rotate(${o * 6}deg)`;
+          const rare = big && c.rarete === tier;
           return (
-            <div key={`${c.id}-${k}`} className="co-card" style={{ transform: tf, opacity: P >= 3 ? 1 : 0, transitionDelay: `${(fanned ? 70 : 90) * k}ms` }}>
+            <div key={`${c.id}-${k}`} className={rare ? "co-card co-card-rare" : "co-card"}
+              style={{ "--rc": rare ? RAR[c.rarete].color : undefined, transform: tf, opacity: P >= 3 ? 1 : 0, transitionDelay: `${(fanned ? 70 : 90) * k}ms` }}>
               <Carte c={c} revealed={k < shown} nouvelle={c.nouvelle} hint />
             </div>
           );
