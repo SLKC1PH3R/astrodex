@@ -1,6 +1,7 @@
 import "./nocturne.css";
 import "./astrodex.css";
 import "./coffret.css";
+import "./landing.css";
 
 export const metadata = {
   title: "Astrodex",
