@@ -59,7 +59,7 @@ cartes:
   image: saturne.webp
   credit: NASA/JPL/SSI · Cassini (mosaïque, 2004)
   licence: Domaine public
-  cadrage: photo
+  cadrage: globe-large
 - numero: 3
   objet: jupiter
   rarete: L
