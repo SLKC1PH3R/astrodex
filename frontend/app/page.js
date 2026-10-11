@@ -1,6 +1,6 @@
 "use client";
 /* Landing « Atlas d'observatoire ». Styles : app/landing.css (préfixe .lx-). Cartes : components/Carte.js. */
-import { useEffect, useMemo, useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
 import Carte, { ORDER, RAR } from "@/components/Carte";
 import StarField from "@/components/StarField";
@@ -59,10 +59,6 @@ export default function Landing() {
   }, []);
 
   const by = slug => cards.find(c => c.slug === slug) || DEMO.find(c => c.slug === slug);
-  const marquee = useMemo(() => {
-    const set = [...cards].sort((a, b) => (a.numero * 7) % 11 - (b.numero * 7) % 11).slice(0, 18);
-    return [...set, ...set];
-  }, [cards]);
   const fan = ["phoebe", "charon", "titania", "mars", "terre"].map(by);
   const k = ORDER[sel], c = RC[k];
 
@@ -104,7 +100,7 @@ export default function Landing() {
                 {(allSeries.length ? allSeries : [{ code: "S1", nom: "Système solaire", nb_cartes: 39 }, { code: "S2", nom: "Astéroïdes", nb_cartes: 15 }, { code: "S3", nom: "Nébuleuses", nb_cartes: 65 }])
                   .map(s => <span key={s.code} className="lx-kicker">SÉRIE {toRoman(s.code)} · {s.nom.toUpperCase()} · {s.nb_cartes}</span>)}
               </div>
-              <h1 id="hero-title">L'espace, <span className="lx-outline">carte</span> après carte.</h1>
+              <h1 id="hero-title"><span className="lx-h1-line">L'espace,</span><span className="lx-h1-line lx-h1-italic">carte après carte.</span></h1>
               <p>Chaque carte est une photo prise par une sonde ou un télescope. Déchire un booster, retourne tes cartes, complète la série.</p>
               <div className="lx-actions">
                 <Link href="/inscription" className="lx-btn-shimmer">Ouvrir mon premier booster<i className="ph ph-arrow-right" aria-hidden="true" /></Link>
@@ -139,12 +135,22 @@ export default function Landing() {
           </div>
         </section>
 
-        <section className="lx-marquee" aria-label="Aperçu des cartes de la série I">
-          <div className="lx-wrap lx-marquee-head"><span>CHAQUE CARTE · UNE VRAIE PHOTO</span><span>CRÉDIT ET LICENCE AU DOS</span></div>
-          <div className="lx-marquee-mask">
-            <div className="lx-marquee-track">
-              {marquee.map((m, i) => <div key={i} className="lx-marquee-item"><Carte c={m} /></div>)}
+        <section className="lx-wrap lx-section lx-section-light lx-gallery" aria-labelledby="gallery-title">
+          <div className="lx-gallery-head">
+            <div>
+              <span className="lx-kicker">COLLECTION · SÉRIE I</span>
+              <h2 id="gallery-title">Cartes à <span className="lx-outline">collectionner</span>.</h2>
+              <p>Chaque carte est une vraie photo, avec sa rareté et ses crédits au dos. Rien n'est généré.</p>
             </div>
+            <Link href="/jeu/cartes" className="lx-link">Voir toute la collection<i className="ph ph-arrow-up-right" aria-hidden="true" /></Link>
+          </div>
+          <div className="lx-gallery-row">
+            {[by("saturne"), by("io"), by("encelade")].map(c => (
+              <div key={c.slug} className="lx-gallery-card">
+                <Carte c={c} />
+                <div className="lx-gallery-meta"><b>{c.nom}</b><span style={{ color: RC[c.rarete] }}>{RAR[c.rarete].label}</span></div>
+              </div>
+            ))}
           </div>
         </section>
 
@@ -154,45 +160,18 @@ export default function Landing() {
             <h2 id="jeu-title">Trois gestes, <span className="lx-outline">cinq</span> cartes.</h2>
             <p>Ouvre un booster, révèle tes cartes, complète la série. Les autres modes se débloquent avec la collection.</p>
           </div>
-          <ol className="lx-steps">
-            <li>
-              <div className="lx-step-art lx-art-tear" aria-hidden="true">
-                <div className="lx-pack">
-                  <div className="lx-pack-peek" />
-                  {/* eslint-disable-next-line @next/next/no-img-element */}
-                  <div className="lx-pack-body"><div className="lighten"><img src="/media/saturne.webp" alt="" loading="lazy" /></div><span>ASTRODEX</span></div>
-                  <div className="lx-pack-top" /><div className="lx-pack-dash" />
-                </div>
-              </div>
-              <div className="lx-step-txt"><span>01 · DÉCHIRE</span><h3>Ouverture tactile.</h3><p>Déchire l'emballage d'un geste. Cinq cartes, dont au moins une Rare en dernière position.</p></div>
-            </li>
-            <li>
-              <div className="lx-step-art lx-art-flip" aria-hidden="true">
-                <div className="lx-flash" />
-                <div className="lx-flipcard">
-                  {/* eslint-disable-next-line @next/next/no-img-element */}
-                  <div className="lx-flip-front"><img src={by("io").image_url} alt="" loading="lazy" /><div><b>Io</b><span>ULTRA RARE</span></div></div>
-                  <div className="lx-flip-back"><span /></div>
-                </div>
-              </div>
-              <div className="lx-step-txt"><span>02 · RÉVÈLE</span><h3>Révélation carte par carte.</h3><p>Chaque carte se retourne individuellement. Sa bordure annonce la rareté avant l'image.</p></div>
-            </li>
-            <li>
-              <div className="lx-step-art lx-art-fill" aria-hidden="true">
-                <div className="lx-minigrid">
-                  {Array.from({ length: 16 }, (_, i) => {
-                    const r = ["L", "UR", "R", "C", "UR", "C", "R", "UR", "C", "PC"][i];
-                    return <i key={i} style={r ? { background: `color-mix(in srgb, ${RC[r]} 55%, #161826)`, boxShadow: `0 0 10px -2px ${RC[r]}` } : undefined} />;
-                  })}
-                </div>
-                <div className="lx-progress"><div><span>SÉRIE I</span><span>24 / 39</span></div><p><i /></p></div>
-              </div>
-              <div className="lx-step-txt"><span>03 · COLLECTIONNE</span><h3>39 objets à réunir.</h3><p>Quantités, doubles et cartes manquantes : ta progression est suivie série par série.</p></div>
-            </li>
-          </ol>
+          <div className="lx-process-grid">
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <div className="lx-process-media" aria-hidden="true"><img src="/media/neb-pillars_m16.webp" alt="" loading="lazy" /></div>
+            <ol className="lx-process-list">
+              <li><span className="lx-pnum">01</span><div><h3>Déchire.</h3><p>Ouverture tactile d'un geste. Cinq cartes, dont au moins une Rare en dernière position.</p></div></li>
+              <li><span className="lx-pnum">02</span><div><h3>Révèle.</h3><p>Chaque carte se retourne individuellement. Sa bordure annonce la rareté avant l'image.</p></div></li>
+              <li><span className="lx-pnum">03</span><div><h3>Collectionne.</h3><p>39 objets à réunir par série. Quantités, doubles et cartes manquantes sont suivies en continu.</p></div></li>
+            </ol>
+          </div>
         </section>
 
-        <section id="atlas" className="lx-wrap lx-section" aria-labelledby="bento-title">
+        <section id="atlas" className="lx-wrap lx-section lx-section-light" aria-labelledby="bento-title">
           <Graduation left="RA 06h" right="DÉC −04°" />
           <h2 id="bento-title" className="lx-rise lx-h2-solo">Un jeu de cartes doublé d'un <span className="lx-outline">atlas</span>.</h2>
           <div className="lx-bento">
@@ -335,36 +314,40 @@ export default function Landing() {
           </div>
         </section>
 
-        <section className="lx-wrap lx-proof" aria-labelledby="proof-title">
-          <figure>
-            {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img src="/media/saturne.webp" alt="Saturne et ses anneaux photographiés par la sonde Cassini en 2004" loading="lazy" />
-            <div className="lx-proof-frame" aria-hidden="true" /><div className="lx-proof-ticks" aria-hidden="true" />
-            <figcaption><span>SATURNE</span><span>NASA/JPL/SSI · CASSINI · 2004</span></figcaption>
-          </figure>
-          <div className="lx-proof-txt">
-            <h2 id="proof-title" className="lx-rise">Des photos qui <span className="lx-outline">existent</span>.</h2>
-            <p>Aucune image n'est générée. Chaque carte vient des archives publiques d'une agence spatiale, avec son instrument, son année et sa licence.</p>
-            <dl>{SOURCES.map(([who, what]) => <div key={who}><dt>{who}</dt><dd>{what}</dd></div>)}</dl>
-            <span className="lx-mono">LICENCES · DOMAINE PUBLIC · CC BY-SA 4.0 · CC BY-SA 3.0 IGO</span>
-          </div>
+        <section className="lx-manifesto" aria-labelledby="manifesto-title">
+          <i className="ph ph-sparkle lx-manifesto-icon" aria-hidden="true" />
+          <h2 id="manifesto-title" className="lx-rise">Jamais une image <span className="lx-outline">générée</span>.</h2>
+          <p>Chaque carte vient des archives publiques d'une agence spatiale, avec son instrument, son année et sa licence.</p>
+          <dl className="lx-manifesto-sources">{SOURCES.map(([who, what]) => <div key={who}><dt>{who}</dt><dd>{what}</dd></div>)}</dl>
+          <span className="lx-mono">LICENCES · DOMAINE PUBLIC · CC BY-SA 4.0 · CC BY-SA 3.0 IGO</span>
         </section>
 
-        <section className="lx-cta" aria-labelledby="cta-title">
-          <div className="lx-eclipse" aria-hidden="true"><div className="lx-corona" /><div className="lx-rays" /><div className="lx-disc" /><i /></div>
-          <h2 id="cta-title">Ton premier booster <span className="lx-outline lx-gold">t'attend</span>.</h2>
-          <p>Un pseudo, un clic, cinq cartes.</p>
-          <Link href="/inscription" className="lx-beam"><span className="lx-beam-dot" aria-hidden="true" /><span className="lx-beam-in">Ouvrir mon premier booster<i className="ph ph-arrow-right" aria-hidden="true" /></span></Link>
-          <span className="lx-mono">GRATUIT · SANS CARTE BANCAIRE</span>
+        <section className="lx-wrap lx-section-light lx-cta-wrap" aria-labelledby="cta-title">
+          <div className="lx-cta">
+            <div className="lx-eclipse" aria-hidden="true"><div className="lx-corona" /><div className="lx-rays" /><div className="lx-disc" /><i /></div>
+            <h2 id="cta-title">Ton premier booster <span className="lx-outline lx-gold">t'attend</span>.</h2>
+            <p>Un pseudo, un clic, cinq cartes.</p>
+            <Link href="/inscription" className="lx-beam"><span className="lx-beam-dot" aria-hidden="true" /><span className="lx-beam-in">Ouvrir mon premier booster<i className="ph ph-arrow-right" aria-hidden="true" /></span></Link>
+            <span className="lx-mono">GRATUIT · SANS CARTE BANCAIRE</span>
+          </div>
         </section>
       </main>
 
       <footer className="lx-footer">
-        <div className="lx-wrap">
-          <div><span className="lx-brand"><span className="lx-logo sm" aria-hidden="true"><span /></span><b>ASTRODEX</b></span><p>Un jeu de cartes sur l'espace et ses planètes.</p></div>
-          <nav aria-label="Pied de page"><h4>JEU</h4><a href="#jeu">Le jeu</a><a href="#raretes">Raretés</a><a href="#atlas">Atlas 3D</a><Link href="/inscription?mode=connexion">Se connecter</Link></nav>
-          <div><h4>CRÉDITS DES IMAGES</h4><p>NASA, JPL-Caltech, SSI, JHUAPL, SwRI, ESA/Hubble, ESA/Rosetta, ESO.</p><p>Domaine public, CC BY-SA 4.0, CC BY-SA 3.0 IGO.</p></div>
-          <div><h4>OPEN SOURCE</h4><a href="https://github.com/SLKC1PH3R/astrodex"><i className="ph ph-github-logo" aria-hidden="true" />Code source sur GitHub</a><p>astrodex.digitalstack.cloud</p></div>
+        <div className="lx-footer-wm" aria-hidden="true">ASTRODEX</div>
+        <div className="lx-wrap lx-footer-top">
+          <div>
+            <span className="lx-brand"><span className="lx-logo sm" aria-hidden="true"><span /></span><b>ASTRODEX</b></span>
+            <p className="lx-footer-tag">L'espace, carte après carte.</p>
+            <p>Un jeu de cartes sur l'espace et ses planètes.</p>
+          </div>
+          <nav aria-label="Pied de page"><h4><i className="lx-dot" aria-hidden="true" />JEU</h4><a href="#jeu">Le jeu</a><a href="#raretes">Raretés</a><a href="#atlas">Atlas 3D</a><Link href="/inscription?mode=connexion">Se connecter</Link></nav>
+          <div><h4><i className="lx-dot" aria-hidden="true" />CRÉDITS DES IMAGES</h4><p>NASA, JPL-Caltech, SSI, JHUAPL, SwRI, ESA/Hubble, ESA/Rosetta, ESO.</p><p>Domaine public, CC BY-SA 4.0, CC BY-SA 3.0 IGO.</p></div>
+          <div><h4><i className="lx-dot" aria-hidden="true" />OPEN SOURCE</h4><a href="https://github.com/SLKC1PH3R/astrodex"><i className="ph ph-github-logo" aria-hidden="true" />Code source sur GitHub</a><p>astrodex.digitalstack.cloud</p></div>
+        </div>
+        <div className="lx-wrap lx-footer-bottom">
+          <span>© 2026 Astrodex. Tous droits réservés.</span>
+          <div><a href="https://github.com/SLKC1PH3R/astrodex">GITHUB</a><Link href="/jeu/atlas">ATLAS 3D</Link></div>
         </div>
       </footer>
     </div>
