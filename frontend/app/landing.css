@@ -37,18 +37,18 @@ html { scroll-behavior: smooth; }
 @keyframes lx-spin { to { transform: rotate(360deg); } }
 @keyframes lx-spinr { to { transform: rotate(-360deg); } }
 @keyframes lx-float { 0%, 100% { translate: 0 0; } 50% { translate: 0 -12px; } }
-@keyframes lx-rise { from { opacity: .3; transform: translateY(28px); } }
 @keyframes lx-odo { from { transform: translateY(0); } }
-@keyframes lx-barin { from { transform: scaleX(0); } }
 @keyframes lx-swapA { 0%, 18% { transform: rotate(-4deg); } 45%, 68% { transform: translate(calc(100% + 34px), -14px) rotate(5deg); } 95%, 100% { transform: rotate(-4deg); } }
 @keyframes lx-swapB { 0%, 18% { transform: rotate(4deg); } 45%, 68% { transform: translate(calc(-100% - 34px), 14px) rotate(-5deg); } 95%, 100% { transform: rotate(4deg); } }
 @keyframes lx-pulse { 0%, 100% { transform: scale(1); opacity: .8; } 50% { transform: scale(1.07); opacity: 1; } }
 
-/* Animations au scroll (repli : visibles d'office) */
-@supports (animation-timeline: view()) {
-  .lx-rise { animation: lx-rise linear both; animation-timeline: view(); animation-range: entry 0% cover 28%; }
-  .lx-battle i { animation: lx-barin linear both; animation-timeline: view(); animation-range: entry 10% cover 40%; }
-}
+/* Animations au scroll : révélation pilotée en JS (IntersectionObserver), fiable sur tous les navigateurs
+   — animation-timeline: view() a été abandonné ici car .lx { overflow-x: hidden } force overflow-y: auto
+   (spec CSS Overflow), ce qui peut faire de .lx son propre conteneur de scroll et casser le calcul des
+   plages entry/cover : les éléments restaient bloqués dans leur état « from » (opacité .3), perçus comme
+   des zones vides au chargement. */
+.lx-rise { opacity: 0; transform: translateY(28px); transition: opacity .8s var(--ease), transform .8s var(--ease); }
+.lx-rise.is-in { opacity: 1; transform: none; }
 
 /* Graduations */
 .lx-grad { display: flex; align-items: center; gap: 14px; margin-bottom: 40px; font-family: var(--f-mono); font-size: 10px; letter-spacing: .12em; color: var(--faint); }

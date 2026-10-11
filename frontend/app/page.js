@@ -58,6 +58,21 @@ export default function Landing() {
     return () => removeEventListener("scroll", onScroll);
   }, []);
 
+  useEffect(() => {
+    const els = document.querySelectorAll(".lx-rise");
+    if (!els.length || matchMedia("(prefers-reduced-motion: reduce)").matches) {
+      els.forEach(el => el.classList.add("is-in"));
+      return;
+    }
+    const io = new IntersectionObserver(entries => {
+      entries.forEach(e => {
+        if (e.isIntersecting) { e.target.classList.add("is-in"); io.unobserve(e.target); }
+      });
+    }, { threshold: .12, rootMargin: "0px 0px -8% 0px" });
+    els.forEach(el => io.observe(el));
+    return () => io.disconnect();
+  }, []);
+
   const by = slug => cards.find(c => c.slug === slug) || DEMO.find(c => c.slug === slug);
   const fan = ["phoebe", "charon", "titania", "mars", "terre"].map(by);
   const k = ORDER[sel], c = RC[k];
