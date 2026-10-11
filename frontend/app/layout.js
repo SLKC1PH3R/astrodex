@@ -1,5 +1,6 @@
 import "./nocturne.css";
 import "./astrodex.css";
+import "./filigrane.css";
 import "./coffret.css";
 import "./landing.css";
 

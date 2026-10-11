@@ -39,14 +39,19 @@ const Reticle = () => (
   <div className="lx-reticle" aria-hidden="true"><i /><i /><i /><i /><b /><b /></div>
 );
 
+const ROMAN = { 1: "I", 2: "II", 3: "III", 4: "IV", 5: "V" };
+const toRoman = code => ROMAN[Number(String(code).replace(/\D/g, ""))] || code;
+
 export default function Landing() {
   const [cards, setCards] = useState(DEMO);
+  const [allSeries, setAllSeries] = useState([]);
   const [scrolled, setScrolled] = useState(false);
   const [sel, setSel] = useState(4);
   const pointer = useRef({ x: .5, y: .5 });
   const tilt = useRef(null), sheen = useRef(null);
 
   useEffect(() => {
+    api.series().then(setAllSeries).catch(() => {});
     api.seriesDetail("S1").then(d => { if (d?.cartes?.length) setCards(d.cartes); }).catch(() => {});
     const onScroll = () => setScrolled(scrollY > 40);
     onScroll(); addEventListener("scroll", onScroll, { passive: true });
@@ -95,7 +100,10 @@ export default function Landing() {
 
           <div className="lx-hero-grid">
             <div className="lx-hero-copy">
-              <span className="lx-kicker">SÉRIE I · SYSTÈME SOLAIRE · 39 CARTES</span>
+              <div className="lx-series-kicker">
+                {(allSeries.length ? allSeries : [{ code: "S1", nom: "Système solaire", nb_cartes: 39 }, { code: "S2", nom: "Astéroïdes", nb_cartes: 15 }, { code: "S3", nom: "Nébuleuses", nb_cartes: 65 }])
+                  .map(s => <span key={s.code} className="lx-kicker">SÉRIE {toRoman(s.code)} · {s.nom.toUpperCase()} · {s.nb_cartes}</span>)}
+              </div>
               <h1 id="hero-title">L'espace, <span className="lx-outline">carte</span> après carte.</h1>
               <p>Chaque carte est une photo prise par une sonde ou un télescope. Déchire un booster, retourne tes cartes, complète la série.</p>
               <div className="lx-actions">
@@ -123,7 +131,7 @@ export default function Landing() {
           <div className="lx-hero-foot">
             <Graduation left="RA 00h" right="RA 24h" />
             <dl className="lx-readouts">
-              <Odometer value={39} label="CARTES DANS LA SÉRIE I" sr="39" />
+              <Odometer value={allSeries.reduce((n, s) => n + (s.nb_cartes || 0), 0) || 119} label="CARTES · 3 SÉRIES" sr="119" />
               <Odometer value={5} label="CARTES PAR BOOSTER" sr="5" delay={120} />
               <Odometer value={6} suffix="%" label="LÉGENDAIRE AU 5E EMPLACEMENT" sr="6 %" delay={240} />
               <Odometer value={500} suffix="M al" label="PORTÉE DE L'ATLAS 3D" sr="500 millions d'années-lumière" delay={360} />
@@ -192,13 +200,15 @@ export default function Landing() {
               <div className="lx-solar" aria-hidden="true">
                 <div className="lx-solar-plane">
                   <div className="lx-sun" />
-                  {[[150, "terre", 20, 14, -3, "rgba(106,168,255,.35)"], [210, "mars", 16, 22, -9, "rgba(233,233,237,.16)"], [300, "jupiter", 34, 40, -14, "rgba(233,233,237,.14)"], [400, "saturne", 52, 62, -30, "rgba(255,207,107,.45)"]].map(([d, img, s, dur, delay, ring]) => (
+                  {[[150, "terre", 26, 14, -3, "rgba(106,168,255,.35)"], [210, "mars", 22, 22, -9, "rgba(233,233,237,.16)"], [300, "jupiter", 42, 40, -14, "rgba(233,233,237,.14)"], [400, "saturne", 64, 62, -30, "rgba(255,207,107,.45)"]].map(([d, img, s, dur, delay, ring]) => (
                     <div key={img}>
-                      <div className="lx-ring" style={{ width: d, height: d, left: -d / 2, top: -d / 2, borderColor: ring }} />
-                      <div className="lx-orbiter" style={{ width: d, height: d, left: -d / 2, top: -d / 2, animationDuration: `${dur}s`, animationDelay: `${delay}s` }}>
-                        {/* eslint-disable-next-line @next/next/no-img-element */}
-                        <div className="lx-planet" style={{ width: s, height: s, margin: `${-s / 2}px 0 0 ${-s / 2}px`, animationDuration: `${dur}s`, animationDelay: `${delay}s` }}><img src={`/media/${img}.webp`} alt="" loading="lazy" /></div>
-                      </div>
+                      <div className="lx-ring" style={{ width: d, height: Math.round(d * 0.407), left: -d / 2, top: -Math.round(d * 0.407) / 2, borderColor: ring }} />
+                      {/* eslint-disable-next-line @next/next/no-img-element */}
+                      <div className="lx-planet" style={{
+                        width: s, height: s,
+                        "--rx": `${d / 2}px`, "--ry": `${Math.round(d / 2 * 0.407)}px`,
+                        animationDuration: `${dur}s`, animationDelay: `${delay}s`,
+                      }}><img src={`/media/${img}.webp`} alt="" loading="lazy" /></div>
                     </div>
                   ))}
                 </div>
@@ -328,9 +338,9 @@ export default function Landing() {
         <section className="lx-wrap lx-proof" aria-labelledby="proof-title">
           <figure>
             {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img src="/media/saturne_anneaux.webp" alt="Les anneaux de Saturne photographiés par la sonde Cassini en 2005" loading="lazy" />
+            <img src="/media/saturne.webp" alt="Saturne et ses anneaux photographiés par la sonde Cassini en 2004" loading="lazy" />
             <div className="lx-proof-frame" aria-hidden="true" /><div className="lx-proof-ticks" aria-hidden="true" />
-            <figcaption><span>SATURNE · ANNEAUX</span><span>NASA/JPL/SSI · CASSINI · 2005</span></figcaption>
+            <figcaption><span>SATURNE</span><span>NASA/JPL/SSI · CASSINI · 2004</span></figcaption>
           </figure>
           <div className="lx-proof-txt">
             <h2 id="proof-title" className="lx-rise">Des photos qui <span className="lx-outline">existent</span>.</h2>

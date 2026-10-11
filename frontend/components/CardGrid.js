@@ -1,10 +1,13 @@
 "use client";
 import { useMemo, useState } from "react";
 import Carte, { ORDER, RAR } from "@/components/Carte";
+import PhotoDive from "@/components/PhotoDive";
 
-/* Grille filtrable. owned = Map(id → quantité) pour la collection ; null pour le catalogue complet. */
+/* Grille filtrable. owned = Map(id → quantité) pour la collection ; null pour le catalogue complet.
+   Les Légendaires révélées peuvent être ouvertes en plein écran (PhotoDive). */
 export default function CardGrid({ cards, owned = null }) {
   const [filter, setFilter] = useState("all");
+  const [dive, setDive] = useState(null);
   const isColl = owned !== null;
 
   const shown = useMemo(() => cards.filter(c =>
@@ -36,13 +39,16 @@ export default function CardGrid({ cards, owned = null }) {
       </div>
       <div className="ax-grid">
         {shown.map(c => (!isColl || owned.has(c.id)) ? (
-          <div key={c.id} className="ax-lift"><Carte c={c} qty={isColl ? owned.get(c.id) : 0} /></div>
+          <div key={c.id} className="ax-lift">
+            <Carte c={c} qty={isColl ? owned.get(c.id) : 0} onDive={(carte, rect) => setDive({ carte, rect })} />
+          </div>
         ) : (
           <div key={c.id} className="ax-missing" title="Carte pas encore obtenue">
             <i className="ax-dot" style={{ background: RAR[c.rarete].color }} />{String(c.numero).padStart(3, "0")}
           </div>
         ))}
       </div>
+      {dive && <PhotoDive {...dive} onClose={() => setDive(null)} />}
     </section>
   );
 }

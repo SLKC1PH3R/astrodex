@@ -1,0 +1,94 @@
+/* Filigranes des cartes — à importer après astrodex.css. Motifs fournis par lib/filigrane.js (variables --ax-*). */
+
+@property --mx { syntax: "<percentage>"; inherits: true; initial-value: 50%; }
+@property --my { syntax: "<percentage>"; inherits: true; initial-value: 35%; }
+@property --lit { syntax: "<number>"; inherits: true; initial-value: .3; }
+
+@keyframes ax-sweep {
+  0%   { --mx: 18%; --my: 26%; --lit: .75; }
+  25%  { --mx: 82%; --my: 38%; --lit: .8; }
+  50%  { --mx: 64%; --my: 78%; --lit: .6; }
+  75%  { --mx: 22%; --my: 66%; --lit: .7; }
+  100% { --mx: 18%; --my: 26%; --lit: .75; }
+}
+
+.ax-fili { --rx: 0deg; --ry: 0deg; animation: ax-sweep 11s ease-in-out infinite; }
+.ax-fili[data-lit] { animation: none; }
+.ax-fili:not([data-down]) .ax-flip { transform: rotateX(var(--rx)) rotateY(var(--ry)); transition: transform .3s cubic-bezier(.16,1,.3,1); }
+.ax-fili[data-down] { animation: none; }
+.ax-fili[data-dive] { cursor: zoom-in; }
+.ax-fili[data-dive]:focus-visible { outline: 2px solid var(--color-accent); outline-offset: 4px; border-radius: 5cqw; }
+
+/* Gravure taille-douce : lignes sombres + reflet coloré qui suit la lumière */
+.fx-engrave, .fx-engrave-lit { position: absolute; inset: 0; pointer-events: none; }
+.fx-engrave { background: var(--ax-engrave-dark) 0 0 / 7cqw auto repeat; mix-blend-mode: multiply; opacity: .8; }
+.fx-engrave-lit { mix-blend-mode: color-dodge; opacity: calc(.2 + var(--lit) * .8);
+  background: radial-gradient(circle at var(--mx) var(--my), var(--rc), color-mix(in srgb, var(--rc) 30%, transparent) 30%, transparent 55%);
+  -webkit-mask: var(--ax-engrave-mask) 0 0 / 7cqw auto repeat; mask: var(--ax-engrave-mask) 0 0 / 7cqw auto repeat; }
+.ax-face.holo .fx-engrave { opacity: .85; }
+.ax-face.holo .fx-engrave-lit { background: radial-gradient(circle at var(--mx) var(--my), #ffcf6b, rgba(255,207,107,.25) 30%, transparent 55%); }
+
+/* Classique : cadre métal tissé de microtexte (3f) */
+.fx-micro-frame { position: absolute; inset: 0; border-radius: 5cqw; padding: 3.4cqw; box-sizing: border-box; pointer-events: none;
+  -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0); -webkit-mask-composite: xor;
+  mask: linear-gradient(#000 0 0) content-box exclude, linear-gradient(#000 0 0);
+  background: rgba(10,11,20,.35); }
+.fx-micro-frame i { position: absolute; inset: 0;
+  background: radial-gradient(circle at var(--mx) var(--my), #fffae6, color-mix(in srgb, var(--rc) 80%, #fff) 30%, var(--rc) 70%);
+  -webkit-mask: var(--ax-micro-mask) 0 0 / auto 1.7cqw repeat; mask: var(--ax-micro-mask) 0 0 / auto 1.7cqw repeat; }
+.ax-face.classic .ax-in { position: relative; overflow: hidden; }
+.ax-face.classic .ax-in > :not(.fx-num) { position: relative; }
+
+/* Classique : numéro en filigrane dans le fond */
+.fx-num { position: absolute; left: 0; right: 0; top: 40%; height: 44%; pointer-events: none; opacity: calc(.07 + var(--lit) * .55);
+  background: radial-gradient(circle at var(--mx) var(--my), color-mix(in srgb, var(--rc) 70%, #fff), transparent 55%);
+  -webkit-mask: var(--ax-num) center / 92% auto no-repeat; mask: var(--ax-num) center / 92% auto no-repeat; }
+
+/* Légendaire : logo en relief et cadre intérieur en microtexte doré (1f) */
+.fx-logo { position: absolute; left: 50%; top: 38%; width: 40%; aspect-ratio: 1; transform: translate(-50%, -50%); pointer-events: none;
+  mix-blend-mode: overlay; opacity: calc(var(--lit) * .85);
+  background: radial-gradient(circle at var(--mx) var(--my), #fff, rgba(255,255,255,.2) 50%);
+  -webkit-mask: var(--ax-logo-mask) center / contain no-repeat; mask: var(--ax-logo-mask) center / contain no-repeat; }
+.fx-micro-ring { position: absolute; inset: 2.4cqw; border-radius: 3.6cqw; padding: 1.6cqw; box-sizing: border-box; pointer-events: none; opacity: .95;
+  background: var(--ax-micro-gold) 0 0 / auto 1.6cqw repeat;
+  -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0); -webkit-mask-composite: xor;
+  mask: linear-gradient(#000 0 0) content-box exclude, linear-gradient(#000 0 0); }
+.ax-fili[data-r="L"] .ax-inner-ring { inset: 4cqw; }
+.ax-fili[data-r="L"] .ax-foil { opacity: .3; background-position: var(--mx) var(--my); background-size: 220% 220%; }
+
+/* Plongée dans la photo (PhotoDive.js) */
+.ax-dive { position: fixed; inset: 0; z-index: 1000; overflow: hidden; background: rgba(5,6,12,0); transition: background .7s ease, backdrop-filter .7s ease; }
+.ax-dive.is-open { background: rgba(5,6,12,.94); backdrop-filter: blur(14px); -webkit-backdrop-filter: blur(14px); }
+.ax-dive-ring { position: absolute; left: 50%; top: 50%; width: 40vmax; height: 40vmax; margin: -20vmax 0 0 -20vmax; border-radius: 50%; pointer-events: none;
+  border: 2px solid rgba(255,207,107,.7); box-shadow: 0 0 60px rgba(255,207,107,.5), inset 0 0 60px rgba(255,207,107,.35);
+  transform: scale(.2); opacity: .9; transition: transform 1.1s cubic-bezier(.2,.7,.2,1), opacity 1.1s ease; }
+.ax-dive.is-open .ax-dive-ring { transform: scale(3.2); opacity: 0; }
+.ax-dive:not(.is-open) .ax-dive-ring { opacity: 0; }
+.ax-dive.is-start .ax-dive-ring { opacity: .9; }
+.ax-dive-win { position: absolute; overflow: hidden; background: radial-gradient(ellipse 90% 60% at 50% 35%, var(--color-accent-900), #0b0c14);
+  transition: left .95s cubic-bezier(.7,0,.15,1), top .95s cubic-bezier(.7,0,.15,1), width .95s cubic-bezier(.7,0,.15,1), height .95s cubic-bezier(.7,0,.15,1), border-radius .95s cubic-bezier(.7,0,.15,1), box-shadow .95s ease; }
+.ax-dive.is-real .ax-dive-win { overflow: auto; }
+.ax-dive-inner { position: relative; min-width: 100%; min-height: 100%; width: 100%; height: 100%; display: grid; place-items: center; grid-template: 100% / 100%; }
+.ax-dive.is-real .ax-dive-inner { width: max-content; height: max-content; grid-template: auto / auto; }
+.ax-dive-inner img { display: block; width: 100%; height: 100%; object-fit: contain; transition: transform .95s cubic-bezier(.7,0,.15,1); cursor: zoom-in; }
+.ax-dive.is-real .ax-dive-inner img { width: auto; height: auto; max-width: none; cursor: zoom-out; }
+.ax-dive-foil { position: absolute; inset: 0; pointer-events: none; mix-blend-mode: color-dodge; opacity: .3; transition: opacity .8s ease;
+  background: repeating-linear-gradient(118deg, transparent 0%, oklch(0.8 0.12 60 / .5) 5%, oklch(0.8 0.12 170 / .5) 10%, oklch(0.75 0.14 290 / .5) 15%, transparent 20%) 0 0 / 220% 220%; }
+.ax-dive.is-open .ax-dive-foil { opacity: 0; }
+.ax-dive-meta { position: absolute; left: 40px; bottom: 36px; display: grid; gap: 6px; max-width: 520px; pointer-events: none; text-shadow: 0 1px 8px rgba(0,0,0,.8);
+  opacity: 0; transform: translateY(12px); transition: opacity .5s ease .5s, transform .6s cubic-bezier(.16,1,.3,1) .5s; }
+.ax-dive-meta span:first-child { font-size: 12px; letter-spacing: .16em; color: #ffcf6b; }
+.ax-dive-meta b { font-size: 40px; font-weight: 500; letter-spacing: -.02em; line-height: 1; }
+.ax-dive-meta span:last-child { font-size: 14px; color: var(--color-neutral-200); }
+.ax-dive-tools { position: absolute; right: 32px; top: 28px; display: flex; gap: 10px; opacity: 0; transition: opacity .5s ease .5s; }
+.ax-dive.is-open .ax-dive-meta, .ax-dive.is-open .ax-dive-tools { opacity: 1; transform: none; }
+.ax-dive-tools button { display: inline-flex; align-items: center; justify-content: center; gap: 8px; min-height: 44px; min-width: 44px; padding: 0 16px; border-radius: 999px;
+  border: 1px solid rgba(233,233,237,.2); background: rgba(22,24,38,.6); backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px); color: var(--color-text); font: inherit; font-size: 14px; cursor: pointer; }
+.ax-dive-tools button:hover { border-color: rgba(255,207,107,.7); }
+.ax-dive-tools button.icon { padding: 0; width: 44px; }
+@media (max-width: 640px) { .ax-dive-meta { left: 20px; bottom: 24px; } .ax-dive-meta b { font-size: 30px; } .ax-dive-tools { right: 16px; top: 16px; } }
+
+@media (prefers-reduced-motion: reduce) {
+  .ax-fili { animation: none; }
+  .ax-dive, .ax-dive *, .ax-dive-win { transition: none !important; }
+}

@@ -31,7 +31,6 @@ html { scroll-behavior: smooth; }
 @keyframes lx-beam { to { offset-distance: 100%; } }
 @keyframes lx-spin { to { transform: rotate(360deg); } }
 @keyframes lx-spinr { to { transform: rotate(-360deg); } }
-@keyframes lx-billboard { from { transform: rotate(0deg) rotateX(-66deg); } to { transform: rotate(-360deg) rotateX(-66deg); } }
 @keyframes lx-float { 0%, 100% { translate: 0 0; } 50% { translate: 0 -12px; } }
 @keyframes lx-rise { from { opacity: .3; transform: translateY(28px); } }
 @keyframes lx-odo { from { transform: translateY(0); } }
@@ -98,6 +97,9 @@ html { scroll-behavior: smooth; }
 .lx-hero-grid { position: relative; z-index: 2; flex: 1; width: 100%; max-width: 1280px; margin: 0 auto; box-sizing: border-box;
   padding: clamp(112px, 15vh, 150px) var(--pad) 40px; display: grid; grid-template-columns: minmax(0, 1.05fr) minmax(0, .95fr); gap: 40px 32px; align-items: center; }
 .lx-hero-copy { display: grid; gap: 24px; max-width: 620px; }
+.lx-series-kicker { display: flex; flex-wrap: wrap; gap: 8px 18px; }
+.lx-series-kicker .lx-kicker { position: relative; padding-left: 14px; }
+.lx-series-kicker .lx-kicker::before { content: ""; position: absolute; left: 0; top: 50%; width: 5px; height: 5px; margin-top: -2.5px; border-radius: 50%; background: var(--accent-lt); }
 .lx-hero h1 { font-weight: 800; font-size: clamp(46px, 8.4vw, 112px); line-height: .9; text-wrap: balance; }
 .lx-hero-copy > p { max-width: 34em; font-size: clamp(16px, 1.3vw, 18px); color: var(--ink-2); text-wrap: pretty; }
 .lx-actions { display: flex; flex-wrap: wrap; gap: 12px; align-items: center; }
@@ -195,13 +197,30 @@ html { scroll-behavior: smooth; }
 .lx-tile-kicker em { font-style: normal; padding: 2px 8px; border-radius: 99px; border: 1px solid currentColor; font-size: 9px; opacity: .8; }
 .lx-k-mint { color: #5ee0c0; } .lx-k-coral { color: #ff9b8a; }
 .lx-t-atlas { grid-column: span 4; grid-row: span 2; display: grid; grid-template-rows: 1fr auto; min-height: 460px; background: radial-gradient(ellipse 70% 70% at 60% 40%, #1d1b3a, #0f1019 75%); }
-.lx-solar { position: relative; min-height: 300px; perspective: 900px; }
-.lx-solar-plane { position: absolute; left: 50%; top: 52%; width: 0; height: 0; transform-style: preserve-3d; transform: rotateX(66deg); }
-.lx-sun { position: absolute; left: -30px; top: -30px; width: 60px; height: 60px; border-radius: 50%; transform: rotateX(-66deg); background: radial-gradient(circle, #fff3d1 0, #ffcf6b 35%, rgba(255,160,60,.35) 60%, transparent 72%); }
+.lx-solar { position: relative; min-height: 300px; }
+.lx-solar-plane { position: absolute; left: 50%; top: 52%; width: 0; height: 0; }
+.lx-sun { position: absolute; left: -30px; top: -30px; width: 60px; height: 60px; border-radius: 50%; background: radial-gradient(circle, #fff3d1 0, #ffcf6b 35%, rgba(255,160,60,.35) 60%, transparent 72%); }
 .lx-ring { position: absolute; border-radius: 50%; border: 1px solid; }
-.lx-orbiter { position: absolute; animation: lx-spin linear infinite; }
-.lx-planet { position: absolute; left: 50%; top: 0; animation: lx-billboard linear infinite; }
-.lx-planet img { width: 100%; display: block; mix-blend-mode: lighten; }
+.lx-planet { position: absolute; left: 0; top: 0; transform: translate(-50%, -50%); animation: lx-orbit-ellipse linear infinite;
+  border-radius: 50%; filter: drop-shadow(0 2px 5px rgba(0,0,0,.6)); }
+@keyframes lx-orbit-ellipse {
+  0%     { left: var(--rx); top: 0; }
+  8.33%  { left: calc(var(--rx) * .866); top: calc(var(--ry) * .5); }
+  16.67% { left: calc(var(--rx) * .5); top: calc(var(--ry) * .866); }
+  25%    { left: 0; top: var(--ry); }
+  33.33% { left: calc(var(--rx) * -.5); top: calc(var(--ry) * .866); }
+  41.67% { left: calc(var(--rx) * -.866); top: calc(var(--ry) * .5); }
+  50%    { left: calc(var(--rx) * -1); top: 0; }
+  58.33% { left: calc(var(--rx) * -.866); top: calc(var(--ry) * -.5); }
+  66.67% { left: calc(var(--rx) * -.5); top: calc(var(--ry) * -.866); }
+  75%    { left: 0; top: calc(var(--ry) * -1); }
+  83.33% { left: calc(var(--rx) * .5); top: calc(var(--ry) * -.866); }
+  91.67% { left: calc(var(--rx) * .866); top: calc(var(--ry) * -.5); }
+  100%   { left: var(--rx); top: 0; }
+}
+.lx-planet img { width: 100%; display: block; border-radius: 50%; }
+.lx-planet::after { content: ""; position: absolute; inset: 0; border-radius: 50%; pointer-events: none;
+  background: radial-gradient(circle at 32% 28%, rgba(255,255,255,.35), transparent 45%), radial-gradient(circle at 68% 74%, rgba(0,0,0,.55), transparent 60%); }
 .lx-solar-tag { position: absolute; right: clamp(16px, 4%, 40px); top: 28px; display: grid; gap: 6px; padding: 10px 14px; border-radius: 12px; background: rgba(22,24,38,.6); backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px); border: 1px solid rgba(233,233,237,.10); font-family: var(--f-mono); font-size: 11px; letter-spacing: .1em; color: var(--muted); }
 .lx-solar-tag span:first-child { display: flex; align-items: center; gap: 8px; color: var(--ink); }
 .lx-solar-tag i { width: 7px; height: 7px; border-radius: 50%; background: var(--gold); box-shadow: 0 0 8px var(--gold); }
@@ -251,10 +270,10 @@ html { scroll-behavior: smooth; }
 .lx-chips span { padding: 5px 10px; border-radius: 99px; border: 1px solid rgba(233,233,237,.16); color: var(--ink-2); }
 .lx-chips .is-on { border-color: transparent; color: var(--bg); background: var(--accent-lt); }
 .lx-ghosts { position: relative; height: 170px; }
-.lx-ghosts > div { position: absolute; }
-.lx-ghosts > div:nth-child(1) { left: 2%; top: 12%; width: 46%; filter: blur(5px) saturate(1.2); opacity: .85; }
-.lx-ghosts > div:nth-child(2) { right: -4%; top: -14%; width: 62%; filter: blur(6px); opacity: .9; }
-.lx-ghosts > div:nth-child(3) { left: 32%; bottom: -20%; width: 44%; filter: blur(7px); opacity: .8; }
+.lx-ghosts > div { position: absolute; border-radius: 12px; overflow: hidden; box-shadow: 0 12px 30px -10px rgba(0,0,0,.6); }
+.lx-ghosts > div:nth-child(1) { left: 2%; top: 12%; width: 46%; }
+.lx-ghosts > div:nth-child(2) { right: -4%; top: -14%; width: 62%; }
+.lx-ghosts > div:nth-child(3) { left: 32%; bottom: -20%; width: 44%; }
 @media (max-width: 1079px) {
   .lx-bento { grid-template-columns: repeat(2, minmax(0, 1fr)); }
   .lx-t-atlas, .lx-t-ech { grid-column: span 2; } .lx-t-photo, .lx-t-taux, .lx-t-bat, .lx-t-series { grid-column: span 1; }

@@ -2,6 +2,7 @@
 import { useEffect, useRef, useState } from "react";
 import Carte, { ORDER, RAR } from "@/components/Carte";
 import Coffret from "@/components/Coffret";
+import PhotoDive from "@/components/PhotoDive";
 import { coffretTheme } from "@/lib/coffrets";
 
 const PHASES = ["idle", "shake", "lid", "rise", "fan", "done"];
@@ -17,6 +18,7 @@ export default function CoffretOpening({ booster, onOpen, onDone, onError, disab
   const [phase, setPhase] = useState("idle");
   const [cards, setCards] = useState([]);
   const [shown, setShown] = useState(0);
+  const [dive, setDive] = useState(null);
   const alive = useRef(true);
   const skip = useRef(false);
   useEffect(() => () => { alive.current = false; }, []);
@@ -79,7 +81,7 @@ export default function CoffretOpening({ booster, onOpen, onDone, onError, disab
           return (
             <div key={`${c.id}-${k}`} className={rare ? "co-card co-card-rare" : "co-card"}
               style={{ "--rc": rare ? RAR[c.rarete].color : undefined, transform: tf, opacity: P >= 3 ? 1 : 0, transitionDelay: `${(fanned ? 70 : 90) * k}ms` }}>
-              <Carte c={c} revealed={k < shown} nouvelle={c.nouvelle} hint />
+              <Carte c={c} revealed={k < shown} nouvelle={c.nouvelle} hint onDive={(carte, rect) => setDive({ carte, rect })} />
             </div>
           );
         })}
@@ -94,6 +96,7 @@ export default function CoffretOpening({ booster, onOpen, onDone, onError, disab
       )}
       {P === 0 && <span className="co-hint">Touche le coffret pour l'ouvrir</span>}
       {P === 5 && <button className="co-again" type="button" onClick={open} aria-label="Rouvrir un coffret" disabled={disabled} />}
+      {dive && <PhotoDive {...dive} onClose={() => setDive(null)} />}
     </div>
   );
 }
