@@ -159,10 +159,8 @@ export default function Landing() {
           <div className="lx-process-head lx-rise">
             {/* eslint-disable-next-line @next/next/no-img-element */}
             <div className="lx-process-media" aria-hidden="true"><img src="/media/neb-pillars_m16.webp" alt="" loading="lazy" /></div>
-            <div className="lx-process-headtext">
-              <h2 id="jeu-title">Trois gestes,<br />cinq <span className="lx-outline">cartes</span>.</h2>
-              <p>Ouvre un booster, révèle tes cartes, complète la série. Les autres modes se débloquent avec la collection.</p>
-            </div>
+            <h2 id="jeu-title">Trois gestes,<br />cinq <span className="lx-outline">cartes</span>.</h2>
+            <p className="lx-process-desc">Ouvre un booster, révèle tes cartes, complète la série. Les autres modes se débloquent avec la collection.</p>
           </div>
           <ol className="lx-process-list">
             <li><span className="lx-pnum">01</span><div><h3>Déchire.</h3><p>Ouverture tactile d'un geste. Cinq cartes, dont au moins une Rare en dernière position.</p></div></li>
