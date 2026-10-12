@@ -150,7 +150,7 @@ export default function Landing() {
           </div>
         </section>
 
-        <section className="lx-section-light" aria-labelledby="gallery-title">
+        <section className="lx-section-dark lx-section-dark-a" aria-labelledby="gallery-title">
         <div className="lx-wrap lx-section lx-gallery">
           <div className="lx-gallery-head">
             <div>
@@ -188,7 +188,7 @@ export default function Landing() {
           </div>
         </section>
 
-        <section id="atlas" className="lx-section-light" aria-labelledby="bento-title">
+        <section id="atlas" className="lx-section-dark lx-section-dark-b" aria-labelledby="bento-title">
         <div className="lx-wrap lx-section">
           <Graduation left="RA 06h" right="DÉC −04°" />
           <h2 id="bento-title" className="lx-rise lx-h2-solo">Un jeu de cartes doublé d'un <span className="lx-outline">atlas</span>.</h2>
@@ -341,7 +341,7 @@ export default function Landing() {
           <span className="lx-mono">LICENCES · DOMAINE PUBLIC · CC BY-SA 4.0 · CC BY-SA 3.0 IGO</span>
         </section>
 
-        <section className="lx-section-light lx-cta-wrap" aria-labelledby="cta-title">
+        <section className="lx-section-dark lx-cta-wrap" aria-labelledby="cta-title">
         <div className="lx-wrap">
           <div className="lx-cta">
             <div className="lx-eclipse" aria-hidden="true"><div className="lx-corona" /><div className="lx-rays" /><div className="lx-disc" /><i /></div>
