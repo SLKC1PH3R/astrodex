@@ -48,7 +48,6 @@ export default function Landing() {
   const [scrolled, setScrolled] = useState(false);
   const [sel, setSel] = useState(4);
   const pointer = useRef({ x: .5, y: .5 });
-  const tilt = useRef(null), sheen = useRef(null);
 
   useEffect(() => {
     api.series().then(setAllSeries).catch(() => {});
@@ -79,13 +78,9 @@ export default function Landing() {
 
   const onMove = e => {
     const r = e.currentTarget.getBoundingClientRect();
-    const x = (e.clientX - r.left) / r.width, y = (e.clientY - r.top) / r.height;
-    pointer.current = { x, y };
-    if (e.pointerType === "touch" || matchMedia("(prefers-reduced-motion: reduce)").matches) return;
-    if (tilt.current) tilt.current.style.transform = `rotateX(${(.5 - y) * 14}deg) rotateY(${(x - .5) * 22}deg)`;
-    if (sheen.current) sheen.current.style.background = `radial-gradient(circle at ${x * 100}% ${y * 100}%, rgba(255,255,255,.5), transparent 42%)`;
+    pointer.current = { x: (e.clientX - r.left) / r.width, y: (e.clientY - r.top) / r.height };
   };
-  const onLeave = () => { pointer.current = { x: .5, y: .5 }; if (tilt.current) tilt.current.style.transform = ""; };
+  const onLeave = () => { pointer.current = { x: .5, y: .5 }; };
 
   return (
     <div className="lx">
@@ -104,10 +99,16 @@ export default function Landing() {
 
       <main id="top">
         <section className="lx-hero" aria-labelledby="hero-title" onPointerMove={onMove} onPointerLeave={onLeave}>
-          <StarField pointer={pointer} />
-          {/* eslint-disable-next-line @next/next/no-img-element */}
-          <div className="lighten lx-hero-planet" aria-hidden="true"><img src="/media/saturne.webp" alt="" fetchPriority="high" /></div>
-          <div className="lx-dec" aria-hidden="true"><span>+60°</span><i /><span>−60°</span></div>
+          <div className="lx-hero-fx" aria-hidden="true">
+            <StarField pointer={pointer} />
+            <div className="lx-dec"><span>+60°</span><i /><span>−60°</span></div>
+          </div>
+
+          <div className="lx-hero-photo" aria-hidden="true">
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img src="/media/saturne.webp" alt="" fetchPriority="high" />
+            <div className="lx-hero-photo-shade" />
+          </div>
 
           <div className="lx-hero-grid">
             <div className="lx-hero-copy">
@@ -122,31 +123,13 @@ export default function Landing() {
                 <a href="#atlas" className="lx-btn-glass"><i className="ph ph-globe-hemisphere-west" aria-hidden="true" />Explorer l'atlas 3D</a>
               </div>
               <span className="lx-mono">GRATUIT · UN PSEUDO SUFFIT</span>
-            </div>
 
-            <div className="lx-stage" aria-hidden="true">
-              <div className="lx-tilt" ref={tilt}>
-                <div className="lx-back lx-back-l"><Carte c={by("mars")} /></div>
-                <div className="lx-back lx-back-r"><Carte c={by("titania")} /></div>
-                <div className="lx-orbit lx-orbit-a"><div><i /></div></div>
-                <div className="lx-orbit lx-orbit-b"><div><i /></div></div>
-                <div className="lx-hero-card">
-                  <div className="lx-hero-glow" />
-                  <Carte c={by("saturne")} />
-                  <div className="lx-sheen" ref={sheen} />
-                </div>
-              </div>
+              <dl className="lx-readouts">
+                <Odometer value={allSeries.reduce((n, s) => n + (s.nb_cartes || 0), 0) || 119} label="CARTES · 3 SÉRIES" sr="119" />
+                <Odometer value={5} label="CARTES PAR BOOSTER" sr="5" delay={120} />
+                <Odometer value={6} suffix="%" label="LÉGENDAIRE AU 5E EMPLACEMENT" sr="6 %" delay={240} />
+              </dl>
             </div>
-          </div>
-
-          <div className="lx-hero-foot">
-            <Graduation left="RA 00h" right="RA 24h" />
-            <dl className="lx-readouts">
-              <Odometer value={allSeries.reduce((n, s) => n + (s.nb_cartes || 0), 0) || 119} label="CARTES · 3 SÉRIES" sr="119" />
-              <Odometer value={5} label="CARTES PAR BOOSTER" sr="5" delay={120} />
-              <Odometer value={6} suffix="%" label="LÉGENDAIRE AU 5E EMPLACEMENT" sr="6 %" delay={240} />
-              <Odometer value={500} suffix="M al" label="PORTÉE DE L'ATLAS 3D" sr="500 millions d'années-lumière" delay={360} />
-            </dl>
           </div>
         </section>
 
@@ -173,19 +156,19 @@ export default function Landing() {
 
         <section id="jeu" className="lx-wrap lx-section" aria-labelledby="jeu-title">
           <Graduation left="RA 02h" right="DÉC +12°" />
-          <div className="lx-split lx-rise">
-            <h2 id="jeu-title">Trois gestes, <span className="lx-outline">cinq</span> cartes.</h2>
-            <p>Ouvre un booster, révèle tes cartes, complète la série. Les autres modes se débloquent avec la collection.</p>
-          </div>
-          <div className="lx-process-grid">
+          <div className="lx-process-head lx-rise">
             {/* eslint-disable-next-line @next/next/no-img-element */}
             <div className="lx-process-media" aria-hidden="true"><img src="/media/neb-pillars_m16.webp" alt="" loading="lazy" /></div>
-            <ol className="lx-process-list">
-              <li><span className="lx-pnum">01</span><div><h3>Déchire.</h3><p>Ouverture tactile d'un geste. Cinq cartes, dont au moins une Rare en dernière position.</p></div></li>
-              <li><span className="lx-pnum">02</span><div><h3>Révèle.</h3><p>Chaque carte se retourne individuellement. Sa bordure annonce la rareté avant l'image.</p></div></li>
-              <li><span className="lx-pnum">03</span><div><h3>Collectionne.</h3><p>39 objets à réunir par série. Quantités, doubles et cartes manquantes sont suivies en continu.</p></div></li>
-            </ol>
+            <div className="lx-process-headtext">
+              <h2 id="jeu-title">Trois gestes,<br />cinq <span className="lx-outline">cartes</span>.</h2>
+              <p>Ouvre un booster, révèle tes cartes, complète la série. Les autres modes se débloquent avec la collection.</p>
+            </div>
           </div>
+          <ol className="lx-process-list">
+            <li><span className="lx-pnum">01</span><div><h3>Déchire.</h3><p>Ouverture tactile d'un geste. Cinq cartes, dont au moins une Rare en dernière position.</p></div></li>
+            <li><span className="lx-pnum">02</span><div><h3>Révèle.</h3><p>Chaque carte se retourne individuellement. Sa bordure annonce la rareté avant l'image.</p></div></li>
+            <li><span className="lx-pnum">03</span><div><h3>Collectionne.</h3><p>39 objets à réunir par série. Quantités, doubles et cartes manquantes sont suivies en continu.</p></div></li>
+          </ol>
         </section>
 
         <section id="atlas" className="lx-section-dark lx-section-dark-b" aria-labelledby="bento-title">
@@ -344,7 +327,9 @@ export default function Landing() {
         <section className="lx-section-dark lx-cta-wrap" aria-labelledby="cta-title">
         <div className="lx-wrap">
           <div className="lx-cta">
-            <div className="lx-eclipse" aria-hidden="true"><div className="lx-corona" /><div className="lx-rays" /><div className="lx-disc" /><i /></div>
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img className="lx-cta-photo" src="/media/neb-pillars_m16.webp" alt="" aria-hidden="true" loading="lazy" />
+            <div className="lx-cta-shade" aria-hidden="true" />
             <h2 id="cta-title">Ton premier booster <span className="lx-outline lx-gold">t'attend</span>.</h2>
             <p>Un pseudo, un clic, cinq cartes.</p>
             <Link href="/inscription" className="lx-beam"><span className="lx-beam-dot" aria-hidden="true" /><span className="lx-beam-in">Ouvrir mon premier booster<i className="ph ph-arrow-right" aria-hidden="true" /></span></Link>
