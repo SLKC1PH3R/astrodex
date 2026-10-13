@@ -77,13 +77,13 @@ export default function Landing() {
   const k = ORDER[sel], c = RC[k];
 
   const onMove = e => {
-    const r = e.currentTarget.getBoundingClientRect();
-    pointer.current = { x: (e.clientX - r.left) / r.width, y: (e.clientY - r.top) / r.height };
+    pointer.current = { x: e.clientX / innerWidth, y: e.clientY / innerHeight };
   };
   const onLeave = () => { pointer.current = { x: .5, y: .5 }; };
 
   return (
-    <div className="lx">
+    <div className="lx" onPointerMove={onMove} onPointerLeave={onLeave}>
+      <div className="lx-stars-bg" aria-hidden="true"><StarField pointer={pointer} /></div>
       <header className={`lx-nav${scrolled ? " is-compact" : ""}`}>
         <nav aria-label="Navigation principale">
           <Link href="/" className="lx-brand" aria-label="Astrodex, accueil"><span className="lx-logo" aria-hidden="true"><span /><span /></span><b>ASTRODEX</b></Link>
@@ -98,9 +98,8 @@ export default function Landing() {
       </header>
 
       <main id="top">
-        <section className="lx-hero" aria-labelledby="hero-title" onPointerMove={onMove} onPointerLeave={onLeave}>
+        <section className="lx-hero" aria-labelledby="hero-title">
           <div className="lx-hero-fx" aria-hidden="true">
-            <StarField pointer={pointer} />
             <div className="lx-dec"><span>+60°</span><i /><span>−60°</span></div>
           </div>
 

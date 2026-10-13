@@ -12,9 +12,15 @@
   min-height: 100vh; overflow-x: hidden; background: var(--bg); color: var(--ink);
   font-family: var(--f-body); font-size: 16px; line-height: 1.7;
 }
-.lx-section-dark { background: var(--bg); color: var(--ink); }
-.lx-section-dark-a { background: linear-gradient(180deg, var(--bg) 0%, #0d0f0d 100%); }
-.lx-section-dark-b { background: radial-gradient(ellipse 55% 65% at 70% 30%, rgba(143,162,131,.07), transparent 70%), #0d0f0d; }
+/* Champ d'étoiles fixe derrière toute la page (pas seulement le hero) : .lx garde un fond noir plein
+   pour la couche la plus basse, le canvas est fixé au viewport juste au-dessus, et les sections qui
+   suivent utilisent un noir semi-transparent plutôt qu'opaque pour laisser les étoiles transparaître. */
+.lx-stars-bg { position: fixed; inset: 0; z-index: 0; pointer-events: none; }
+.lx-stars { display: block; width: 100%; height: 100%; }
+.lx > main, .lx > footer.lx-footer { position: relative; z-index: 1; }
+.lx-section-dark { background: rgba(11,12,13,.9); color: var(--ink); }
+.lx-section-dark-a { background: linear-gradient(180deg, rgba(11,12,13,.9) 0%, rgba(13,15,13,.94) 100%); }
+.lx-section-dark-b { background: radial-gradient(ellipse 55% 65% at 70% 30%, rgba(143,162,131,.07), transparent 70%), rgba(13,15,13,.94); }
 html { scroll-behavior: smooth; }
 .lx a { color: var(--accent-lt); }
 .lx a:hover { color: var(--ink); }
@@ -96,7 +102,7 @@ html { scroll-behavior: smooth; }
 /* Hero — bannière photo pleine hauteur à droite, qui déborde sous le hero (comme le bouquet de Floria
    déborde sur la section suivante), texte à gauche sur fond sombre. */
 .lx-hero { position: relative; overflow: visible; min-height: min(92vh, 860px); display: flex; flex-direction: column;
-  background: radial-gradient(ellipse 60% 60% at 18% 30%, var(--bg-2), var(--bg) 70%); }
+  background: radial-gradient(ellipse 60% 60% at 18% 30%, rgba(21,23,21,.72), rgba(11,12,13,.9) 70%); }
 .lx-hero::after { content: ""; position: absolute; left: 0; right: 0; bottom: 0; height: 160px; z-index: 3; pointer-events: none;
   background: linear-gradient(180deg, transparent, #0d0e18); }
 .lx-hero-fx { position: absolute; inset: 0; overflow: hidden; z-index: 0; }
@@ -280,7 +286,7 @@ html { scroll-behavior: smooth; }
 }
 
 /* Raretés */
-.lx-rarity { position: relative; overflow: hidden; padding-block: 140px; background: radial-gradient(ellipse 50% 60% at 30% 60%, rgba(143,162,131,.09), transparent 70%), #0d0f0d; }
+.lx-rarity { position: relative; overflow: hidden; padding-block: 140px; background: radial-gradient(ellipse 50% 60% at 30% 60%, rgba(143,162,131,.09), transparent 70%), rgba(13,15,13,.94); }
 .lx-rarity-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 420px), 1fr)); gap: 48px 56px; align-items: center; }
 .lx-rarity-grid > div:first-child { display: grid; gap: 28px; }
 .lx-fan { display: flex; justify-content: center; align-items: flex-end; min-height: clamp(220px, 26vw, 320px); padding: 30px 0 10px; }
@@ -305,7 +311,7 @@ html { scroll-behavior: smooth; }
 
 /* Manifeste */
 .lx-manifesto { position: relative; overflow: hidden; padding: 150px var(--pad) 150px; text-align: center; display: grid; justify-items: center; gap: 22px;
-  background: linear-gradient(180deg, #0e100e 0%, #0e100e 55%, var(--bg) 100%); color: var(--ink); }
+  background: linear-gradient(180deg, rgba(14,16,14,.92) 0%, rgba(14,16,14,.92) 55%, rgba(11,12,13,.9) 100%); color: var(--ink); }
 .lx-manifesto::before { content: ""; position: absolute; inset: 0; background: url("/media/neb-pillars_m16.webp") center 22% / cover no-repeat; opacity: .07; mix-blend-mode: luminosity; pointer-events: none; }
 .lx-manifesto-icon { font-size: 28px; color: var(--accent-lt); opacity: .85; }
 .lx-manifesto h2 { position: relative; max-width: 16em; font-size: clamp(34px, 5vw, 64px); line-height: 1.05; color: var(--ink); }
@@ -329,7 +335,7 @@ html { scroll-behavior: smooth; }
 .lx-cta > .lx-mono { margin-top: 24px; font-size: 11px; }
 
 /* Pied de page — plus haut, avec un fondu en haut qui reprend la section précédente, comme chez Floria */
-.lx-footer { position: relative; overflow: hidden; background: #09090a; }
+.lx-footer { position: relative; overflow: hidden; background: rgba(9,9,10,.92); }
 .lx-footer::before { content: ""; position: absolute; left: 0; right: 0; top: 0; height: 160px; pointer-events: none;
   background: linear-gradient(180deg, var(--bg), transparent); }
 .lx-footer-wm { position: absolute; left: 0; right: 0; top: 50%; transform: translateY(-50%); text-align: center; pointer-events: none; user-select: none;
