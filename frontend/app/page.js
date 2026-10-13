@@ -153,7 +153,8 @@ export default function Landing() {
         </div>
         </section>
 
-        <section id="jeu" className="lx-wrap lx-section" aria-labelledby="jeu-title">
+        <section id="jeu" className="lx-section-dark" aria-labelledby="jeu-title">
+        <div className="lx-wrap lx-section">
           <Graduation left="RA 02h" right="DÉC +12°" />
           <div className="lx-process-row lx-rise">
             {/* eslint-disable-next-line @next/next/no-img-element */}
@@ -168,6 +169,7 @@ export default function Landing() {
               <li><span className="lx-pnum">03</span><div><h3>Collectionne.</h3><p>39 objets à réunir par série. Quantités, doubles et cartes manquantes sont suivies en continu.</p></div></li>
             </ol>
           </div>
+        </div>
         </section>
 
         <section id="atlas" className="lx-section-dark lx-section-dark-b" aria-labelledby="bento-title">
