@@ -119,8 +119,8 @@ export default function Landing() {
               <h1 id="hero-title"><span className="lx-h1-line">L'espace,</span><span className="lx-h1-line lx-h1-italic">carte après carte.</span></h1>
               <p>Chaque carte est une photo prise par une sonde ou un télescope. Déchire un booster, retourne tes cartes, complète la série.</p>
               <div className="lx-actions">
-                <Link href="/inscription" className="lx-btn-shimmer">Ouvrir mon premier booster<i className="ph ph-arrow-right" aria-hidden="true" /></Link>
-                <a href="#atlas" className="lx-btn-glass"><i className="ph ph-globe-hemisphere-west" aria-hidden="true" />Explorer l'atlas 3D</a>
+                <Link href="/inscription" className="lx-textlink">Ouvrir mon premier booster<i className="ph ph-arrow-right" aria-hidden="true" /></Link>
+                <a href="#atlas" className="lx-textlink is-muted">Explorer l'atlas 3D<i className="ph ph-arrow-right" aria-hidden="true" /></a>
               </div>
               <span className="lx-mono">GRATUIT · UN PSEUDO SUFFIT</span>
 
@@ -332,7 +332,7 @@ export default function Landing() {
             <div className="lx-cta-shade" aria-hidden="true" />
             <h2 id="cta-title">Ton premier booster <span className="lx-outline lx-gold">t'attend</span>.</h2>
             <p>Un pseudo, un clic, cinq cartes.</p>
-            <Link href="/inscription" className="lx-beam"><span className="lx-beam-dot" aria-hidden="true" /><span className="lx-beam-in">Ouvrir mon premier booster<i className="ph ph-arrow-right" aria-hidden="true" /></span></Link>
+            <Link href="/inscription" className="lx-textlink">Ouvrir mon premier booster<i className="ph ph-arrow-right" aria-hidden="true" /></Link>
             <span className="lx-mono">GRATUIT · SANS CARTE BANCAIRE</span>
           </div>
         </div>
