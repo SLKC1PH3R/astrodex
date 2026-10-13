@@ -156,17 +156,19 @@ export default function Landing() {
 
         <section id="jeu" className="lx-wrap lx-section" aria-labelledby="jeu-title">
           <Graduation left="RA 02h" right="DÉC +12°" />
-          <div className="lx-process-head lx-rise">
+          <div className="lx-process-row lx-rise">
             {/* eslint-disable-next-line @next/next/no-img-element */}
             <div className="lx-process-media" aria-hidden="true"><img src="/media/neb-pillars_m16.webp" alt="" loading="lazy" /></div>
-            <h2 id="jeu-title">Trois gestes,<br />cinq <span className="lx-outline">cartes</span>.</h2>
-            <p className="lx-process-desc">Ouvre un booster, révèle tes cartes, complète la série. Les autres modes se débloquent avec la collection.</p>
+            <div className="lx-process-col">
+              <h2 id="jeu-title">Trois gestes,<br />cinq <span className="lx-outline">cartes</span>.</h2>
+              <p>Ouvre un booster, révèle tes cartes, complète la série. Les autres modes se débloquent avec la collection.</p>
+            </div>
+            <ol className="lx-process-list">
+              <li><span className="lx-pnum">01</span><div><h3>Déchire.</h3><p>Ouverture tactile d'un geste. Cinq cartes, dont au moins une Rare en dernière position.</p></div></li>
+              <li><span className="lx-pnum">02</span><div><h3>Révèle.</h3><p>Chaque carte se retourne individuellement. Sa bordure annonce la rareté avant l'image.</p></div></li>
+              <li><span className="lx-pnum">03</span><div><h3>Collectionne.</h3><p>39 objets à réunir par série. Quantités, doubles et cartes manquantes sont suivies en continu.</p></div></li>
+            </ol>
           </div>
-          <ol className="lx-process-list">
-            <li><span className="lx-pnum">01</span><div><h3>Déchire.</h3><p>Ouverture tactile d'un geste. Cinq cartes, dont au moins une Rare en dernière position.</p></div></li>
-            <li><span className="lx-pnum">02</span><div><h3>Révèle.</h3><p>Chaque carte se retourne individuellement. Sa bordure annonce la rareté avant l'image.</p></div></li>
-            <li><span className="lx-pnum">03</span><div><h3>Collectionne.</h3><p>39 objets à réunir par série. Quantités, doubles et cartes manquantes sont suivies en continu.</p></div></li>
-          </ol>
         </section>
 
         <section id="atlas" className="lx-section-dark lx-section-dark-b" aria-labelledby="bento-title">
