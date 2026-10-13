@@ -104,7 +104,7 @@ html { scroll-behavior: smooth; }
    déborde sur la section suivante), texte à gauche sur fond sombre. */
 .lx-hero { position: relative; overflow: visible; min-height: min(92vh, 860px); display: flex; flex-direction: column;
   background: radial-gradient(ellipse 60% 60% at 18% 30%, rgba(21,23,21,.72), var(--veil) 70%); }
-.lx-hero::after { content: ""; position: absolute; left: 0; right: 0; bottom: 0; height: 160px; z-index: 3; pointer-events: none;
+.lx-hero::after { content: ""; position: absolute; left: 0; right: 0; bottom: 0; height: 160px; z-index: 1; pointer-events: none;
   background: linear-gradient(180deg, transparent, var(--veil)); }
 .lx-hero-fx { position: absolute; inset: 0; overflow: hidden; z-index: 0; }
 .lx-dec { position: absolute; left: clamp(10px, 2vw, 24px); top: 120px; bottom: 90px; width: 22px; display: flex; flex-direction: column; justify-content: space-between; font-family: var(--f-mono); font-size: 9px; letter-spacing: .12em; color: var(--faint); }
@@ -112,10 +112,12 @@ html { scroll-behavior: smooth; }
   background: repeating-linear-gradient(180deg, rgba(233,233,237,.22) 0 1px, transparent 1px 12px) left / 5px 100% no-repeat,
               repeating-linear-gradient(180deg, rgba(233,233,237,.36) 0 1px, transparent 1px 96px) left / 9px 100% no-repeat;
   -webkit-mask: linear-gradient(180deg, transparent, #000 48px, #000 calc(100% - 48px), transparent); mask: linear-gradient(180deg, transparent, #000 48px, #000 calc(100% - 48px), transparent); }
-.lx-hero-photo { position: absolute; right: 0; top: 0; width: min(54%, 860px); height: calc(100% + 220px); z-index: 5; overflow: hidden; }
+.lx-hero-photo { position: absolute; right: 0; top: 0; width: min(54%, 860px); height: calc(100% + 220px); z-index: 5; overflow: hidden;
+  -webkit-mask-image: linear-gradient(90deg, transparent 0%, #000 38%);
+          mask-image: linear-gradient(90deg, transparent 0%, #000 38%); }
 .lx-hero-photo img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; object-position: 38% 42%; display: block; }
 .lx-hero-photo-shade { position: absolute; inset: 0;
-  background: linear-gradient(90deg, var(--bg) 0%, rgba(11,12,13,.6) 16%, transparent 42%), linear-gradient(180deg, transparent 74%, var(--bg) 100%); }
+  background: linear-gradient(180deg, transparent 74%, var(--bg) 100%); }
 .lx-hero-grid { position: relative; z-index: 2; flex: 1; width: 100%; max-width: 1280px; margin: 0 auto; box-sizing: border-box;
   padding: clamp(112px, 15vh, 150px) var(--pad) 64px; display: flex; }
 .lx-hero-copy { display: grid; gap: 24px; max-width: 600px; align-self: center; }
