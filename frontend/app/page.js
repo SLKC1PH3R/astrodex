@@ -160,13 +160,13 @@ export default function Landing() {
             {/* eslint-disable-next-line @next/next/no-img-element */}
             <div className="lx-process-media" aria-hidden="true"><img src="/media/neb-pillars_m16.webp" alt="" loading="lazy" /></div>
             <div className="lx-process-col">
-              <h2 id="jeu-title">Trois gestes,<br />cinq <span className="lx-outline">cartes</span>.</h2>
-              <p>Ouvre un booster, révèle tes cartes, complète la série. Les autres modes se débloquent avec la collection.</p>
+              <h2 id="jeu-title">La masse fixe<br /><span className="lx-outline">l'attaque</span>.</h2>
+              <p>Le diamètre fixe la défense. La distance à la Terre, la vitesse. La notoriété, la rareté — du Soleil aux comètes obscures. Rien n'est inventé, pas même les chiffres.</p>
             </div>
             <ol className="lx-process-list">
-              <li><span className="lx-pnum">01</span><div><h3>Déchire.</h3><p>Ouverture tactile d'un geste. Cinq cartes, dont au moins une Rare en dernière position.</p></div></li>
-              <li><span className="lx-pnum">02</span><div><h3>Révèle.</h3><p>Chaque carte se retourne individuellement. Sa bordure annonce la rareté avant l'image.</p></div></li>
-              <li><span className="lx-pnum">03</span><div><h3>Collectionne.</h3><p>39 objets à réunir par série. Quantités, doubles et cartes manquantes sont suivies en continu.</p></div></li>
+              <li><span className="lx-pnum">01</span><div><h3>Déchire.</h3><p>Cinq objets tirés au sort dans un booster, pondérés par rareté. Toujours au moins une Rare en dernière position.</p></div></li>
+              <li><span className="lx-pnum">02</span><div><h3>Révèle.</h3><p>Chaque carte se retourne et affiche aussitôt ses stats calculées à partir de vraies données d'observation.</p></div></li>
+              <li><span className="lx-pnum">03</span><div><h3>Collectionne.</h3><p>39 objets par série, du Soleil aux comètes obscures. Doublons et manquants suivis en continu.</p></div></li>
             </ol>
           </div>
         </div>
