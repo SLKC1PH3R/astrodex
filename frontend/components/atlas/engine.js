@@ -405,7 +405,7 @@ export function mountAtlas(container, { data, onSelect, onLevel, onMeasure }) {
       pos.push(p.x, p.y, p.z);
       col.push(...(BULK_COLOR[o.famille] || [.75, .78, .9]));
     }
-    L.group.add(makePoints(pos, col, pointsMat(2.1, .85, true)));
+    L.group.add(makePoints(pos, col, pointsMat(2.6, .9)));
   }
 
   /* Sélection et ligne de mesure */
