@@ -160,7 +160,8 @@ export function mountAtlas(container, { data, onSelect, onLevel, onMeasure }) {
   const scene = new THREE.Scene();
   const camera = new THREE.PerspectiveCamera(50, 1, 0.01, 8000);
   const controls = new OrbitControls(camera, canvas);
-  controls.enableDamping = true; controls.dampingFactor = .08; controls.enablePan = false;
+  controls.enableDamping = true; controls.dampingFactor = .08; controls.enablePan = true;
+  controls.panSpeed = .7; controls.screenSpacePanning = true;
   controls.rotateSpeed = .6; controls.zoomSpeed = .9;
 
   let W = 1, H = 1, pxToScale = .001;
