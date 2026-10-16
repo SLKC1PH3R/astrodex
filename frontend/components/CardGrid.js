@@ -1,13 +1,18 @@
 "use client";
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import Carte, { ORDER, RAR } from "@/components/Carte";
 import PhotoDive from "@/components/PhotoDive";
 
+const PAGE_SIZE = 120;
+
 /* Grille filtrable. owned = Map(id → quantité) pour la collection ; null pour le catalogue complet.
-   Les Légendaires révélées peuvent être ouvertes en plein écran (PhotoDive). */
+   Les Légendaires révélées peuvent être ouvertes en plein écran (PhotoDive).
+   Affichage par pages de PAGE_SIZE : au-delà de quelques milliers de cartes (séries comme le
+   Catalogue NGC), tout rendre en une fois ralentit sérieusement le montage et le défilement. */
 export default function CardGrid({ cards, owned = null }) {
   const [filter, setFilter] = useState("all");
   const [dive, setDive] = useState(null);
+  const [visible, setVisible] = useState(PAGE_SIZE);
   const isColl = owned !== null;
 
   const shown = useMemo(() => cards.filter(c =>
@@ -15,6 +20,9 @@ export default function CardGrid({ cards, owned = null }) {
       : filter === "owned" ? owned?.has(c.id)
       : filter === "missing" ? !owned?.has(c.id)
       : c.rarete === filter), [cards, owned, filter]);
+
+  useEffect(() => { setVisible(PAGE_SIZE); }, [filter]);
+  const page = shown.slice(0, visible);
 
   const nOwned = isColl ? cards.filter(c => owned.has(c.id)).length : 0;
   const pct = cards.length ? Math.round(nOwned / cards.length * 100) : 0;
@@ -38,7 +46,7 @@ export default function CardGrid({ cards, owned = null }) {
         )}
       </div>
       <div className="ax-grid">
-        {shown.map(c => (!isColl || owned.has(c.id)) ? (
+        {page.map(c => (!isColl || owned.has(c.id)) ? (
           <div key={c.id} className="ax-lift">
             <Carte c={c} qty={isColl ? owned.get(c.id) : 0} onDive={(carte, rect) => setDive({ carte, rect })} />
           </div>
@@ -48,6 +56,13 @@ export default function CardGrid({ cards, owned = null }) {
           </div>
         ))}
       </div>
+      {visible < shown.length && (
+        <div className="ax-loadmore">
+          <button className="btn btn-secondary" type="button" onClick={() => setVisible(v => v + PAGE_SIZE)}>
+            Charger plus ({shown.length - visible} restantes)
+          </button>
+        </div>
+      )}
       {dive && <PhotoDive {...dive} onClose={() => setDive(null)} />}
     </section>
   );

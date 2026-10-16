@@ -6,6 +6,7 @@ export const SERIES_THEMES = {
   S1: { titre: "Système solaire", couleur: "#9184d9", image: "/media/saturne.webp", cadrage: "photo" },
   S2: { titre: "Astéroïdes", couleur: "#c9a66b", image: "/media/ast-vesta.webp", cadrage: "globe" },
   S3: { titre: "Nébuleuses", couleur: "#ff6b9d", image: "/media/neb-pillars_m16.webp", cadrage: "photo" },
+  S4: { titre: "Catalogue NGC", couleur: "#6aa8ff", image: "/media/neb-pillars_m16.webp", cadrage: "photo" },
 };
 
 /* Teinte de secours pour une série sans entrée : dérivée du code, stable d'une visite à l'autre. */

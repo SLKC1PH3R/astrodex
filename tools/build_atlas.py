@@ -61,6 +61,12 @@ def gal_pos(ra, dec, dist):
     return [round(c * dist, 2) for c in g]
 
 
+def gal_pos_deg(ra_deg, dec_deg, dist):
+    a, b = math.radians(ra_deg), math.radians(dec_deg)
+    g = eq2gal([math.cos(b) * math.cos(a), math.cos(b) * math.sin(a), math.sin(b)])
+    return [c * dist for c in g]
+
+
 # ---------- Positions connues ----------
 PLANETES = {"mercure": "mercury", "venus": "venus", "terre": "earth", "mars": "mars", "jupiter": "jupiter",
             "saturne": "saturn", "uranus": "uranus", "neptune": "neptune", "pluton": "pluto"}
@@ -151,7 +157,7 @@ MANUEL = {  # objets absents d'OpenNGC : (ascension droite, déclinaison, distan
 
 def image_for(slug):
     """Illustration d'un objet qui n'a pas encore de carte (sinon l'atlas prend celle de la carte)."""
-    for name in (f"{slug}.webp", f"dso-{slug}.webp", f"dso-{slug.replace('-', '_')}.webp"):
+    for name in (f"{slug}.webp", f"dso-{slug}.webp", f"dso-{slug.replace('-', '_')}.webp", f"ngc/{slug}.webp"):
         if (IMAGES / name).is_file():
             return name
     return None
@@ -162,6 +168,9 @@ def main():
     for f in ("NGC.csv", "addendum.csv"):
         for r in csv.DictReader(open(source(f), encoding="utf-8"), delimiter=";"):
             ngc[r["Name"]] = r
+
+    ngc_manifest_path = CACHE / "ngc_manifest.json"
+    ngc_manifest = json.loads(ngc_manifest_path.read_text(encoding="utf-8")) if ngc_manifest_path.exists() else {}
 
     objets = yaml.safe_load((ROOT / "catalog" / "objects.yaml").read_text(encoding="utf-8"))["objets"]
     out, manquants = [], []
@@ -184,6 +193,16 @@ def main():
         elif slug in MANUEL:
             ra, dec, dist = MANUEL[slug]
             item["pos"], item["dist"] = gal_pos(ra, dec, dist), dist
+        elif slug in ngc_manifest:
+            # Série IV (catalogue NGC en masse) : coordonnées OpenNGC, distance estimée par
+            # tools/build_ngc_series.py (redshift pour les galaxies, repli par type sinon).
+            # "bulk" : rendu en nuage de points dans le moteur 3D plutôt qu'en sprite individuel
+            # (un sprite + label DOM par objet ne tiendrait pas la charge à cette échelle).
+            m = ngc_manifest[slug]
+            item["pos"] = [round(c, 2) for c in gal_pos_deg(m["ra_deg"], m["dec_deg"], m["dist_ly"])]
+            item["dist"] = m["dist_ly"]
+            item["bulk"] = True
+            item["famille"] = m["famille"]
         else:
             manquants.append(slug)
             continue

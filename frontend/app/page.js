@@ -112,7 +112,7 @@ export default function Landing() {
           <div className="lx-hero-grid">
             <div className="lx-hero-copy">
               <div className="lx-series-kicker">
-                {(allSeries.length ? allSeries : [{ code: "S1", nom: "Système solaire", nb_cartes: 39 }, { code: "S2", nom: "Astéroïdes", nb_cartes: 15 }, { code: "S3", nom: "Nébuleuses", nb_cartes: 65 }])
+                {(allSeries.length ? allSeries : [{ code: "S1", nom: "Système solaire", nb_cartes: 39 }, { code: "S2", nom: "Astéroïdes", nb_cartes: 15 }, { code: "S3", nom: "Nébuleuses", nb_cartes: 65 }, { code: "S4", nom: "Catalogue NGC", nb_cartes: 7657 }])
                   .map(s => <span key={s.code} className="lx-kicker">SÉRIE {toRoman(s.code)} · {s.nom.toUpperCase()} · {s.nb_cartes}</span>)}
               </div>
               <h1 id="hero-title"><span className="lx-h1-line">L'espace,</span><span className="lx-h1-line lx-h1-italic">carte après carte.</span></h1>
@@ -124,7 +124,7 @@ export default function Landing() {
               <span className="lx-mono">GRATUIT · UN PSEUDO SUFFIT</span>
 
               <dl className="lx-readouts">
-                <Odometer value={allSeries.reduce((n, s) => n + (s.nb_cartes || 0), 0) || 119} label="CARTES · 3 SÉRIES" sr="119" />
+                <Odometer value={allSeries.reduce((n, s) => n + (s.nb_cartes || 0), 0) || 7776} label={`CARTES · ${allSeries.length || 4} SÉRIES`} sr="7776" />
                 <Odometer value={5} label="CARTES PAR BOOSTER" sr="5" delay={120} />
                 <Odometer value={6} suffix="%" label="LÉGENDAIRE AU 5E EMPLACEMENT" sr="6 %" delay={240} />
               </dl>
@@ -264,8 +264,8 @@ export default function Landing() {
             <article className="lx-tile lx-t-series" aria-labelledby="t-series">
               <div>
                 <span className="lx-tile-kicker">DÉJÀ DISPONIBLES</span>
-                <h3 id="t-series" className="lx-h3-lg">Astéroïdes. Nébuleuses.</h3>
-                <div className="lx-chips"><span className="is-on">S2 · ASTÉROÏDES · 15</span><span className="is-on">S3 · NÉBULEUSES · 65</span></div>
+                <h3 id="t-series" className="lx-h3-lg">Astéroïdes. Nébuleuses. Et 7 657 objets NGC.</h3>
+                <div className="lx-chips"><span className="is-on">S2 · ASTÉROÏDES · 15</span><span className="is-on">S3 · NÉBULEUSES · 65</span><span className="is-on">S4 · CATALOGUE NGC · 7 657</span></div>
               </div>
               {/* eslint-disable-next-line @next/next/no-img-element */}
               <div className="lx-ghosts" aria-hidden="true">

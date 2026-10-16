@@ -15,6 +15,24 @@ Les photos du ciel profond proviennent des télescopes de l'ESO (CC BY 4.0), de 
 
 Les globes marqués « globe reconstitué » sont des rendus générés par `tools/render_globes.py` à partir des mosaïques photographiques publiées par la NASA (dépôt `nasa/NASA-3D-Resources`, domaine public). Ce ne sont pas des photos d'un seul cliché. Les anneaux de Saturne sont dessinés.
 
+## Série IV — Catalogue NGC (7 657 cartes)
+
+Contrairement aux séries précédentes où chaque image a été choisie et créditée à la main, les
+7 657 cartes de cette série utilisent un cliché du **Digitized Sky Survey** (relevés photographiques
+du ciel réalisés depuis les observatoires de Palomar et de Siding Spring, numérisés par le Space
+Telescope Science Institute), récupéré automatiquement par position céleste via le service
+[SkyView](https://skyview.gsfc.nasa.gov/) de la NASA/GSFC. Le DSS est dans le domaine public ; aucun
+crédit par image n'est donc requis, mais la source est : *NASA/STScI · Digitized Sky Survey*.
+
+Contrairement aux photos Hubble/ESO/NOIRLab utilisées ailleurs dans le jeu, ce sont des plaques
+photographiques en niveaux de gris, pas des images couleur « grand public » : un compromis assumé
+pour couvrir l'intégralité du New General Catalogue plutôt qu'une sélection restreinte d'objets
+photogéniques. Les coordonnées, types et magnitudes viennent d'[OpenNGC](https://github.com/mattiaverga/OpenNGC)
+(CC BY-SA 4.0). Les distances affichées sont des estimations (loi de Hubble pour les galaxies avec
+décalage spectral connu, fourchette typique par famille d'objet sinon) — voir
+`tools/build_ngc_series.py` pour la méthode complète et `tools/fetch_dss_images.py` pour le
+téléchargement des images.
+
 La licence CC BY 4.0 impose de citer l'auteur : le crédit est affiché sur chaque carte.
 
 | Carte | Fichier | Crédit | Licence |

@@ -388,7 +388,25 @@ export function mountAtlas(container, { data, onSelect, onLevel, onMeasure }) {
     s.position.copy(p); L.group.add(s); if (Math.abs(p.y) > .4) dropLine(L.group, p);
     addMark(r.niveau, s, `${esc(r.nom)}<small>${fmtDist(r.dist, true)}</small>`, { ...r, posG: r.pos }, "repere", 6);
   }
-  for (const o of objects) if (o.level >= 2) addObject(o, galToScene(o.posG, LEVELS[o.level].unit));
+  /* Catalogue NGC en masse (~7700 objets) : nuage de points par niveau plutôt qu'un sprite + label
+     DOM individuel par objet (ce que fait addObject pour les ~120 objets "vedettes") — un sprite par
+     objet à cette échelle ferait chuter le framerate et la boucle de placement des labels. */
+  const BULK_COLOR = { galaxie: [.55, .62, 1], amas: [1, .86, .55], nebuleuse: [1, .6, .72], etoile: [.9, .9, 1] };
+  const bulkByLevel = {};
+  for (const o of objects) {
+    if (o.level < 2) continue;
+    if (o.bulk) { (bulkByLevel[o.level] ??= []).push(o); continue; }
+    addObject(o, galToScene(o.posG, LEVELS[o.level].unit));
+  }
+  for (const [lvl, arr] of Object.entries(bulkByLevel)) {
+    const L = LEVELS[lvl], pos = [], col = [];
+    for (const o of arr) {
+      const p = galToScene(o.posG, L.unit);
+      pos.push(p.x, p.y, p.z);
+      col.push(...(BULK_COLOR[o.famille] || [.75, .78, .9]));
+    }
+    L.group.add(makePoints(pos, col, pointsMat(2.1, .85, true)));
+  }
 
   /* Sélection et ligne de mesure */
   const selRing = glowSprite(selTex, 52); selRing.material.blending = THREE.NormalBlending; selRing.visible = false; scene.add(selRing);
