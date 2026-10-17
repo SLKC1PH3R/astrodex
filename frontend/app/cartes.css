@@ -1,0 +1,167 @@
+/* Designs de cartes (components/Carte.js, classes .cx-*). À importer après filigrane.css.
+   Tailles en cqw : la carte fait 100cqw de large, quelle que soit sa taille d'affichage.
+   --rc = couleur de rareté, --tc = couleur du type, --mx/--my/--lit = lumière (filigrane.css). */
+
+.cx-glare { position: absolute; inset: 0; z-index: 6; border-radius: 5cqw; pointer-events: none; mix-blend-mode: soft-light;
+  opacity: calc(.15 + var(--lit) * .85); background: radial-gradient(circle at var(--mx) var(--my), rgba(255,255,255,.65), transparent 50%); }
+
+/* ---------- Bloc commun : capacités, infos, pied ---------- */
+.cx-facts { align-self: center; max-width: 92%; margin-top: .6cqw; padding: .8cqw 4.4cqw; border-radius: .6cqw; transform: skewX(-12deg);
+  font-size: 2.6cqw; font-style: italic; font-weight: 500; color: #1c1420; background: linear-gradient(90deg, #d9cfc0, #f6f0e4, #d9cfc0); }
+.cx-facts span { display: block; transform: skewX(12deg); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.cx-move { display: flex; align-items: center; gap: 2.8cqw; padding: 1.1cqw .6cqw; }
+.cx-pip { width: 5.6cqw; height: 5.6cqw; flex: none; border-radius: 50%; display: grid; place-items: center; font-size: 3.3cqw; color: #0b0c14;
+  background: var(--tc); box-shadow: inset 0 -.6cqw 0 rgba(0,0,0,.25), 0 0 0 .4cqw rgba(255,255,255,.8); }
+.cx-mn { flex: 1; min-width: 0; font-size: 4.4cqw; font-weight: 700; }
+.cx-mn small { display: block; margin-top: .3cqw; font-size: 2.6cqw; font-weight: 500; color: rgba(255,255,255,.75); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.cx-move b { font-size: 6.1cqw; font-weight: 800; font-variant-numeric: tabular-nums; }
+.cx-rule { height: 1px; flex: none; background: linear-gradient(90deg, transparent, rgba(255,255,255,.4), transparent); }
+.cx-tri { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 1.7cqw; padding-top: 1.7cqw; border-top: 1px solid rgba(255,255,255,.2);
+  font-size: 2.2cqw; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; color: rgba(255,255,255,.68); }
+.cx-tri > div:nth-child(2) { text-align: center; }
+.cx-tri > div:nth-child(3) { text-align: right; min-width: 0; }
+.cx-tri b { display: block; margin-top: .8cqw; font-size: 3.3cqw; letter-spacing: 0; text-transform: none; color: #fff; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.cx-gems { display: flex; justify-content: center; gap: 1.1cqw; margin-top: 1.4cqw; }
+.cx-gems i { width: 1.9cqw; height: 1.9cqw; transform: rotate(45deg); background: rgba(0,0,0,.35); box-shadow: 0 0 0 1px rgba(255,255,255,.4); }
+.cx-gems i.on { background: var(--rc); box-shadow: 0 0 0 1px #fff, 0 0 1.6cqw var(--rc); }
+.cx-desc { padding: 1.7cqw 2.5cqw; border-radius: 1.4cqw; border: 1px solid rgba(255,255,255,.28); font-size: 2.8cqw; font-style: italic; font-weight: 500; line-height: 1.35; color: rgba(255,255,255,.9);
+  display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+.cx-foot { margin-top: auto; display: flex; align-items: center; justify-content: space-between; gap: 2.2cqw; font-size: 2.1cqw; color: rgba(255,255,255,.66); }
+.cx-foot span { min-width: 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.cx-foot b { flex: none; font-size: 2.4cqw; font-weight: 700; color: #fff; white-space: nowrap; }
+
+/* ---------- A · Classique (C, PC) — base commune à Prisme et Reverse ---------- */
+.cx-std { padding: 2.5cqw; box-sizing: border-box; overflow: hidden; background: linear-gradient(160deg, #2a2b36, #0b0c14 60%, #1d1e28);
+  box-shadow: 0 5cqw 11cqw -4cqw rgba(0,0,0,.7), inset 0 0 0 1px rgba(255,255,255,.08); }
+.cx-std .fx-micro-frame { padding: 2.5cqw; }
+.cx-in { position: relative; height: 100%; box-sizing: border-box; overflow: hidden; border-radius: 3cqw; padding: 3.3cqw 3.9cqw 2.8cqw;
+  display: flex; flex-direction: column; gap: 1.7cqw; color: #fff;
+  background: radial-gradient(ellipse 120% 60% at 20% 0%, rgba(255,255,255,.16), transparent 60%),
+    linear-gradient(170deg, color-mix(in oklab, var(--tc) 55%, #0b0c14), color-mix(in oklab, var(--tc) 30%, #0b0c14) 45%, color-mix(in oklab, var(--tc) 14%, #0b0c14)); }
+.cx-in > :not(.fx-num):not(.cx-chart):not(.cx-sky):not(.cx-rfoil) { position: relative; }
+.cx-std .ax-head, .cx-std .cx-move { text-shadow: 0 1px 2px rgba(0,0,0,.45); }
+.cx-std .ax-name { font-size: 5.8cqw; font-weight: 800; }
+.cx-std .ax-type, .cx-std .ax-pow { color: rgba(255,255,255,.78); }
+.cx-std .ax-pow b { font-size: 6.7cqw; font-weight: 800; color: #fff; }
+.cx-std .ax-ticon { box-shadow: 0 0 0 .6cqw rgba(255,255,255,.85); }
+.cx-win { position: relative; height: 46cqw; flex: none; overflow: hidden; border-radius: 1cqw; background: #05060c;
+  box-shadow: 0 0 0 .9cqw #e6dccb, 0 0 0 1.2cqw rgba(0,0,0,.45), 0 1.6cqw 4cqw rgba(0,0,0,.5); }
+.cx-win::after { content: ""; position: absolute; inset: 0; pointer-events: none; box-shadow: inset 0 0 6cqw rgba(0,0,0,.6); }
+
+/* ---------- B2 · Holo Prisme (R) ---------- */
+.ax-card[data-style="prisme"] .cx-std { background: #cfd3e0; box-shadow: 0 5cqw 11cqw -4cqw rgba(0,0,0,.7), 0 0 14cqw -4cqw rgba(180,139,255,.6); }
+.cx-rim { position: absolute; inset: 0; pointer-events: none; opacity: .9; background: conic-gradient(from 0deg, #ff9ec4, #ffe08a, #9effc8, #8ad8ff, #c7a6ff, #ff9ec4);
+  background-size: 200% 200%; background-position: var(--mx) var(--my); }
+.ax-card[data-style="prisme"] .cx-win { box-shadow: 0 0 0 .9cqw #eef0f6, 0 0 0 1.2cqw rgba(0,0,0,.45), 0 1.6cqw 4cqw rgba(0,0,0,.5); }
+.cx-prism { position: absolute; inset: 0; z-index: 1; pointer-events: none; mix-blend-mode: color-dodge; opacity: .55;
+  background-image:
+    conic-gradient(from 20deg at 30% 35%, transparent 0 40deg, rgba(255,255,255,.5) 40deg 70deg, transparent 70deg 150deg, rgba(255,255,255,.35) 150deg 200deg, transparent 200deg 290deg, rgba(255,255,255,.45) 290deg 320deg, transparent 320deg),
+    conic-gradient(from 200deg at 72% 62%, transparent 0 50deg, rgba(255,255,255,.45) 50deg 90deg, transparent 90deg 180deg, rgba(255,255,255,.3) 180deg 240deg, transparent 240deg),
+    linear-gradient(115deg, #ff7aa8, #ffd36b, #7dffb7, #6ad1ff, #b48bff, #ff7aa8);
+  background-size: 25cqw 25cqw, 19.4cqw 19.4cqw, 300% 300%; background-position: 0 0, 0 0, var(--mx) var(--my); }
+
+/* ---------- C2 · Reverse Carte du ciel (finition "reverse") ---------- */
+.ax-card[data-style="reverse"] .cx-in { background: linear-gradient(170deg, #1f2c4a, #141c34 50%, #0c1124); }
+.ax-card[data-style="reverse"] .ax-head, .ax-card[data-style="reverse"] .cx-move { text-shadow: 0 1px 3px rgba(0,0,0,.7); }
+.cx-chart { position: absolute; inset: -11cqw; pointer-events: none; opacity: .55;
+  background-image: repeating-radial-gradient(circle at 50% 160%, transparent 0 12.8cqw, rgba(214,230,255,.35) 12.8cqw calc(12.8cqw + 1px)),
+    repeating-conic-gradient(from -30deg at 50% 160%, transparent 0 7.5deg, rgba(214,230,255,.28) 7.5deg 7.8deg); }
+.cx-sky { position: absolute; inset: 0; width: 100%; height: 100%; pointer-events: none; }
+.cx-sky line { stroke: rgba(214,230,255,.7); stroke-width: 1; stroke-dasharray: 3 3; vector-effect: non-scaling-stroke; }
+.cx-sky circle { fill: #fff; }
+.cx-rfoil { position: absolute; inset: 0; pointer-events: none; mix-blend-mode: color-dodge; opacity: .5;
+  background-image: linear-gradient(115deg, #0f1f4d, #1e40af 25%, #7fb2f0 45%, #1e40af 60%, #0f1f4d 80%, #1e40af);
+  background-size: 300% 300%; background-position: var(--mx) var(--my); }
+.ax-card[data-style="reverse"] .cx-win { box-shadow: 0 0 0 .9cqw #0b0c14, 0 0 0 1.2cqw rgba(214,230,255,.55), 0 1.6cqw 4cqw rgba(0,0,0,.5); }
+.cx-stamp { position: absolute; right: 2.2cqw; top: 2.2cqw; z-index: 2; padding: .8cqw 1.9cqw; border-radius: .8cqw;
+  font-size: 2.2cqw; font-weight: 800; letter-spacing: .18em; color: #0b0c14; background: linear-gradient(90deg, #9ccbff, #d6e6ff, #6aa8ff); }
+.ax-card[data-style="reverse"] .ax-new { right: auto; left: 2cqw; }
+.ax-card[data-style="reverse"] .cx-desc { background: rgba(11,12,20,.6); }
+
+/* ---------- D · Full Art (UR) ---------- */
+.cx-full { padding: 1.7cqw; box-sizing: border-box;
+  background: linear-gradient(135deg, color-mix(in srgb, var(--rc) 25%, #fff), var(--rc) 25%, color-mix(in srgb, var(--rc) 50%, #1a1030) 50%, color-mix(in srgb, var(--rc) 40%, #fff) 75%, color-mix(in srgb, var(--rc) 70%, #1a1030));
+  box-shadow: 0 5cqw 11cqw -4cqw rgba(0,0,0,.7), 0 0 16cqw -5cqw var(--rc); }
+.cx-full-in { position: relative; height: 100%; overflow: hidden; border-radius: 3.6cqw; background: radial-gradient(ellipse 90% 60% at 50% 35%, var(--color-accent-900), #05060c); color: #fff; }
+.cx-full .ax-art { transform: scale(1.04); }
+.cx-full .ax-art.globe { object-fit: contain; transform: scale(1.15) translateY(-12%); }
+.cx-etch { position: absolute; inset: 0; pointer-events: none; mix-blend-mode: overlay; opacity: .5;
+  background-image: repeating-linear-gradient(35deg, transparent 0 .8cqw, rgba(255,255,255,.35) .8cqw 1.1cqw); }
+.cx-sfoil { position: absolute; inset: 0; pointer-events: none; mix-blend-mode: color-dodge; opacity: .35;
+  background-image: linear-gradient(115deg, transparent 20%, rgba(255,140,200,.9) 35%, rgba(140,200,255,.9) 45%, rgba(200,255,180,.9) 55%, transparent 70%);
+  background-size: 260% 260%; background-position: var(--mx) var(--my); }
+.cx-shade { position: absolute; inset: 0; pointer-events: none; background: linear-gradient(180deg, rgba(5,6,12,.75), transparent 22%, transparent 46%, rgba(5,6,12,.85) 74%); }
+.cx-ring { position: absolute; inset: 2.2cqw; border-radius: 2.2cqw; pointer-events: none; box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--rc) 55%, transparent); }
+.cx-full .ax-head, .cx-or .ax-head { position: absolute; left: 5cqw; right: 5cqw; top: 4.6cqw; text-shadow: 0 1px 3px rgba(0,0,0,.85), 0 0 8px rgba(0,0,0,.5); }
+.cx-full .ax-name { font-size: 6.6cqw; font-weight: 800; }
+.cx-full .ax-type { color: color-mix(in srgb, var(--rc) 45%, #fff); }
+.cx-full .ax-pow { color: color-mix(in srgb, var(--rc) 45%, #fff); }
+.cx-full .ax-pow b { font-size: 7.8cqw; font-weight: 800; color: #fff; }
+.cx-full .ax-new, .cx-or .ax-new { top: 19cqw; right: 5cqw; }
+.cx-panel { position: absolute; left: 3.9cqw; right: 3.9cqw; bottom: 3.9cqw; display: flex; flex-direction: column; gap: 1.4cqw; padding: 2.8cqw 3.3cqw 2.2cqw; border-radius: 2.8cqw;
+  background: rgba(11,12,20,.5); backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px); box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--rc) 35%, transparent); color: #fff; }
+.cx-panel .cx-move { padding: 0; }
+.cx-panel .cx-tri { border-top: 0; padding-top: .8cqw; }
+.cx-panel .cx-foot { margin-top: 0; }
+
+/* ---------- E · Illustration spéciale (L) ---------- */
+.cx-illus { padding: 1.7cqw; box-sizing: border-box; background: linear-gradient(135deg, #fff4d6, #ffcf6b 25%, #8a6420 50%, #ffe39c 75%, #b5862e);
+  box-shadow: 0 5cqw 11cqw -4cqw rgba(0,0,0,.7), 0 0 16cqw -4cqw rgba(255,207,107,.6); }
+.cx-illus-in { position: relative; height: 100%; overflow: hidden; border-radius: 3.6cqw; color: #fff;
+  background: radial-gradient(ellipse 60% 40% at 30% 30%, rgba(196,120,60,.45), transparent 70%), radial-gradient(ellipse 70% 50% at 80% 60%, rgba(120,80,190,.5), transparent 70%), radial-gradient(ellipse 100% 80% at 50% 40%, #2a1f3d, #07080f 75%); }
+.cx-stars { position: absolute; inset: 0; pointer-events: none;
+  background-image: radial-gradient(1.2px 1.2px at 8% 12%, #fff, transparent), radial-gradient(1px 1px at 22% 40%, rgba(255,255,255,.8), transparent), radial-gradient(1.4px 1.4px at 88% 8%, #fff, transparent),
+    radial-gradient(1px 1px at 70% 30%, rgba(255,255,255,.7), transparent), radial-gradient(1.2px 1.2px at 94% 52%, #fff, transparent), radial-gradient(1px 1px at 6% 66%, rgba(255,255,255,.7), transparent),
+    radial-gradient(1.3px 1.3px at 40% 6%, #fff, transparent), radial-gradient(1px 1px at 58% 74%, rgba(255,255,255,.6), transparent), radial-gradient(1.2px 1.2px at 84% 82%, #fff, transparent); }
+.cx-window { position: absolute; left: 6.7cqw; right: 6.7cqw; top: 21.7cqw; height: 65.6cqw; overflow: hidden; border-radius: 1.1cqw;
+  background: radial-gradient(ellipse at 50% 50%, rgba(255,207,107,.08), transparent 70%); box-shadow: 0 0 0 1.1cqw rgba(7,8,15,.55); }
+.cx-window::after { content: ""; position: absolute; inset: 0; border-radius: inherit; pointer-events: none; box-shadow: inset 0 0 0 1px rgba(255,207,107,.75); }
+.cx-halo { position: absolute; left: 50%; top: 54.4cqw; width: 92cqw; height: 92cqw; margin: -46cqw 0 0 -46cqw; border-radius: 50%; pointer-events: none;
+  background: radial-gradient(circle, rgba(255,200,130,.35), transparent 62%); }
+.cx-illus .ax-art.cx-pop { inset: auto; left: 50%; top: 54.4cqw; width: 98cqw; height: 98cqw; margin: -49cqw 0 0 -49cqw; object-fit: contain;
+  mix-blend-mode: screen; filter: saturate(1.15) contrast(1.05);
+  transform: translate(calc((var(--mx) - 50%) * .1), calc((var(--my) - 50%) * .08)); }
+.cx-gfoil { position: absolute; inset: 0; pointer-events: none; mix-blend-mode: color-dodge; opacity: .28;
+  background-image: repeating-linear-gradient(115deg, #ffcf6b 0%, #ff9ac2 8%, #9ad6ff 16%, #ffcf6b 24%); background-size: 300% 300%; background-position: var(--mx) var(--my); }
+.cx-top { position: absolute; left: 5.6cqw; right: 5.6cqw; top: 5cqw; display: flex; align-items: center; justify-content: space-between; }
+.cx-rib { padding: 1.1cqw 2.5cqw; border-radius: 99px; font-size: 2.4cqw; font-weight: 800; letter-spacing: .24em; color: #2a1f0a; background: linear-gradient(90deg, #ffe39c, #ffcf6b, #ffe39c); }
+.cx-num { font-size: 2.5cqw; font-weight: 700; letter-spacing: .1em; color: #ffe39c; }
+.cx-illus .ax-new { top: 12cqw; right: 5.6cqw; }
+.cx-bottom { position: absolute; left: 5.6cqw; right: 5.6cqw; bottom: 4.4cqw; }
+.cx-bname { font-size: 8.9cqw; font-weight: 800; letter-spacing: -.02em; line-height: 1; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; text-shadow: 0 1px 4px rgba(0,0,0,.7); }
+.cx-bty { margin-top: 1.1cqw; font-size: 2.8cqw; font-weight: 600; letter-spacing: .12em; text-transform: uppercase; color: #ffe39c; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.cx-chips { display: flex; gap: 1.7cqw; margin-top: 3.3cqw; }
+.cx-chip { flex: 1; padding: 1.7cqw 0 1.4cqw; border-radius: 1.9cqw; text-align: center; background: rgba(7,8,15,.55); box-shadow: inset 0 0 0 1px rgba(255,207,107,.35);
+  font-size: 2.1cqw; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; color: rgba(255,255,255,.7); }
+.cx-chip b { display: block; margin-top: .6cqw; font-size: 4.2cqw; letter-spacing: 0; color: #fff; font-variant-numeric: tabular-nums; }
+.cx-chip.pui { background: linear-gradient(180deg, rgba(255,207,107,.3), rgba(7,8,15,.55)); }
+.cx-illus .cx-foot { margin-top: 2.5cqw; }
+.cx-illus .cx-foot b { color: #ffe39c; }
+
+/* ---------- F · Or secrète (finition "or") ---------- */
+.cx-or { padding: 2.2cqw; box-sizing: border-box; background: linear-gradient(135deg, #fff3c4, #d4a43a 20%, #7a5414 42%, #f6d77a 62%, #9c6d1c 82%, #ffe9a8);
+  box-shadow: 0 5cqw 11cqw -4cqw rgba(0,0,0,.7), 0 0 19cqw -4cqw rgba(255,200,90,.6); }
+.cx-or-in { position: relative; height: 100%; overflow: hidden; border-radius: 3cqw; color: #fff3cf;
+  background: repeating-radial-gradient(circle at 50% 40%, rgba(255,236,170,0) 0 1.4cqw, rgba(255,236,170,.13) 1.4cqw 1.7cqw), radial-gradient(ellipse 90% 70% at 50% 38%, #6b4a12, #2a1b05 80%); }
+.cx-guil { position: absolute; inset: 0; pointer-events: none; opacity: .5; background: repeating-conic-gradient(from 0deg at 50% 40%, rgba(255,230,160,.08) 0 3deg, transparent 3deg 9deg); }
+.cx-or .ax-art.cx-gold { mix-blend-mode: screen; opacity: .9; filter: grayscale(1) sepia(1) saturate(3.2) hue-rotate(-14deg) brightness(1.08) contrast(1.15); }
+.cx-or .ax-art.globe.cx-gold { inset: auto; left: 50%; top: 52.8cqw; width: 75cqw; height: 75cqw; margin: -37.5cqw 0 0 -37.5cqw; object-fit: contain; opacity: 1;
+  transform: translate(calc((var(--mx) - 50%) * .08), calc((var(--my) - 50%) * .06)); }
+.cx-ofoil { position: absolute; inset: 0; pointer-events: none; mix-blend-mode: color-dodge; opacity: .45;
+  background-image: linear-gradient(115deg, transparent 25%, rgba(255,240,190,.95) 42%, rgba(255,200,110,.6) 50%, transparent 62%); background-size: 260% 260%; background-position: var(--mx) var(--my); }
+.cx-oring { position: absolute; inset: 2.2cqw; border-radius: 2cqw; pointer-events: none;
+  box-shadow: inset 0 0 0 1px rgba(255,230,160,.55), inset 0 0 0 1.1cqw rgba(42,27,5,.4), inset 0 0 0 1.4cqw rgba(255,230,160,.25); }
+.cx-or .ax-name, .cx-or .ax-pow b { background: linear-gradient(180deg, #fff6d0, #f2c95a 45%, #b8861f 70%, #ffe39c); -webkit-background-clip: text; background-clip: text; color: transparent;
+  text-shadow: none; filter: drop-shadow(0 .5cqw .5cqw rgba(0,0,0,.55)); }
+.cx-or .ax-name { font-size: 8cqw; font-weight: 800; }
+.cx-or .ax-pow b { font-size: 7.8cqw; font-weight: 800; }
+.cx-or .ax-type, .cx-or .ax-pow { color: #f2d68a; }
+.cx-or .ax-ticon, .cx-or .cx-pip { background: radial-gradient(circle at 35% 30%, #fff3c4, #d4a43a 60%, #7a5414); color: #2a1b05; }
+.cx-or .cx-panel { background: linear-gradient(180deg, rgba(42,27,5,.35), rgba(20,12,2,.75)); backdrop-filter: none; -webkit-backdrop-filter: none;
+  box-shadow: inset 0 0 0 1px rgba(255,230,160,.45); color: #fff3cf; }
+.cx-or .cx-mn small { color: #e8cf8f; }
+.cx-or .cx-rule { background: linear-gradient(90deg, transparent, rgba(255,230,160,.6), transparent); }
+.cx-or .cx-tri { color: #d8bb73; }
+.cx-or .cx-tri b, .cx-or .cx-foot b { color: #fff3cf; }
+.cx-or .cx-gems i, .cx-or .cx-gems i.on { background: #ffcf6b; box-shadow: 0 0 0 1px #fff3c4, 0 0 1.6cqw #ffcf6b; }
+.cx-or .cx-foot { color: #cfb26a; }

@@ -1,7 +1,9 @@
 import "./nocturne.css";
 import "./astrodex.css";
 import "./filigrane.css";
+import "./cartes.css";
 import "./coffret.css";
+import "./sachet.css";
 import "./landing.css";
 
 export const metadata = {

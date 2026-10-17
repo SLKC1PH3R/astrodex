@@ -2,7 +2,7 @@
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { ORDER, RAR } from "@/components/Carte";
-import CoffretOpening from "@/components/CoffretOpening";
+import SachetOpening from "@/components/SachetOpening";
 import BoosterCarousel from "@/components/BoosterCarousel";
 import Topbar from "@/components/Topbar";
 import OddsDialog from "@/components/OddsDialog";
@@ -48,7 +48,7 @@ export default function PaquetsPage() {
           onSelect={b => { if (b.code !== booster?.code) { setBooster(b); setResult(null); setRun(n => n + 1); } }} />
         {error && <p className="ax-notice"><strong>Oups.</strong> {error}</p>}
         {booster && (
-          <CoffretOpening key={`${booster.code}-${run}`} booster={booster} disabled={noPacks}
+          <SachetOpening key={`${booster.code}-${run}`} booster={booster} disabled={noPacks}
             onOpen={open} onDone={done} onError={e => setError(e.message)} />
         )}
         <div className="ax-draw-foot">
@@ -59,7 +59,7 @@ export default function PaquetsPage() {
           </div>
           {result && (
             <div className="ax-actions" style={{ justifyContent: "center" }}>
-              <button className="btn btn-primary" type="button" disabled={noPacks} onClick={() => { setResult(null); setRun(n => n + 1); }}><i className="ph ph-package" />Ouvrir un autre coffret</button>
+              <button className="btn btn-primary" type="button" disabled={noPacks} onClick={() => { setResult(null); setRun(n => n + 1); }}><i className="ph ph-package" />Ouvrir un autre booster</button>
               <button className="btn btn-secondary" type="button" onClick={() => router.push("/jeu/collection")}>Voir la collection</button>
             </div>
           )}

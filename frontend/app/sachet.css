@@ -1,0 +1,89 @@
+/* Ouverture « Déchirure » (components/SachetOpening.js). Importé dans app/layout.js. --cc = couleur de la série. */
+
+.sa-stage { --cc: var(--color-accent); --cw: clamp(200px, 24vw, 250px);
+  position: relative; width: 100%; max-width: 1100px; height: 600px; overflow: hidden; border-radius: 18px;
+  background: radial-gradient(ellipse 50% 45% at 50% 50%, color-mix(in srgb, var(--cc) 14%, transparent), transparent 75%); }
+
+/* ---------- Sachet ---------- */
+.sa-pack { --foil: linear-gradient(100deg, color-mix(in srgb, var(--cc) 70%, var(--color-bg)), color-mix(in srgb, var(--cc) 45%, var(--color-neutral-100)) 42%, var(--cc) 60%, color-mix(in srgb, var(--cc) 55%, var(--color-bg)));
+  position: absolute; left: 50%; top: 50%; width: 220px; height: 340px; margin: -175px 0 0 -110px; z-index: 3;
+  padding: 0; border: 0; background: none; color: var(--color-text); font: inherit; cursor: pointer;
+  animation: sa-float 4s ease-in-out infinite; }
+.sa-pack:disabled { cursor: default; }
+.sa-pack:disabled:not([data-phase="tear"]) { filter: grayscale(.6) brightness(.75); animation: none; }
+.sa-pack:focus-visible { outline: 2px solid var(--color-accent-300); outline-offset: 8px; border-radius: 14px; }
+@keyframes sa-float { 50% { transform: translateY(-10px) rotate(-1deg); } }
+
+.sa-strip { position: absolute; left: 0; right: 0; top: 0; height: 42px; border-radius: 12px 12px 0 0; background: var(--foil);
+  display: flex; align-items: center; justify-content: center; gap: 8px; color: var(--color-bg);
+  font-size: 10px; font-weight: 700; letter-spacing: .22em; text-transform: uppercase; transition: transform .25s; }
+.sa-strip::before { content: ""; position: absolute; left: 0; right: 0; top: 0; height: 9px; border-radius: 12px 12px 0 0;
+  background: repeating-linear-gradient(90deg, rgba(22,24,38,.25) 0 2px, transparent 2px 5px); }
+.sa-strip::after { content: ""; position: absolute; left: 10px; right: 10px; bottom: -1px; border-bottom: 2px dashed color-mix(in srgb, var(--color-bg) 60%, transparent); }
+.sa-strip i { font-size: 14px; }
+.sa-pack:not(:disabled):hover .sa-strip { transform: translateY(-3px) rotate(-1.5deg); }
+
+.sa-body { position: absolute; left: 0; right: 0; top: 42px; bottom: 0; overflow: hidden; border-radius: 0 0 12px 12px;
+  display: flex; flex-direction: column; align-items: center; padding-top: 20px; box-sizing: border-box;
+  background: radial-gradient(ellipse 90% 60% at 30% 20%, color-mix(in srgb, var(--cc) 30%, var(--color-surface)), var(--color-bg) 80%);
+  box-shadow: 0 30px 60px -20px rgba(0,0,0,.85), 0 0 70px -28px var(--cc), inset 0 0 0 1px color-mix(in srgb, var(--cc) 45%, transparent); }
+.sa-foil { position: absolute; inset: 0; pointer-events: none;
+  background: linear-gradient(115deg, transparent 30%, rgba(255,255,255,.16) 45%, transparent 60%); background-size: 250% 100%; animation: sa-sheen 3.5s ease-in-out infinite; }
+@keyframes sa-sheen { 0% { background-position: 120% 0; } 70%, 100% { background-position: -20% 0; } }
+.sa-brand { font-size: 10px; font-weight: 600; letter-spacing: .5em; padding-left: .5em; color: color-mix(in srgb, var(--cc) 55%, var(--color-text)); }
+.sa-port { position: relative; width: 132px; height: 132px; margin: 18px 0 20px; border-radius: 50%; overflow: hidden;
+  background: radial-gradient(circle, var(--color-accent-900), #0b0c14 70%); box-shadow: 0 0 0 2px var(--cc), 0 0 36px -6px var(--cc); }
+.sa-art { position: absolute; left: 50%; top: 50%; max-width: none; transform: translate(-50%, -50%); mix-blend-mode: lighten; }
+.sa-art.globe { width: 88%; }
+.sa-art.large { width: 144%; }
+.sa-art.photo { width: 100%; height: 100%; object-fit: cover; }
+.sa-title { text-align: center; padding: 0 14px; }
+.sa-title small { display: block; font-size: 9px; letter-spacing: .34em; padding-left: .34em; color: var(--color-neutral-400); }
+.sa-title b { display: block; margin-top: 4px; font-size: 19px; font-weight: 600; line-height: 1.2; }
+.sa-foot { position: absolute; left: 16px; right: 16px; bottom: 26px; display: flex; justify-content: space-between; font-size: 9px; letter-spacing: .14em; color: var(--color-neutral-300); }
+.sa-seal { position: absolute; left: 0; right: 0; bottom: 0; height: 12px; background: repeating-linear-gradient(90deg, color-mix(in srgb, var(--cc) 40%, transparent) 0 2px, transparent 2px 5px); }
+.sa-leak { position: absolute; left: 6px; right: 6px; top: 36px; height: 14px; border-radius: 50%; opacity: 0; pointer-events: none;
+  background: radial-gradient(ellipse, #fff, color-mix(in srgb, var(--cc) 70%, #fff) 40%, transparent 70%); filter: blur(4px); }
+
+.sa-pack[data-phase="tear"] { animation: none; }
+.sa-pack[data-phase="tear"] .sa-strip { animation: sa-strip-off .7s cubic-bezier(.3,.7,.3,1) forwards; }
+.sa-pack[data-phase="tear"] .sa-leak { animation: sa-leak .9s ease-out forwards; }
+.sa-pack[data-phase="tear"] .sa-body { animation: sa-body-down .75s .4s cubic-bezier(.5,0,.8,.4) forwards; }
+@keyframes sa-strip-off { 30% { transform: translate(20px, -16px) rotate(8deg); } to { transform: translate(120px, -150px) rotate(28deg); opacity: 0; } }
+@keyframes sa-leak { 0% { opacity: 0; } 30% { opacity: 1; transform: scaleX(1.1); } 100% { opacity: 0; transform: scaleX(1.6) translateY(-20px); } }
+@keyframes sa-body-down { to { transform: translateY(520px); } }
+.sa-hint { position: absolute; left: 0; right: 0; bottom: 22px; text-align: center; font-size: 13px; color: var(--color-neutral-400); }
+
+/* ---------- Pile ---------- */
+.sa-stack { position: absolute; inset: 0; animation: sa-rise .55s cubic-bezier(.2,.8,.2,1) both; }
+@keyframes sa-rise { from { transform: translateY(90px) scale(.9); opacity: 0; } }
+.sa-card, .sa-hit { position: absolute; left: 50%; top: 50%; width: var(--cw); margin-left: calc(var(--cw) / -2); margin-top: calc(var(--cw) * -0.7 - 30px); }
+.sa-card { transition: transform .45s cubic-bezier(.2,.8,.2,1), opacity .45s; pointer-events: none; }
+.sa-stage[data-dragging] .sa-card[data-top] { transition: none; }
+.sa-card[data-rare] { filter: drop-shadow(0 0 22px var(--rc)) drop-shadow(0 0 7px var(--rc)); }
+.sa-hit { aspect-ratio: 63 / 88; z-index: 30; padding: 0; border: 0; border-radius: 14px; background: transparent; cursor: grab; touch-action: pan-y; -webkit-tap-highlight-color: transparent; }
+.sa-stage[data-dragging] .sa-hit { cursor: grabbing; }
+.sa-hit:focus-visible { outline: 2px solid var(--color-accent-300); outline-offset: 6px; }
+.sa-rays { position: absolute; left: 50%; top: calc(50% - 30px); width: 760px; height: 760px; margin: -380px 0 0 -380px; border-radius: 50%; pointer-events: none;
+  background: repeating-conic-gradient(from 0deg, color-mix(in srgb, var(--rc) 40%, transparent) 0deg 5deg, transparent 5deg 16deg);
+  -webkit-mask: radial-gradient(circle, #000 15%, transparent 62%); mask: radial-gradient(circle, #000 15%, transparent 62%);
+  animation: sa-spin 16s linear infinite, sa-fade .5s both; }
+@keyframes sa-spin { to { transform: rotate(360deg); } }
+@keyframes sa-fade { from { opacity: 0; } }
+.sa-count { position: absolute; left: 0; right: 0; bottom: 78px; text-align: center; }
+.sa-count b { font-size: 15px; font-weight: 600; font-variant-numeric: tabular-nums; }
+.sa-count span { display: block; margin-top: 4px; font-size: 13px; color: var(--color-neutral-400); }
+.sa-skip { position: absolute; left: 50%; bottom: 20px; transform: translateX(-50%); }
+
+/* ---------- Récapitulatif ---------- */
+.sa-recap { position: absolute; inset: 0; display: flex; flex-wrap: wrap; align-content: center; justify-content: center; gap: 18px; padding: 24px; }
+.sa-mini { width: clamp(104px, 15vw, 170px); animation: sa-pop .45s cubic-bezier(.2,.9,.3,1.3) both; }
+.sa-mini[data-best] { filter: drop-shadow(0 0 18px var(--rc)); }
+@keyframes sa-pop { from { transform: translateY(30px) scale(.8); opacity: 0; } }
+
+@media (max-width: 640px) { .sa-stage { height: 520px; --cw: 210px; } .sa-recap { gap: 12px; padding: 16px; } }
+@media (prefers-reduced-motion: reduce) {
+  .sa-pack, .sa-foil, .sa-rays, .sa-stack, .sa-mini { animation: none; }
+  .sa-pack[data-phase="tear"] :is(.sa-strip, .sa-body, .sa-leak) { animation: none; opacity: 0; }
+  .sa-card, .sa-strip { transition: none; }
+}
