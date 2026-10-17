@@ -35,6 +35,9 @@
 .atlas-lv b { font-size: 13px; font-weight: 500; }
 .atlas-lv small { font-size: 11px; color: var(--color-neutral-500); font-variant-numeric: tabular-nums; }
 .atlas-lv[aria-current="true"] { color: var(--color-accent-200); background: color-mix(in srgb, var(--color-accent) 14%, transparent); }
+.atlas-controls-hint { display: grid; gap: 5px; margin: 8px 10px 2px; padding-top: 8px;
+  border-top: 1px solid var(--glass-line); font-size: 10.5px; line-height: 1.4; color: var(--color-neutral-500); }
+.atlas-controls-hint i { margin-right: 6px; font-size: 12px; vertical-align: -1px; color: var(--color-neutral-600); }
 .atlas-lv[aria-current="true"] i { background: var(--color-accent); border-color: var(--color-accent); box-shadow: 0 0 10px var(--color-accent); }
 
 /* Bas : mesure et aide */

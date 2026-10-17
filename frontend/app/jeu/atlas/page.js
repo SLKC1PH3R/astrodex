@@ -119,6 +119,11 @@ export default function AtlasPage() {
                 <small>{L.echelle}{counts[i].objets ? ` · ${counts[i].cartes ? `${counts[i].possedees}/${counts[i].cartes} cartes` : `${counts[i].objets} objets`}` : ""}</small>
               </button>
             ))}
+            <p className="atlas-controls-hint">
+              <span><i className="ph ph-arrows-out-cardinal" aria-hidden="true" />Glisser : tourner</span>
+              <span><i className="ph ph-hand-pointing" aria-hidden="true" />Clic droit + glisser : déplacer</span>
+              <span><i className="ph ph-magnifying-glass" aria-hidden="true" />Molette : zoomer</span>
+            </p>
           </nav>
         )}
 

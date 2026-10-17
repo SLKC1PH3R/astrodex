@@ -392,7 +392,7 @@ export function mountAtlas(container, { data, onSelect, onLevel, onMeasure }) {
   /* Catalogue NGC en masse (~7700 objets) : nuage de points par niveau plutôt qu'un sprite + label
      DOM individuel par objet (ce que fait addObject pour les ~120 objets "vedettes") — un sprite par
      objet à cette échelle ferait chuter le framerate et la boucle de placement des labels. */
-  const BULK_COLOR = { galaxie: [.55, .62, 1], amas: [1, .86, .55], nebuleuse: [1, .6, .72], etoile: [.9, .9, 1] };
+  const BULK_COLOR = { galaxie: [.62, .72, 1.3], amas: [1.3, 1, .6], nebuleuse: [1.3, .68, .82], etoile: [1, 1, 1.1] };
   const bulkByLevel = {};
   for (const o of objects) {
     if (o.level < 2) continue;
@@ -406,7 +406,7 @@ export function mountAtlas(container, { data, onSelect, onLevel, onMeasure }) {
       pos.push(p.x, p.y, p.z);
       col.push(...(BULK_COLOR[o.famille] || [.75, .78, .9]));
     }
-    L.group.add(makePoints(pos, col, pointsMat(2.6, .9)));
+    L.group.add(makePoints(pos, col, pointsMat(3.4, 1)));
   }
 
   /* Sélection et ligne de mesure */
