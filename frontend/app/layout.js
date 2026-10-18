@@ -4,6 +4,7 @@ import "./filigrane.css";
 import "./cartes.css";
 import "./coffret.css";
 import "./sachet.css";
+import "./coverflow.css";
 import "./packpicker.css";
 import "./blackhole.css";
 import "./landing.css";

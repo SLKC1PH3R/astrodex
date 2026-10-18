@@ -1,0 +1,47 @@
+/* Carrousel 3D "cover flow" (lib/coverflow.js) + visuel de paquet scellé (components/PackArt.js).
+   Importé dans app/layout.js. --cc = couleur de la série. */
+
+.cv-wrap { display: grid; justify-items: center; gap: 22px; width: 100%; padding: 4px 0 8px; }
+.cv-hint { padding: 10px 26px; border-radius: 999px; font-size: 14px; font-weight: 500; color: var(--color-text); text-align: center;
+  background: linear-gradient(135deg, color-mix(in srgb, var(--color-accent) 22%, transparent), color-mix(in srgb, var(--cc, var(--color-accent)) 22%, transparent));
+  box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--color-text) 16%, transparent), 0 10px 26px -16px rgba(0,0,0,.7); }
+
+.cv-stage { position: relative; width: 100%; height: 360px; perspective: 1400px; touch-action: pan-y; }
+.cv-item { position: absolute; left: 50%; top: 50%; width: 190px; height: 290px; margin: -145px 0 0 -95px;
+  border: 0; padding: 0; background: none; cursor: pointer;
+  transition: transform .45s cubic-bezier(.2,.8,.2,1), opacity .45s; }
+.cv-item:focus-visible { outline: 2px solid var(--color-accent-300); outline-offset: 6px; border-radius: 16px; }
+
+/* ---------- Visuel du paquet (sans bande à déchirer) ---------- */
+.pka-pack { position: relative; display: flex; flex-direction: column; align-items: center; width: 100%; height: 100%;
+  overflow: hidden; border-radius: 16px; box-sizing: border-box; padding-top: 20px;
+  background: radial-gradient(ellipse 90% 60% at 30% 15%, color-mix(in srgb, var(--cc) 32%, var(--color-surface)), var(--color-bg) 82%);
+  box-shadow: 0 20px 44px -18px rgba(0,0,0,.85), 0 0 50px -22px var(--cc), inset 0 0 0 1px color-mix(in srgb, var(--cc) 48%, transparent); }
+.pka-foil { position: absolute; inset: 0; pointer-events: none;
+  background: linear-gradient(115deg, transparent 30%, rgba(255,255,255,.18) 45%, transparent 60%);
+  background-size: 250% 100%; animation: pka-sheen 3.6s ease-in-out infinite; }
+@keyframes pka-sheen { 0% { background-position: 120% 0; } 70%, 100% { background-position: -20% 0; } }
+.pka-brand { position: relative; font-size: 9px; font-weight: 600; letter-spacing: .5em; padding-left: .5em;
+  color: color-mix(in srgb, var(--cc) 55%, var(--color-text)); }
+.pka-port { position: relative; width: 108px; height: 108px; margin: 16px 0 16px; border-radius: 50%; overflow: hidden;
+  background: radial-gradient(circle, var(--color-accent-900), #0b0c14 70%); box-shadow: 0 0 0 2px var(--cc), 0 0 30px -6px var(--cc); }
+.pka-art { position: absolute; left: 50%; top: 50%; max-width: none; transform: translate(-50%, -50%); mix-blend-mode: lighten; }
+.pka-art.globe { width: 88%; }
+.pka-art.large { width: 144%; }
+.pka-art.photo { width: 100%; height: 100%; object-fit: cover; }
+.pka-title { position: relative; text-align: center; padding: 0 12px; }
+.pka-title small { display: block; font-size: 8px; letter-spacing: .3em; padding-left: .3em; color: var(--color-neutral-400); }
+.pka-title b { display: block; margin-top: 3px; font-size: 15px; font-weight: 600; line-height: 1.2; }
+.pka-foot { position: absolute; left: 14px; right: 14px; bottom: 22px; display: flex; justify-content: space-between;
+  font-size: 8px; letter-spacing: .12em; color: var(--color-neutral-300); }
+.pka-seal { position: absolute; left: 0; right: 0; bottom: 0; height: 10px;
+  background: repeating-linear-gradient(90deg, color-mix(in srgb, var(--cc) 40%, transparent) 0 2px, transparent 2px 5px); }
+
+@media (max-width: 640px) {
+  .cv-stage { height: 300px; }
+  .cv-item { width: 156px; height: 238px; margin: -119px 0 0 -78px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .cv-item { transition: none; }
+  .pka-foil { animation: none; }
+}
