@@ -1,0 +1,35 @@
+/* Spirale de 20 paquets identiques (components/PackPicker.js). Importé dans app/layout.js.
+   --cc = couleur de la série (lib/coffrets.js). */
+
+.pk-open-series { display: flex; margin: 22px auto 4px; }
+
+.pk-picker { display: grid; justify-items: center; gap: 2px; width: 100%; max-width: 1100px; margin: 0 auto;
+  padding: 8px 12px 40px; animation: pk-rise .5s cubic-bezier(.2,.8,.2,1) both; }
+@keyframes pk-rise { from { opacity: 0; transform: translateY(18px); } }
+.pk-back { justify-self: start; margin-bottom: 10px; }
+.pk-title { margin: 4px 0 2px; font-size: 22px; font-weight: 700; }
+.pk-sub { margin: 0 0 24px; color: var(--color-neutral-400); font-size: 14px; }
+
+.pk-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(88px, 1fr)); gap: 16px; width: 100%; }
+.pk-item { position: relative; aspect-ratio: 63 / 88; border: 0; border-radius: 12px; padding: 0; cursor: pointer;
+  background: linear-gradient(160deg, color-mix(in srgb, var(--cc) 55%, var(--color-surface)), color-mix(in srgb, var(--cc) 20%, var(--color-bg)) 70%);
+  box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--cc) 45%, transparent), 0 10px 24px -14px rgba(0,0,0,.7);
+  animation: pk-float 3.2s ease-in-out infinite; transition: transform .2s, box-shadow .2s; }
+.pk-item:hover, .pk-item:focus-visible { transform: translateY(-6px) scale(1.04);
+  box-shadow: inset 0 0 0 1px var(--cc), 0 16px 30px -14px rgba(0,0,0,.8), 0 0 24px -6px var(--cc); }
+.pk-item:active { transform: translateY(-2px) scale(.98); }
+.pk-item:focus-visible { outline: 2px solid var(--color-accent-300); outline-offset: 4px; }
+@keyframes pk-float { 50% { transform: translateY(-4px); } }
+
+.pk-port { position: absolute; left: 50%; top: 42%; width: 58%; aspect-ratio: 1; margin-left: -29%; margin-top: -29%;
+  border-radius: 50%; overflow: hidden; background: radial-gradient(circle, var(--color-accent-900), #05060c 70%);
+  box-shadow: 0 0 0 2px var(--cc); }
+.pk-art { position: absolute; left: 50%; top: 50%; max-width: none; width: 100%; height: 100%;
+  transform: translate(-50%, -50%); object-fit: cover; mix-blend-mode: lighten; }
+.pk-art.globe { width: 86%; height: 86%; object-fit: contain; }
+.pk-art.large { width: 140%; height: 140%; object-fit: contain; }
+.pk-glow { position: absolute; inset: 0; border-radius: inherit; pointer-events: none; opacity: 0; transition: opacity .2s;
+  box-shadow: inset 0 0 20px 4px var(--cc); }
+.pk-item:hover .pk-glow, .pk-item:focus-visible .pk-glow { opacity: .5; }
+
+@media (prefers-reduced-motion: reduce) { .pk-picker, .pk-item { animation: none; } }
