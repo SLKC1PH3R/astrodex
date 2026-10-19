@@ -6,7 +6,7 @@
 
 /* ---------- Sachet ---------- */
 .sa-pack { --foil: linear-gradient(100deg, color-mix(in srgb, var(--cc) 70%, var(--color-bg)), color-mix(in srgb, var(--cc) 45%, var(--color-neutral-100)) 42%, var(--cc) 60%, color-mix(in srgb, var(--cc) 55%, var(--color-bg)));
-  position: absolute; left: 50%; top: 50%; width: 220px; height: 340px; margin: -175px 0 0 -110px; z-index: 3;
+  position: absolute; left: 50%; top: 50%; width: 210px; height: 462px; margin: -246px 0 0 -105px; z-index: 3;
   padding: 0; border: 0; background: none; color: var(--color-text); font: inherit; cursor: pointer;
   animation: sa-float 4s ease-in-out infinite; }
 .sa-pack:disabled { cursor: default; }
@@ -23,25 +23,8 @@
 .sa-strip i { font-size: 14px; }
 .sa-pack:not(:disabled):hover .sa-strip { transform: translateY(-3px) rotate(-1.5deg); }
 
-.sa-body { position: absolute; left: 0; right: 0; top: 42px; bottom: 0; overflow: hidden; border-radius: 0 0 12px 12px;
-  display: flex; flex-direction: column; align-items: center; padding-top: 20px; box-sizing: border-box;
-  background: radial-gradient(ellipse 90% 60% at 30% 20%, color-mix(in srgb, var(--cc) 30%, var(--color-surface)), var(--color-bg) 80%);
-  box-shadow: 0 30px 60px -20px rgba(0,0,0,.85), 0 0 70px -28px var(--cc), inset 0 0 0 1px color-mix(in srgb, var(--cc) 45%, transparent); }
-.sa-foil { position: absolute; inset: 0; pointer-events: none;
-  background: linear-gradient(115deg, transparent 30%, rgba(255,255,255,.16) 45%, transparent 60%); background-size: 250% 100%; animation: sa-sheen 3.5s ease-in-out infinite; }
-@keyframes sa-sheen { 0% { background-position: 120% 0; } 70%, 100% { background-position: -20% 0; } }
-.sa-brand { font-size: 10px; font-weight: 600; letter-spacing: .5em; padding-left: .5em; color: color-mix(in srgb, var(--cc) 55%, var(--color-text)); }
-.sa-port { position: relative; width: 132px; height: 132px; margin: 18px 0 20px; border-radius: 50%; overflow: hidden;
-  background: radial-gradient(circle, var(--color-accent-900), #0b0c14 70%); box-shadow: 0 0 0 2px var(--cc), 0 0 36px -6px var(--cc); }
-.sa-art { position: absolute; left: 50%; top: 50%; max-width: none; transform: translate(-50%, -50%); mix-blend-mode: lighten; }
-.sa-art.globe { width: 88%; }
-.sa-art.large { width: 144%; }
-.sa-art.photo { width: 100%; height: 100%; object-fit: cover; }
-.sa-title { text-align: center; padding: 0 14px; }
-.sa-title small { display: block; font-size: 9px; letter-spacing: .34em; padding-left: .34em; color: var(--color-neutral-400); }
-.sa-title b { display: block; margin-top: 4px; font-size: 19px; font-weight: 600; line-height: 1.2; }
-.sa-foot { position: absolute; left: 16px; right: 16px; bottom: 26px; display: flex; justify-content: space-between; font-size: 9px; letter-spacing: .14em; color: var(--color-neutral-300); }
-.sa-seal { position: absolute; left: 0; right: 0; bottom: 0; height: 12px; background: repeating-linear-gradient(90deg, color-mix(in srgb, var(--cc) 40%, transparent) 0 2px, transparent 2px 5px); }
+.sa-body { position: absolute; left: 0; right: 0; top: 42px; bottom: 0; }
+/* le visuel du paquet vient de components/PackArt.js (app/packart.css) */
 .sa-leak { position: absolute; left: 6px; right: 6px; top: 36px; height: 14px; border-radius: 50%; opacity: 0; pointer-events: none;
   background: radial-gradient(ellipse, #fff, color-mix(in srgb, var(--cc) 70%, #fff) 40%, transparent 70%); filter: blur(4px); }
 
@@ -81,7 +64,7 @@
 .sa-mini[data-best] { filter: drop-shadow(0 0 18px var(--rc)); }
 @keyframes sa-pop { from { transform: translateY(30px) scale(.8); opacity: 0; } }
 
-@media (max-width: 640px) { .sa-stage { height: 520px; --cw: 210px; } .sa-recap { gap: 12px; padding: 16px; } }
+@media (max-width: 640px) { .sa-stage { height: 520px; --cw: 210px; } .sa-pack { width: 180px; height: 402px; margin: -216px 0 0 -90px; } .sa-recap { gap: 12px; padding: 16px; } }
 @media (prefers-reduced-motion: reduce) {
   .sa-pack, .sa-foil, .sa-rays, .sa-stack, .sa-mini { animation: none; }
   .sa-pack[data-phase="tear"] :is(.sa-strip, .sa-body, .sa-leak) { animation: none; opacity: 0; }

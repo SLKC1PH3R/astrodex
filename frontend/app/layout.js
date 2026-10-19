@@ -1,3 +1,5 @@
+import "@fontsource/russo-one/400.css";
+import "@fontsource/exo-2/800.css";
 import "./nocturne.css";
 import "./astrodex.css";
 import "./filigrane.css";
@@ -5,6 +7,7 @@ import "./cartes.css";
 import "./coffret.css";
 import "./sachet.css";
 import "./coverflow.css";
+import "./packart.css";
 import "./packpicker.css";
 import "./packring.css";
 import "./blackhole.css";

@@ -29,6 +29,7 @@ export function coffretTheme(booster) {
   const code = booster?.serie || "";
   const t = BOOSTER_THEMES[booster?.code] || SERIES_THEMES[code];
   return {
+    code: booster?.code || "",
     serie: code,
     titre: t?.titre || booster?.nom?.replace(/^Booster\s*/i, "") || code,
     couleur: t?.couleur || FALLBACK[hash(booster?.code || code) % FALLBACK.length],

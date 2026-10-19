@@ -1,0 +1,138 @@
+/* Designs des paquets « booster à thème » (maquettes validées), un par booster (catalog/boosters.yaml).
+   Rendu : components/PackArt.js + app/packart.css. Le paquet fait 1 × 2 (largeur × hauteur).
+
+   art      : fond de la fenêtre d'illustration (sous les images)
+   stars    : opacité du champ d'étoiles (0 = aucun)
+   layers   : images empilées dans la fenêtre d'illustration ; x, y, w, h en % de cette fenêtre
+              fit "cover" | "contain", blend "screen" pour les images sur fond noir, round = découpe ronde,
+              clip = découpe libre (clip-path) pour isoler un astre d'une photo à fond gris
+   tint     : voile coloré au-dessus des images (facultatif)
+   shade    : assombrissement haut / bas de l'illustration (lisibilité du titre)
+   band     : dégradé du bandeau haut et bas ; stripe : liseré clair sous le bandeau
+   fill     : dégradé du titre ; dark : contour foncé ; rim : contour clair ; size : taille du titre
+   plate    : fond de la plaque du titre ; ring : liseré de la plaque ; label : contour de « BOOSTER À THÈME »
+   bg, glow : fond du paquet et halo autour */
+
+const M = "/media/";
+
+export const PACK_DESIGNS = {
+  S1A: {
+    art: "#2a0800", stars: 0,
+    layers: [
+      { src: "soleil_eruption.webp", x: -40, y: -6, w: 180, h: 112, fit: "cover", pos: "18% 60%" },
+      { src: "venus.webp", x: 6.84, y: 41.2, w: 16.84, h: 10.63, blend: "screen", opacity: 0.9 },
+      { src: "mercure.webp", x: 66.84, y: 5.65, w: 27.37, h: 17.28, blend: "screen" },
+    ],
+    shade: ["rgba(42,8,0,.4)", "rgba(46,8,0,.92)"],
+    band: ["#ffa53a", "#f05a10"], stripe: ["#ffd8a0", "#fff6dc"],
+    fill: "linear-gradient(180deg, #fffbe0 8%, #ffd84a 44%, #ff6a00 56%, #ffb347 96%)",
+    dark: "#3a0900", rim: "#fff1c4", label: "#2a0800",
+    plate: ["rgba(122,28,5,.82)", "rgba(46,8,0,.94)"], ring: "#ffd36b", ringOut: "#4a1500",
+    bg: "#2a0800", glow: "rgba(255,122,26,.7)",
+  },
+  S1B: {
+    art: "radial-gradient(80% 50% at 70% 30%, rgba(214,150,60,.45), transparent 70%), radial-gradient(70% 45% at 15% 75%, rgba(90,70,200,.45), transparent 70%), #0b0d2a",
+    stars: 0.8,
+    layers: [
+      { src: "saturne.webp", x: -25, y: 6.64, w: 150, h: 94.68, blend: "screen", rotate: -14 },
+      { src: "titan.webp", x: 7.37, y: 4.98, w: 19.47, h: 12.29, blend: "screen" },
+      { src: "encelade.webp", x: 80, y: 54.82, w: 12.1, h: 7.64, blend: "screen", opacity: 0.9, clip: "circle(36% at 54% 38%)" },
+    ],
+    shade: ["rgba(11,13,42,.35)", "rgba(8,9,30,.92)"],
+    band: ["#f6cd62", "#c98a1a"], stripe: ["#ffe7a8", "#fffaea"],
+    fill: "linear-gradient(180deg, #fffdf0 8%, #ffe08a 44%, #c8860f 56%, #f2c14e 96%)",
+    dark: "#2b1700", rim: "#fff4d0", label: "#1a1530",
+    plate: ["rgba(30,30,80,.85)", "rgba(8,9,30,.95)"], ring: "#ffd36b", ringOut: "#2b1700",
+    bg: "#0b0d2a", glow: "rgba(242,193,78,.65)",
+  },
+  S1C: {
+    art: "radial-gradient(90% 55% at 50% 100%, rgba(80,200,255,.5), transparent 70%), radial-gradient(60% 40% at 85% 15%, rgba(120,90,255,.35), transparent 70%), linear-gradient(180deg, #061a3a, #0a3d66)",
+    stars: 0.85,
+    layers: [
+      { src: "neptune.webp", x: 6.32, y: 4.32, w: 32.1, h: 20.27, blend: "screen" },
+      { src: "triton.webp", x: 75.26, y: 15.28, w: 15.26, h: 9.63, blend: "screen", opacity: 0.9 },
+      { src: "encelade.webp", x: 60.53, y: 4.98, w: 10.53, h: 6.64, blend: "screen", opacity: 0.85, clip: "circle(36% at 54% 38%)" },
+      { src: "europe.webp", x: -21.05, y: 28.24, w: 142.1, h: 89.7, blend: "screen" },
+    ],
+    shade: ["rgba(6,26,58,.35)", "rgba(4,26,52,.9)"],
+    band: ["#52dbff", "#0a86c8"], stripe: ["#b8efff", "#f2fdff"],
+    fill: "linear-gradient(180deg, #f2fdff 8%, #8ff0ff 44%, #148fcc 56%, #6fe0ff 96%)",
+    dark: "#062a45", rim: "#e6fbff", label: "#062a45",
+    plate: ["rgba(10,70,120,.84)", "rgba(4,26,52,.95)"], ring: "#9ef0ff", ringOut: "#062a45",
+    bg: "#04203a", glow: "rgba(63,208,245,.65)",
+  },
+  S2A: {
+    art: "radial-gradient(70% 50% at 95% 0%, rgba(255,200,120,.55), transparent 70%), radial-gradient(70% 45% at 0% 80%, rgba(150,70,30,.45), transparent 70%), linear-gradient(180deg, #1a0d08, #2a1508)",
+    stars: 0.7,
+    layers: [
+      { src: "ast-eros.webp", x: 1.58, y: 3.65, w: 39.47, h: 24.92, blend: "screen", rotate: -18, filter: "sepia(.45) saturate(1.5) brightness(1.05)" },
+      { src: "ast-ida_dactyl.webp", x: 66.32, y: 10.3, w: 28.95, h: 18.27, blend: "screen", filter: "sepia(.4) saturate(1.4)" },
+      { src: "ast-vesta.webp", x: -2.63, y: 24.92, w: 105.26, h: 66.45, blend: "screen", filter: "sepia(.5) saturate(1.6) brightness(1.1) contrast(1.1)" },
+    ],
+    shade: ["rgba(26,13,8,.35)", "rgba(30,14,4,.92)"],
+    band: ["#e6aa5c", "#8a5520"], stripe: ["#f0cf9e", "#fff4e2"],
+    fill: "linear-gradient(180deg, #fff6e6 8%, #f3c98a 44%, #9a5a1a 56%, #e0a65c 96%)",
+    dark: "#2a1406", rim: "#fbe8c8", label: "#2a1406",
+    plate: ["rgba(90,48,16,.86)", "rgba(30,14,4,.95)"], ring: "#f3c98a", ringOut: "#2a1406",
+    bg: "#1e0f06", glow: "rgba(217,154,78,.6)",
+  },
+  S3A: {
+    art: "#1a0a20", stars: 0,
+    layers: [
+      { src: "neb-pillars_m16.webp", x: -15.79, y: -1.66, w: 131.58, h: 103, fit: "cover", pos: "50% 40%", filter: "saturate(1.25) contrast(1.05)" },
+      { src: "neb-orion_m42.webp", x: 55.26, y: -3.32, w: 52.63, h: 33.22, fit: "cover", round: true, blend: "screen", opacity: 0.55, filter: "saturate(1.4)" },
+    ],
+    tint: "radial-gradient(80% 40% at 50% 0%, rgba(240,71,159,.28), transparent 70%)",
+    shade: ["rgba(40,4,26,.35)", "rgba(40,4,26,.92)"],
+    band: ["#ff5cae", "#a3176a"], stripe: ["#ffc6e3", "#fff2f9"],
+    fill: "linear-gradient(180deg, #fff0f8 8%, #ff9dd0 44%, #c4127a 56%, #ff6fb5 96%)",
+    dark: "#3a0626", rim: "#ffe3f2", label: "#3a0626",
+    plate: ["rgba(110,16,70,.86)", "rgba(40,4,26,.95)"], ring: "#ffb3dc", ringOut: "#3a0626",
+    bg: "#28041a", glow: "rgba(240,71,159,.65)",
+  },
+  S3B: {
+    art: "radial-gradient(70% 45% at 50% 42%, rgba(255,90,60,.45), transparent 70%), radial-gradient(60% 40% at 100% 0%, rgba(140,60,255,.4), transparent 70%), linear-gradient(180deg, #160416, #2a0410)",
+    stars: 0.8,
+    layers: [
+      { src: "neb-casA.webp", x: 60.53, y: 1, w: 44.74, h: 28.24, fit: "cover", round: true, blend: "screen", opacity: 0.85 },
+      { src: "neb-crab_m1.webp", x: -18.42, y: 18.27, w: 136.84, h: 86.38, fit: "cover", blend: "screen", rotate: -10, filter: "saturate(1.35) brightness(1.1)" },
+    ],
+    shade: ["rgba(22,4,22,.35)", "rgba(40,2,12,.92)"],
+    band: ["#ff5a6c", "#9a0f2a"], stripe: ["#ffc2c9", "#fff2f3"],
+    fill: "linear-gradient(180deg, #fff2f2 8%, #ffb0a0 44%, #d0102e 56%, #ff6a5e 96%)",
+    dark: "#3a0610", rim: "#ffe0e3", label: "#3a0610",
+    plate: ["rgba(120,10,30,.86)", "rgba(40,2,12,.95)"], ring: "#ffb0b8", ringOut: "#3a0610",
+    bg: "#22030c", glow: "rgba(255,68,88,.65)",
+  },
+  S4A: {
+    art: "radial-gradient(70% 45% at 55% 45%, rgba(110,90,255,.45), transparent 70%), radial-gradient(60% 40% at 0% 100%, rgba(40,140,255,.35), transparent 70%), linear-gradient(180deg, #07061e, #120c3a)",
+    stars: 0.9,
+    layers: [
+      { src: "dso-n5128.webp", x: -4.74, y: 1.33, w: 44.74, h: 28.24, fit: "cover", round: true, blend: "screen", opacity: 0.9 },
+      { src: "dso-m83.webp", x: -23.68, y: 14.95, w: 147.37, h: 93.02, fit: "cover", blend: "screen", rotate: 24, filter: "saturate(1.5) brightness(1.35) contrast(1.1)" },
+    ],
+    shade: ["rgba(7,6,30,.35)", "rgba(10,8,40,.92)"],
+    band: ["#8c8eff", "#3a2fb0"], stripe: ["#d4d4ff", "#f6f5ff"],
+    fill: "linear-gradient(180deg, #f4f3ff 8%, #b9b8ff 44%, #4b3fe0 56%, #9d8cff 96%)",
+    dark: "#120a40", rim: "#ecebff", label: "#120a40", size: 42,
+    plate: ["rgba(40,30,120,.86)", "rgba(10,8,40,.95)"], ring: "#c4c0ff", ringOut: "#120a40",
+    bg: "#0a0828", glow: "rgba(123,125,255,.65)",
+  },
+};
+for (const d of Object.values(PACK_DESIGNS)) for (const l of d.layers) l.src = M + l.src;
+
+/* Design de secours pour un booster sans maquette : bandeau à sa couleur, son image en plein cadre. */
+export function fallbackDesign(theme) {
+  const c = theme.couleur || "#9184d9";
+  return {
+    art: "#0b0d2a", stars: 0.7,
+    layers: theme.image ? [{ src: theme.image, x: -10, y: 0, w: 120, h: 100, fit: theme.cadrage === "photo" ? "cover" : "contain", blend: "screen" }] : [],
+    shade: ["rgba(8,9,30,.35)", "rgba(8,9,30,.92)"],
+    band: [`color-mix(in srgb, ${c} 80%, white)`, `color-mix(in srgb, ${c} 70%, black)`],
+    stripe: [`color-mix(in srgb, ${c} 40%, white)`, "#ffffff"],
+    fill: `linear-gradient(180deg, #ffffff 8%, color-mix(in srgb, ${c} 45%, white) 44%, ${c} 56%, color-mix(in srgb, ${c} 60%, white) 96%)`,
+    dark: "#0c0d24", rim: "#ffffff", label: "#0c0d24",
+    plate: ["rgba(30,30,80,.85)", "rgba(8,9,30,.95)"], ring: `color-mix(in srgb, ${c} 60%, white)`, ringOut: "#0c0d24",
+    bg: "#0b0d2a", glow: `color-mix(in srgb, ${c} 65%, transparent)`,
+  };
+}

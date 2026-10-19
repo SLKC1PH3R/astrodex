@@ -12,7 +12,7 @@ const easeOut = t => 1 - Math.pow(1 - t, 3);
    appelle onPick. intro : les paquets jaillissent du centre en spirale (après le trou noir).
    Positions calculées à chaque image (requestAnimationFrame), sans bibliothèque.
    Styles : app/packring.css (.pr-*) ; visuel du paquet : components/PackArt.js. */
-export default function PackRing({ count = 20, theme, roman, nbCartes, onPick, intro = true }) {
+export default function PackRing({ count = 20, theme, onPick, intro = true }) {
   const stageRef = useRef(null);
   const itemsRef = useRef([]);
   const [front, setFront] = useState(0);
@@ -72,7 +72,7 @@ export default function PackRing({ count = 20, theme, roman, nbCartes, onPick, i
           el.style.transform = `translate(-50%, -50%) translate(${x.toFixed(1)}px, ${y.toFixed(1)}px) scale(${scale.toFixed(4)})`;
           el.style.zIndex = String(Math.round(d * 1000));
           el.style.opacity = String(Math.min(1, p * 2.5) * (0.22 + 0.78 * Math.pow(d, 0.8)));
-          el.style.filter = `brightness(${(0.32 + 0.68 * d).toFixed(3)})`;
+          el.style.setProperty("--dim", (0.68 * (1 - d)).toFixed(3)); // voile sombre au fond (app/packring.css)
         }
         const f = mod(Math.round(-s.rot / step), count);
         if (f !== s.front) { s.front = f; setFront(f); }
@@ -165,7 +165,7 @@ export default function PackRing({ count = 20, theme, roman, nbCartes, onPick, i
               if (sim.current?.justDragged) return;
               if (i === front) onPick?.(i); else goTo(i);
             }}>
-            <span className="pr-lift"><PackArt theme={theme} roman={roman} nbCartes={nbCartes} /></span>
+            <span className="pr-lift"><PackArt theme={theme} /></span>
           </button>
         ))}
       </div>
