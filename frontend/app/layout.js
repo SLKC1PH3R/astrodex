@@ -6,6 +6,7 @@ import "./coffret.css";
 import "./sachet.css";
 import "./coverflow.css";
 import "./packpicker.css";
+import "./packring.css";
 import "./blackhole.css";
 import "./landing.css";
 

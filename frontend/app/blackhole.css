@@ -1,24 +1,63 @@
-/* Transition trou noir (components/BlackHole.js). Importé dans app/layout.js. */
+/* Transition trou noir (components/BlackHole.js). Importé dans app/layout.js.
+   Toutes les animations durent 1,7 s ; l'éclair culmine à 1 s (≈ 59 %), quand la page change d'étape.
+   --x / --y : centre du trou noir (le paquet choisi). */
 
-.bh-overlay { position: fixed; inset: 0; z-index: 200; pointer-events: none; overflow: hidden; background: transparent; }
+@property --bh-spin { syntax: "<angle>"; inherits: true; initial-value: 0deg; }
 
-.bh-vortex { position: absolute; left: 50%; top: 50%; width: 60px; height: 60px; margin: -30px 0 0 -30px; border-radius: 50%;
-  background:
-    repeating-conic-gradient(from 0deg, rgba(190,150,255,.65) 0deg 2deg, transparent 2deg 10deg),
-    radial-gradient(circle, #050108 0%, #130a24 55%, rgba(80,40,140,.5) 72%, transparent 85%);
-  box-shadow: 0 0 60px 14px rgba(150,100,255,.55);
-  animation: bh-warp 1.15s cubic-bezier(.65,0,.35,1) both;
+.bh-overlay { position: fixed; inset: 0; z-index: 200; pointer-events: none; overflow: hidden; }
+
+/* Voile : le ciel s'assombrit autour du trou noir */
+.bh-dim { position: absolute; inset: 0;
+  background: radial-gradient(circle at var(--x) var(--y), rgba(3,2,8,.55), rgba(3,2,8,.92) 55%);
+  animation: bh-dim 1.7s ease both; }
+@keyframes bh-dim { 0% { opacity: 0; } 22%, 62% { opacity: 1; } 100% { opacity: 0; } }
+
+/* Traînées d'étoiles aspirées vers le centre */
+.bh-streaks { position: absolute; left: var(--x); top: var(--y); width: 160vmax; height: 160vmax; margin: -80vmax 0 0 -80vmax;
+  background: repeating-conic-gradient(from 3deg, rgba(220,210,255,.55) 0 .35deg, transparent .35deg 5.5deg);
+  -webkit-mask: radial-gradient(circle, transparent 9%, #000 22%, rgba(0,0,0,.6) 45%, transparent 62%);
+          mask: radial-gradient(circle, transparent 9%, #000 22%, rgba(0,0,0,.6) 45%, transparent 62%);
+  animation: bh-streaks 1.7s cubic-bezier(.5,0,.7,.4) both; }
+@keyframes bh-streaks {
+  0%   { transform: scale(1.5) rotate(0deg); opacity: 0; }
+  14%  { opacity: .9; }
+  55%  { transform: scale(.35) rotate(-70deg); opacity: .8; }
+  60%, 100% { transform: scale(.1) rotate(-90deg); opacity: 0; }
 }
-@keyframes bh-warp {
-  0%   { transform: scale(0) rotate(0deg); }
-  46%  { transform: scale(48) rotate(330deg); }
-  100% { transform: scale(100) rotate(720deg); opacity: 0; }
-}
 
-.bh-flash { position: absolute; inset: 0; background: radial-gradient(circle, #fff, rgba(255,255,255,0) 70%);
-  opacity: 0; animation: bh-flash 1.15s ease both; }
-@keyframes bh-flash { 0%, 42% { opacity: 0; } 48% { opacity: .85; } 58%, 100% { opacity: 0; } }
+/* Le trou noir : cœur noir, disque d'accrétion incliné (moitié arrière derrière le cœur,
+   moitié avant devant), halo de lumière déviée */
+.bh-hole { position: absolute; left: var(--x); top: var(--y); width: min(70vmin, 460px); aspect-ratio: 1; translate: -50% -50%;
+  animation: bh-hole 1.7s cubic-bezier(.3,.7,.3,1) both; }
+@keyframes bh-hole {
+  0%   { transform: scale(0) rotate(-25deg); opacity: 0; }
+  12%  { opacity: 1; }
+  35%  { transform: scale(1) rotate(0deg); }
+  50%  { transform: scale(1.06) rotate(4deg); }
+  58%  { transform: scale(.03) rotate(10deg); opacity: 1; }
+  60%, 100% { transform: scale(0); opacity: 0; }
+}
+.bh-core { position: absolute; inset: 31%; border-radius: 50%; background: #000;
+  box-shadow: 0 0 0 2px rgba(255,200,140,.85), 0 0 24px 6px rgba(255,170,90,.55), 0 0 80px 20px rgba(150,100,255,.35); }
+.bh-lens { position: absolute; inset: 22%; border-radius: 50%;
+  background: radial-gradient(circle, transparent 54%, rgba(255,214,160,.9) 57%, rgba(255,150,80,.35) 63%, rgba(150,100,255,.15) 72%, transparent 74%);
+  animation: bh-pulse .5s ease-in-out infinite alternate; }
+@keyframes bh-pulse { to { filter: brightness(1.35); } }
+.bh-disk { position: absolute; left: -12%; right: -12%; top: 37%; height: 26%; border-radius: 50%;
+  background: conic-gradient(from var(--bh-spin), #fff3d6, #ffb05a, #c2410c, #6d28d9, #ffb05a, #fff3d6, #ff8a3d, #fff3d6);
+  -webkit-mask: radial-gradient(closest-side, transparent 50%, #000 58%, #000 82%, transparent 100%);
+          mask: radial-gradient(closest-side, transparent 50%, #000 58%, #000 82%, transparent 100%);
+  filter: blur(1.5px) saturate(1.2); animation: bh-spin .6s linear infinite; }
+.bh-disk.back { clip-path: inset(0 0 50% 0); opacity: .8; }
+.bh-disk.front { clip-path: inset(50% 0 0 0); }
+@keyframes bh-spin { to { --bh-spin: 360deg; } }
+
+/* Éclair au moment où le trou noir se referme */
+.bh-flash { position: absolute; inset: 0;
+  background: radial-gradient(circle at var(--x) var(--y), #fff, rgba(255,236,210,.85) 12%, rgba(180,150,255,.25) 40%, transparent 70%);
+  opacity: 0; animation: bh-flash 1.7s ease both; }
+@keyframes bh-flash { 0%, 55% { opacity: 0; } 59% { opacity: 1; } 75%, 100% { opacity: 0; } }
 
 @media (prefers-reduced-motion: reduce) {
-  .bh-vortex, .bh-flash { animation: none; opacity: 0; }
+  .bh-overlay { display: none; }
 }
