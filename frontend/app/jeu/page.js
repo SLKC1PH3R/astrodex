@@ -5,22 +5,24 @@ import { ORDER, RAR } from "@/components/Carte";
 import SachetOpening from "@/components/SachetOpening";
 import BoosterCarousel from "@/components/BoosterCarousel";
 import PackPicker from "@/components/PackPicker";
-import BlackHole from "@/components/BlackHole";
+import BlackHole, { BLACK_HOLE } from "@/components/BlackHole";
 import Topbar from "@/components/Topbar";
 import OddsDialog from "@/components/OddsDialog";
 import { usePlayer } from "@/components/PlayerProvider";
 import { api } from "@/lib/api";
 
-/* Parcours : choisir une série → trou noir → spirale de 20 paquets identiques → on en touche un
-   → ouverture (SachetOpening, inchangée). "stage" piloté ici ; "warp" est un calque indépendant
-   qui continue son animation pendant que le contenu change dessous (voir onMid/onDone). */
+/* Parcours : choisir une série → le paquet est aspiré par un trou noir → les 20 paquets de la série
+   jaillissent en spirale sur un anneau qui tourne en boucle → on touche celui de devant → ouverture
+   (SachetOpening, inchangée). "stage" piloté ici ; "warp" est un calque indépendant qui continue
+   son animation pendant que le contenu change dessous (chronologie : components/BlackHole.js). */
 export default function PaquetsPage() {
   const router = useRouter();
   const { stats, refresh } = usePlayer();
   const [boosters, setBoosters] = useState([]);
   const [booster, setBooster] = useState(null);
   const [stage, setStage] = useState("series"); // series | picker | opening
-  const [warp, setWarp] = useState(false);
+  const [warp, setWarp] = useState(null);      // { x, y } : centre du trou noir pendant la transition
+  const [leaving, setLeaving] = useState(false); // le paquet choisi est en train d'être aspiré
   const [chosen, setChosen] = useState(null);
   const [result, setResult] = useState(null);
   const [error, setError] = useState(null);
@@ -38,10 +40,15 @@ export default function PaquetsPage() {
   const plural = (n, w) => `${n} ${w}${n > 1 ? "s" : ""}`;
 
   const openSeries = () => {
-    if (!booster || noPacks) return;
-    setChosen(booster); setResult(null); setWarp(true);
-    setTimeout(() => setStage("picker"), 550);
-    setTimeout(() => setWarp(false), 1200);
+    if (!booster || noPacks || leaving) return;
+    setChosen(booster); setResult(null);
+    if (matchMedia("(prefers-reduced-motion: reduce)").matches) { setStage("picker"); return; }
+    // le trou noir s'ouvre là où se trouve le paquet choisi
+    const r = document.querySelector(".cv-item.is-active")?.getBoundingClientRect();
+    setWarp(r ? { x: r.left + r.width / 2, y: r.top + r.height / 2 } : {});
+    setLeaving(true);
+    setTimeout(() => { setStage("picker"); setLeaving(false); }, BLACK_HOLE.swapAt);
+    setTimeout(() => setWarp(null), BLACK_HOLE.total);
   };
   const backToSeries = () => { setStage("series"); setResult(null); };
   const pickPack = () => { setStage("opening"); setRun(n => n + 1); };
@@ -63,11 +70,11 @@ export default function PaquetsPage() {
       <section className="ax-stage">
         {stage === "series" && (
           <>
-            <BoosterCarousel boosters={boosters} selected={booster}
+            <BoosterCarousel boosters={boosters} selected={booster} leaving={leaving}
               onSelect={b => { if (b.code !== booster?.code) setBooster(b); }} />
             {error && <p className="ax-notice"><strong>Oups.</strong> {error}</p>}
             {booster && (
-              <button className="btn btn-primary pk-open-series" type="button" disabled={noPacks} onClick={openSeries}>
+              <button className={`btn btn-primary pk-open-series${leaving ? " is-leaving" : ""}`} type="button" disabled={noPacks || leaving} onClick={openSeries}>
                 <i className="ph ph-door-open" />Ouvrir cette série
               </button>
             )}
@@ -103,7 +110,7 @@ export default function PaquetsPage() {
           </>
         )}
       </section>
-      {warp && <BlackHole />}
+      {warp && <BlackHole x={warp.x} y={warp.y} />}
       {odds && <OddsDialog booster={booster} onClose={() => setOdds(false)} />}
     </>
   );

@@ -1,9 +1,10 @@
 /* Étape "paquets" de /jeu (components/PackPicker.js). Importé dans app/layout.js.
    Le visuel des paquets vient de app/coverflow.css (.cv-*, .pka-*). */
 
-.pk-open-series { display: flex; margin: 22px auto 4px; }
+.pk-open-series { display: flex; margin: 22px auto 4px; transition: opacity .25s; }
+.pk-open-series.is-leaving { opacity: 0; }
 
-.pk-picker { display: grid; justify-items: center; gap: 2px; width: 100%; max-width: 1100px; margin: 0 auto;
+.pk-picker { display: grid; justify-items: center; gap: 10px; width: 100%; max-width: 1100px; margin: 0 auto;
   padding: 8px 12px 40px; animation: pk-rise .5s cubic-bezier(.2,.8,.2,1) both; }
 @keyframes pk-rise { from { opacity: 0; transform: translateY(18px); } }
 .pk-back { justify-self: start; margin-bottom: 10px; }

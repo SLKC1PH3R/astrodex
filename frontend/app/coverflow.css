@@ -45,3 +45,33 @@
   .cv-item { transition: none; }
   .pka-foil { animation: none; }
 }
+
+/* ---------- Légende de la série centrée ---------- */
+.cv-stage { outline: none; }
+.cv-stage:focus-visible { box-shadow: inset 0 0 0 2px color-mix(in srgb, var(--color-accent) 60%, transparent); border-radius: var(--radius-lg); }
+.cv-caption { display: grid; justify-items: center; gap: 4px; text-align: center; transition: opacity .3s; }
+.cv-caption b { font-size: 18px; font-weight: 600; letter-spacing: -.01em; }
+.cv-caption > span { font-size: 13px; color: var(--color-neutral-400); }
+.cv-dots { display: flex; gap: 6px; margin-top: 6px; }
+.cv-dots i { width: 6px; height: 6px; border-radius: 50%; background: var(--color-neutral-700); transition: background .3s, width .3s; }
+.cv-dots i.on { width: 18px; border-radius: 99px; background: var(--color-accent); }
+
+/* ---------- Départ vers le trou noir ---------- */
+/* Le paquet choisi tourne sur lui-même et rétrécit jusqu'à disparaître dans le trou noir ;
+   les autres sont attirés vers lui. Animations sur le visuel (.pka-pack) pour ne pas
+   entrer en conflit avec le transform du carrousel posé sur .cv-item. */
+.cv-leaving .cv-hint, .cv-leaving .cv-caption { opacity: 0; transition: opacity .25s; }
+.cv-leaving .cv-item { pointer-events: none; }
+.cv-leaving .cv-item:not(.cv-suck) .pka-pack { animation: cv-pull .75s cubic-bezier(.55,0,.8,.3) forwards; }
+.cv-suck { z-index: 300 !important; }
+.cv-suck .pka-pack { animation: cv-suck 1s cubic-bezier(.5,0,.75,.15) forwards; }
+@keyframes cv-pull { to { transform: translateX(var(--pull, 0)) scale(.15) rotate(90deg); opacity: 0; } }
+@keyframes cv-suck {
+  0%   { transform: none; filter: brightness(1); }
+  25%  { transform: scale(1.06) rotate(-6deg); }
+  100% { transform: scale(0) rotate(600deg); filter: brightness(2.2); opacity: .2; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .cv-leaving .cv-item .pka-pack, .cv-suck .pka-pack { animation: none; }
+  .cv-dots i { transition: none; }
+}
