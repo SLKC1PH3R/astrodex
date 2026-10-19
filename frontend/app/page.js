@@ -4,7 +4,7 @@ import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
 import Carte, { ORDER, RAR } from "@/components/Carte";
 import StarField from "@/components/StarField";
-import { api } from "@/lib/api";
+import { api, hasPlayer } from "@/lib/api";
 import { DEMO, RC, SLOTS, COUNT, NOTES, SOURCES } from "@/lib/landing-data";
 
 const pct = x => Math.round(x * 100) + " %";
@@ -47,9 +47,15 @@ export default function Landing() {
   const [allSeries, setAllSeries] = useState([]);
   const [scrolled, setScrolled] = useState(false);
   const [sel, setSel] = useState(4);
+  const [loggedIn, setLoggedIn] = useState(false);
   const pointer = useRef({ x: .5, y: .5 });
+  // "Commencer"/"Ouvrir mon premier booster" doivent ramener un joueur déjà inscrit dans la partie
+  // plutôt que sur le formulaire d'inscription : le soumettre créerait un second compte et
+  // écraserait le jeton de l'ancien (voir le garde-fou équivalent dans app/inscription/page.js).
+  const ctaHref = loggedIn ? "/jeu" : "/inscription";
 
   useEffect(() => {
+    setLoggedIn(hasPlayer());
     api.series().then(setAllSeries).catch(() => {});
     api.seriesDetail("S1").then(d => { if (d?.cartes?.length) setCards(d.cartes); }).catch(() => {});
     const onScroll = () => setScrolled(scrollY > 40);
@@ -91,8 +97,8 @@ export default function Landing() {
             <a href="#jeu">Le jeu</a><a href="#raretes">Raretés</a><a href="#atlas">Atlas</a>
           </div>
           <div className="lx-nav-cta">
-            <Link href="/inscription?mode=connexion" className="lx-nav-login">Se connecter</Link>
-            <Link href="/inscription" className="lx-nav-start">Commencer</Link>
+            {!loggedIn && <Link href="/inscription?mode=connexion" className="lx-nav-login">Se connecter</Link>}
+            <Link href={ctaHref} className="lx-nav-start">{loggedIn ? "Continuer" : "Commencer"}</Link>
           </div>
         </nav>
       </header>
@@ -118,7 +124,7 @@ export default function Landing() {
               <h1 id="hero-title"><span className="lx-h1-line">L'espace,</span><span className="lx-h1-line lx-h1-italic">carte après carte.</span></h1>
               <p>Chaque carte est une photo prise par une sonde ou un télescope. Déchire un booster, retourne tes cartes, complète la série.</p>
               <div className="lx-actions">
-                <Link href="/inscription" className="lx-textlink">Ouvrir mon premier booster<i className="ph ph-arrow-right" aria-hidden="true" /></Link>
+                <Link href={ctaHref} className="lx-textlink">{loggedIn ? "Ouvrir un booster" : "Ouvrir mon premier booster"}<i className="ph ph-arrow-right" aria-hidden="true" /></Link>
                 <a href="#atlas" className="lx-textlink is-muted">Explorer l'atlas 3D<i className="ph ph-arrow-right" aria-hidden="true" /></a>
               </div>
               <span className="lx-mono">GRATUIT · UN PSEUDO SUFFIT</span>
@@ -331,9 +337,9 @@ export default function Landing() {
             {/* eslint-disable-next-line @next/next/no-img-element */}
             <img className="lx-cta-photo" src="/media/neb-pillars_m16.webp" alt="" aria-hidden="true" loading="lazy" />
             <div className="lx-cta-shade" aria-hidden="true" />
-            <h2 id="cta-title">Ton premier booster <span className="lx-outline lx-gold">t'attend</span>.</h2>
+            <h2 id="cta-title">{loggedIn ? <>Un nouveau booster <span className="lx-outline lx-gold">t'attend</span>.</> : <>Ton premier booster <span className="lx-outline lx-gold">t'attend</span>.</>}</h2>
             <p>Un pseudo, un clic, cinq cartes.</p>
-            <Link href="/inscription" className="lx-textlink">Ouvrir mon premier booster<i className="ph ph-arrow-right" aria-hidden="true" /></Link>
+            <Link href={ctaHref} className="lx-textlink">{loggedIn ? "Ouvrir un booster" : "Ouvrir mon premier booster"}<i className="ph ph-arrow-right" aria-hidden="true" /></Link>
             <span className="lx-mono">GRATUIT · SANS CARTE BANCAIRE</span>
           </div>
         </div>

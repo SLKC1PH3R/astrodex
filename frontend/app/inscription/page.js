@@ -3,7 +3,7 @@ import { Suspense, useEffect, useState } from "react";
 import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
 import CardCarousel from "@/components/CardCarousel";
-import { api, ensurePlayer, signup } from "@/lib/api";
+import { api, ensurePlayer, hasPlayer, signup } from "@/lib/api";
 
 /* Une face de la carte. login = verso (connexion), sinon recto (inscription). */
 function Face({ login, active, busy, error, pseudo, setPseudo, onSubmit, onGuest, onFlip }) {
@@ -63,6 +63,13 @@ function AuthCard() {
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState(null);
   const isSignup = mode === "inscription";
+
+  // Un visiteur qui a déjà une session (jeton en localStorage) ne doit jamais retomber sur ce
+  // formulaire : soumettre "Créer mon compte" appelle toujours signup(), qui crée un NOUVEAU
+  // joueur et écrase le jeton existant — l'ancien compte (et sa collection) devient orphelin.
+  // Ça arrivait en pratique via les liens "Commencer"/"Ouvrir mon premier booster" de la landing,
+  // qui pointent ici sans condition même pour un joueur déjà inscrit.
+  useEffect(() => { if (hasPlayer()) router.replace("/jeu"); }, [router]);
 
   const go = async action => {
     setBusy(true); setError(null);
