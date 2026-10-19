@@ -31,7 +31,7 @@ export default function BoosterCarousel({ boosters, selected, onSelect, leaving 
   }
   return (
     <div className={`cv-wrap${leaving ? " cv-leaving" : ""}`}>
-      <span className="cv-hint">Choisis une série</span>
+      <span className="cv-hint">Choisis un booster</span>
       <div className="cv-stage" tabIndex={0} role="group" aria-roledescription="carrousel"
         aria-label="Séries disponibles" {...cf.pointer}>
         {boosters.map((b, i) => {
@@ -56,7 +56,8 @@ export default function BoosterCarousel({ boosters, selected, onSelect, leaving 
       {current && (
         <div className="cv-caption" aria-live="polite">
           <b>{coffretTheme(current).titre}</b>
-          <span>{current.nb_cartes} cartes par paquet · série {toRoman(current.serie)}</span>
+          <span>{current.nb_cartes} cartes par paquet · {current.nb_cartes_contenu
+            ? `${current.nb_cartes_contenu.toLocaleString("fr-FR")} cartes à découvrir` : `série ${toRoman(current.serie)}`}</span>
           <span className="cv-dots" aria-hidden="true">
             {boosters.map((b, i) => <i key={b.code} className={i === cf.active ? "on" : undefined} />)}
           </span>

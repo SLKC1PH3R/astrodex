@@ -15,7 +15,7 @@ export default function PackPicker({ booster, onPick, onBack, intro = true }) {
   return (
     <div className="pk-picker" style={{ "--cc": theme.couleur }}>
       <button className="btn btn-ghost pk-back" type="button" onClick={onBack}>
-        <i className="ph ph-arrow-left" aria-hidden="true" />Changer de série
+        <i className="ph ph-arrow-left" aria-hidden="true" />Changer de booster
       </button>
       <span className="cv-hint">Fais tourner l'anneau, puis touche le paquet de devant</span>
       <PackRing count={N} theme={theme} roman={toRoman(booster.serie)} nbCartes={booster.nb_cartes}

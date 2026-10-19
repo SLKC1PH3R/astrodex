@@ -11,6 +11,7 @@ serie:
 boosters:
 - code: S2-STD
   nom: Booster Astéroïdes
+  active: false  # remplacé par les boosters à thème (catalog/boosters.yaml)
   nb_cartes: 5
   image: ast-vesta.webp
   emplacements:

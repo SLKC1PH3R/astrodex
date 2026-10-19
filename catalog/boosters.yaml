@@ -1,0 +1,139 @@
+# Boosters à thème : chaque booster pioche dans son propre contenu, défini par des règles.
+#
+# Une carte entre dans un booster si elle correspond à AU MOINS UNE règle de « contenu ».
+# Une règle combine des filtres (tous doivent correspondre) :
+#   series : codes de série (S1, S2…)        types  : type de l'objet (objects.yaml)
+#   objets : slugs d'objets (objects.yaml)
+# Une même carte peut se trouver dans plusieurs boosters. L'import vérifie que chaque carte
+# d'une série active est dans au moins un booster, et que chaque rareté citée dans les taux
+# existe dans le contenu du booster.
+#
+# serie : série « de rattachement » (numéro affiché sur le paquet, regroupement dans l'interface).
+# Taux : chaque emplacement totalise 1 ; ils sont adaptés aux raretés présentes dans chaque contenu.
+
+taux_standard: &standard
+- {position: 1, taux: {C: 0.75, PC: 0.25}}
+- {position: 2, taux: {C: 0.75, PC: 0.25}}
+- {position: 3, taux: {C: 0.6, PC: 0.4}}
+- {position: 4, taux: {PC: 0.55, R: 0.38, UR: 0.07}}
+- {position: 5, taux: {R: 0.72, UR: 0.22, L: 0.06}}
+
+boosters:
+
+# ---------- Série I : Système solaire ----------
+
+- code: S1A
+  nom: Tempête Solaire
+  serie: S1
+  nb_cartes: 5
+  image: soleil_eruption.webp
+  description: Le Soleil et les mondes brûlants qu'il façonne, des planètes rocheuses aux comètes qu'il fait flamboyer.
+  contenu:
+  - series: [S1]
+    objets: [soleil, mercure, venus, terre, lune, mars, io]
+  - series: [S1]
+    types: [Comète]
+  # contenu : C (comètes), UR, L
+  emplacements:
+  - {position: 1, taux: {C: 0.7, UR: 0.3}}
+  - {position: 2, taux: {C: 0.7, UR: 0.3}}
+  - {position: 3, taux: {C: 0.4, UR: 0.6}}
+  - {position: 4, taux: {UR: 0.93, L: 0.07}}
+  - {position: 5, taux: {UR: 0.8, L: 0.2}}
+
+- code: S1B
+  nom: Anneaux Royaux
+  serie: S1
+  nb_cartes: 5
+  image: saturne.webp
+  description: Les quatre planètes géantes et la cour de lunes de Jupiter et Saturne.
+  contenu:
+  - series: [S1]
+    types: [Géante gazeuse, Géante de glaces, Satellite de Jupiter, Satellite de Saturne]
+  # contenu : C, R, UR, L
+  emplacements:
+  - {position: 1, taux: {C: 0.75, R: 0.25}}
+  - {position: 2, taux: {C: 0.75, R: 0.25}}
+  - {position: 3, taux: {C: 0.5, R: 0.5}}
+  - {position: 4, taux: {R: 0.6, UR: 0.4}}
+  - {position: 5, taux: {R: 0.3, UR: 0.62, L: 0.08}}
+
+- code: S1C
+  nom: Océans Gelés
+  serie: S1
+  nb_cartes: 5
+  image: europe.webp
+  description: Lunes glacées à océans cachés, géantes de glaces et confins gelés du Système solaire.
+  contenu:
+  - series: [S1]
+    objets: [europe, ganymede, encelade, titan, mimas, dione, tethys, rhea, japet, uranus, neptune, pluton, charon, ceres, halley, 67p]
+  - series: [S1]
+    types: [Satellite d'Uranus, Satellite de Neptune]
+  # contenu : C, PC (Charon seul), R, UR — pas de Légendaire
+  emplacements:
+  - {position: 1, taux: {C: 0.85, PC: 0.15}}
+  - {position: 2, taux: {C: 0.85, PC: 0.15}}
+  - {position: 3, taux: {C: 0.6, R: 0.4}}
+  - {position: 4, taux: {R: 0.7, UR: 0.3}}
+  - {position: 5, taux: {R: 0.4, UR: 0.6}}
+
+# ---------- Série II : Astéroïdes ----------
+
+- code: S2A
+  nom: Roches Errantes
+  serie: S2
+  nb_cartes: 5
+  image: ast-vesta.webp
+  description: Astéroïdes, comètes, planètes naines et lunes capturées qui vagabondent entre les planètes.
+  contenu:
+  - series: [S2]
+  - series: [S1]
+    types: [Comète, Planète naine]
+  - series: [S1]
+    objets: [phoebe]
+  # contenu : C, PC (Annefrank seul), R, UR, L (Vesta)
+  emplacements:
+  - {position: 1, taux: {C: 0.85, PC: 0.15}}
+  - {position: 2, taux: {C: 0.85, PC: 0.15}}
+  - {position: 3, taux: {C: 0.6, R: 0.4}}
+  - {position: 4, taux: {R: 0.62, UR: 0.38}}
+  - {position: 5, taux: {R: 0.35, UR: 0.57, L: 0.08}}
+
+# ---------- Série III : Nébuleuses (+ objets NGC du même thème) ----------
+
+- code: S3A
+  nom: Piliers Cosmiques
+  serie: S3
+  nb_cartes: 5
+  image: neb-pillars_m16.webp
+  description: Pouponnières d'étoiles — régions HII, nébuleuses sombres et par réflexion, jeunes amas ouverts.
+  contenu:
+  - series: [S3, S4]
+    types: [Région HII, Amas et nébuleuse, Nébuleuse, Nébuleuse en émission, Nébuleuse par réflexion,
+            Nébuleuse obscure, Amas ouvert, Association stellaire]
+  emplacements: *standard
+
+- code: S3B
+  nom: Éclat Supernova
+  serie: S3
+  nb_cartes: 5
+  image: neb-crab_m1.webp
+  description: La fin des étoiles — nébuleuses planétaires, rémanents de supernova et vieux amas globulaires.
+  contenu:
+  - series: [S3, S4]
+    types: [Nébuleuse planétaire, Nébuleuse protoplanétaire, Nébuleuse circumstellaire, Rémanent de supernova,
+            Amas globulaire]
+  emplacements: *standard
+
+# ---------- Série IV : Catalogue NGC ----------
+
+- code: S4A
+  nom: Spirales Lointaines
+  serie: S4
+  nb_cartes: 5
+  image: dso-m83.webp
+  description: Galaxies spirales, elliptiques et en interaction, des paires aux amas de galaxies.
+  contenu:
+  - series: [S4]
+    types: [Galaxie, Galaxie perturbée, Paire de galaxies, Triplet de galaxies, Groupe de galaxies, Amas de galaxies]
+  emplacements: *standard

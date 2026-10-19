@@ -11,6 +11,7 @@ serie:
 boosters:
 - code: S3-STD
   nom: Booster Nébuleuses
+  active: false  # remplacé par les boosters à thème (catalog/boosters.yaml)
   nb_cartes: 5
   image: neb-pillars_m16.webp
   emplacements:

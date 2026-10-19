@@ -37,8 +37,9 @@ app.mount("/media", StaticFiles(directory=config.MEDIA_DIR, check_dir=False), na
 CARD_SELECT = """
     SELECT c.id, c.numero, c.rarete, c.attaque, c.defense, c.vitesse, c.image, c.credit, c.licence, c.variante, c.cadrage,
            o.slug, o.nom, o.type, o.constellation, o.description, o.faits,
-           s.code AS serie, (SELECT count(*) FROM cards x WHERE x.series_id = c.series_id AND NOT x.retired) AS total
+           s.code AS serie, t.total
     FROM cards c JOIN celestial_objects o ON o.id = c.object_id JOIN series s ON s.id = c.series_id
+    JOIN (SELECT series_id, count(*) AS total FROM cards WHERE NOT retired GROUP BY series_id) t ON t.series_id = c.series_id
 """
 
 
@@ -55,13 +56,17 @@ def card_out(r: dict) -> dict:
 
 def boosters_out(conn, where: str = "", params: tuple = ()) -> list[dict]:
     rows = conn.execute(f"""
-        SELECT p.id, p.code, p.nom, p.nb_cartes, p.image, s.code AS serie, ps.position, ps.rarete, ps.probabilite
+        SELECT p.id, p.code, p.nom, p.nb_cartes, p.image, p.description, s.code AS serie,
+               ps.position, ps.rarete, ps.probabilite,
+               (SELECT count(*) FROM pack_cards pc JOIN cards c ON c.id = pc.card_id
+                 WHERE pc.pack_type_id = p.id AND NOT c.retired) AS contenu
         FROM pack_types p JOIN series s ON s.id = p.series_id JOIN pack_slots ps ON ps.pack_type_id = p.id
         WHERE p.active AND s.active {where}
         ORDER BY p.code, ps.position, ps.probabilite DESC""", params).fetchall()
     out: dict[str, dict] = {}
     for r in rows:
         b = out.setdefault(r["code"], {"code": r["code"], "nom": r["nom"], "serie": r["serie"], "nb_cartes": r["nb_cartes"],
+                                       "description": r["description"], "nb_cartes_contenu": r["contenu"] or None,
                                        "image_url": f"/media/{r['image']}" if r["image"] else None, "emplacements": {}})
         b["emplacements"].setdefault(r["position"], {})[r["rarete"]] = float(r["probabilite"])
     for b in out.values():
@@ -121,6 +126,27 @@ def get_series(code: str):
 def list_boosters():
     with db.connection() as conn:
         return boosters_out(conn)
+
+
+def _pack_pool_sql(pack_id: int) -> tuple[str, tuple]:
+    """Cartes qu'un booster peut donner : son contenu (pack_cards) s'il en a un, sinon toute sa série."""
+    return ("""(c.id IN (SELECT card_id FROM pack_cards WHERE pack_type_id = %(p)s)
+               OR (NOT EXISTS (SELECT 1 FROM pack_cards WHERE pack_type_id = %(p)s)
+                   AND c.series_id = (SELECT series_id FROM pack_types WHERE id = %(p)s)))""", {"p": pack_id})
+
+
+@app.get("/api/boosters/{code}/cartes")
+def booster_cards(code: str):
+    """Contenu d'un booster : les cartes qu'il peut donner (une carte peut figurer dans plusieurs boosters)."""
+    with db.connection() as conn:
+        pack = conn.execute("""SELECT p.id FROM pack_types p JOIN series s ON s.id = p.series_id
+                               WHERE p.code = %s AND p.active AND s.active""", (code,)).fetchone()
+        if not pack:
+            raise HTTPException(404, "Booster inconnu")
+        where, params = _pack_pool_sql(pack["id"])
+        rows = conn.execute(CARD_SELECT + f" WHERE NOT c.retired AND {where} ORDER BY s.code, c.numero",
+                            params).fetchall()
+        return [card_out(r) for r in rows]
 
 
 class PlayerIn(BaseModel):
@@ -183,7 +209,8 @@ def open_booster(code: str, player: dict = Depends(current_player)):
         for r in slot_rows:
             slots.setdefault(r["position"], {})[r["rarete"]] = float(r["probabilite"])
         pool: dict[str, list[int]] = {}
-        for r in conn.execute("SELECT id, rarete FROM cards WHERE series_id = %s AND NOT retired", (pack["series_id"],)).fetchall():
+        where, params = _pack_pool_sql(pack["id"])
+        for r in conn.execute(f"SELECT c.id, c.rarete FROM cards c WHERE NOT c.retired AND {where}", params).fetchall():
             pool.setdefault(r["rarete"], []).append(r["id"])
 
         ids = draw_pack([slots[k] for k in sorted(slots)], pool)
