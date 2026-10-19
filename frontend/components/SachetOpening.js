@@ -1,6 +1,7 @@
 "use client";
 import { useEffect, useRef, useState } from "react";
 import Carte, { ORDER, RAR } from "@/components/Carte";
+import PackArt from "@/components/PackArt";
 import PhotoDive from "@/components/PhotoDive";
 import { coffretTheme } from "@/lib/coffrets";
 
@@ -10,7 +11,6 @@ import { coffretTheme } from "@/lib/coffrets";
    Styles : app/sachet.css (.sa-*). */
 
 const sleep = ms => new Promise(r => setTimeout(r, ms));
-const ROMAN = ["", "I", "II", "III", "IV", "V", "VI", "VII", "VIII", "IX", "X"];
 const BIG_TIERS = new Set(["R", "UR", "L"]);
 const SWIPE = 70; // px à parcourir pour envoyer la carte
 
@@ -35,7 +35,6 @@ export default function SachetOpening({ booster, onOpen, onDone, onError, disabl
   useEffect(() => () => { alive.current = false; }, []);
 
   const theme = coffretTheme(booster);
-  const roman = ROMAN[Number(String(booster?.serie || "").replace(/\D/g, ""))] || booster?.serie || "I";
   const n = cards.length;
   const top = cards[Math.min(idx, n - 1)];
   const best = cards[n - 1];
@@ -107,19 +106,7 @@ export default function SachetOpening({ booster, onOpen, onDone, onError, disabl
           <button className="sa-pack" type="button" onClick={tear} disabled={disabled || phase !== "idle"}
             data-phase={phase} aria-label={`Déchirer ${booster?.nom || "le booster"}`}>
             <span className="sa-strip"><i className="ph ph-scissors" aria-hidden="true" />Déchirer ici</span>
-            <span className="sa-body">
-              <span className="sa-foil" />
-              <span className="sa-brand">ASTRODEX</span>
-              <span className="sa-port">
-                {theme.image && (
-                  // eslint-disable-next-line @next/next/no-img-element
-                  <img className={`sa-art ${theme.cadrage}`} src={theme.image} alt="" draggable={false} />
-                )}
-              </span>
-              <span className="sa-title"><small>BOOSTER</small><b>{theme.titre}</b></span>
-              <span className="sa-foot"><span>SÉRIE {roman}</span><span>{booster?.nb_cartes || 5} CARTES</span></span>
-              <span className="sa-seal" />
-            </span>
+            <span className="sa-body"><PackArt theme={theme} /></span>
             <span className="sa-leak" />
           </button>
           {phase === "idle" && (

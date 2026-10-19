@@ -48,7 +48,7 @@ export default function BoosterCarousel({ boosters, selected, onSelect, leaving 
               style={{ ...cfStyle(off), ...(jumped ? { transition: "none" } : null) }}
               aria-label={`${b.nom} — ${b.nb_cartes} cartes`} aria-current={isActive || undefined}
               onClick={() => cf.setActive(i)}>
-              <PackArt theme={theme} roman={toRoman(b.serie)} nbCartes={b.nb_cartes} />
+              <PackArt theme={theme} />
             </button>
           );
         })}
