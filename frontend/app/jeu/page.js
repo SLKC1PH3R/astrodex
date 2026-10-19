@@ -75,7 +75,7 @@ export default function PaquetsPage() {
             {error && <p className="ax-notice"><strong>Oups.</strong> {error}</p>}
             {booster && (
               <button className={`btn btn-primary pk-open-series${leaving ? " is-leaving" : ""}`} type="button" disabled={noPacks || leaving} onClick={openSeries}>
-                <i className="ph ph-door-open" />Ouvrir cette série
+                <i className="ph ph-door-open" />Ouvrir ce booster
               </button>
             )}
             <div className="ax-draw-foot">
@@ -102,7 +102,7 @@ export default function PaquetsPage() {
               {result && (
                 <div className="ax-actions" style={{ justifyContent: "center" }}>
                   <button className="btn btn-primary" type="button" disabled={noPacks} onClick={() => setStage("picker")}><i className="ph ph-package" />Choisir un autre paquet</button>
-                  <button className="btn btn-secondary" type="button" onClick={backToSeries}>Changer de série</button>
+                  <button className="btn btn-secondary" type="button" onClick={backToSeries}>Changer de booster</button>
                   <button className="btn btn-secondary" type="button" onClick={() => router.push("/jeu/collection")}>Voir la collection</button>
                 </div>
               )}

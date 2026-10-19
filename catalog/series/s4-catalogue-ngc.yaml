@@ -12,6 +12,7 @@ serie:
 boosters:
 - code: S4-STD
   nom: Booster Catalogue NGC
+  active: false  # remplacé par les boosters à thème (catalog/boosters.yaml)
   nb_cartes: 5
   image: ngc-booster.webp
   emplacements:

@@ -5,6 +5,9 @@
 
 Idempotent : objets mis à jour par slug, séries par code, cartes par (série, numéro),
 boosters par code. Une carte absente du YAML est marquée retired (jamais supprimée).
+
+Boosters à thème (catalog/boosters.yaml) : leur contenu est calculé à partir de règles
+(séries, types d'objets, slugs) et écrit dans pack_cards ; une carte peut être dans plusieurs boosters.
 """
 from __future__ import annotations
 
@@ -72,6 +75,25 @@ class BoosterIn(BaseModel):
         return self
 
 
+class RuleIn(BaseModel):
+    """Une règle de contenu : une carte correspond si elle satisfait tous les filtres renseignés."""
+    series: list[str] | None = None
+    types: list[str] | None = None
+    objets: list[str] | None = None
+
+    @model_validator(mode="after")
+    def not_empty(self):
+        if not (self.series or self.types or self.objets):
+            raise ValueError("une règle de contenu doit filtrer sur series, types ou objets")
+        return self
+
+
+class ThemedBoosterIn(BoosterIn):
+    serie: str
+    description: str = ""
+    contenu: list[RuleIn] = Field(min_length=1)
+
+
 class Stats(BaseModel):
     attaque: int = Field(ge=0, le=100)
     defense: int = Field(ge=0, le=100)
@@ -100,6 +122,24 @@ class SeriesFile(BaseModel):
 class Catalog(BaseModel):
     objets: list[ObjectIn]
     series: list[SeriesFile]
+    boosters: list[ThemedBoosterIn] = []
+
+
+def themed_pools(cat: Catalog) -> dict[str, list[tuple[str, int, str]]]:
+    """Contenu de chaque booster à thème : liste de (code série, numéro, rareté), dans l'ordre du catalogue."""
+    types = {o.slug: o.type for o in cat.objets}
+    out: dict[str, list[tuple[str, int, str]]] = {}
+    for b in cat.boosters:
+        pool = []
+        for sf in cat.series:
+            for c in sf.cartes:
+                t = types.get(c.objet)
+                if any((r.series is None or sf.serie.code in r.series)
+                       and (r.types is None or t in r.types)
+                       and (r.objets is None or c.objet in r.objets) for r in b.contenu):
+                    pool.append((sf.serie.code, c.numero, c.rarete))
+        out[b.code] = pool
+    return out
 
 
 def load_catalog(catalog_dir: Path = config.CATALOG_DIR, media_dir: Path = config.MEDIA_DIR) -> Catalog:
@@ -108,7 +148,9 @@ def load_catalog(catalog_dir: Path = config.CATALOG_DIR, media_dir: Path = confi
     try:
         objets = yaml.safe_load((catalog_dir / "objects.yaml").read_text(encoding="utf-8"))["objets"]
         series = [yaml.safe_load(f.read_text(encoding="utf-8")) for f in sorted((catalog_dir / "series").glob("*.yaml"))]
-        cat = Catalog(objets=objets, series=series)
+        bfile = catalog_dir / "boosters.yaml"
+        boosters = yaml.safe_load(bfile.read_text(encoding="utf-8"))["boosters"] if bfile.is_file() else []
+        cat = Catalog(objets=objets, series=series, boosters=boosters)
     except (OSError, KeyError, yaml.YAMLError) as exc:
         raise ValueError(f"catalogue illisible : {exc}") from exc
     except ValidationError as exc:
@@ -138,9 +180,50 @@ def load_catalog(catalog_dir: Path = config.CATALOG_DIR, media_dir: Path = confi
                 for r in s.taux:
                     if r not in rarities:
                         errors.append(f"{b.code} emplacement {s.position} : aucune carte de rareté {r} dans {code}")
+    errors += _check_themed(cat, media_dir)
     if errors:
         raise ValueError("catalogue invalide :\n- " + "\n- ".join(errors))
     return cat
+
+
+def _check_themed(cat: Catalog, media_dir: Path) -> list[str]:
+    """Boosters à thème : règles cohérentes, contenu suffisant, et aucune carte orpheline."""
+    errors: list[str] = []
+    if not cat.boosters:
+        return errors
+    series_codes = {s.serie.code for s in cat.series}
+    known_types = {o.type for o in cat.objets}
+    known_slugs = {o.slug for o in cat.objets}
+    all_codes = [b.code for sf in cat.series for b in sf.boosters] + [b.code for b in cat.boosters]
+    dup = sorted({c for c in all_codes if all_codes.count(c) > 1})
+    if dup:
+        errors.append(f"codes de booster en double : {dup}")
+    pools = themed_pools(cat)
+    for b in cat.boosters:
+        if b.serie not in series_codes:
+            errors.append(f"{b.code} : série de rattachement inconnue « {b.serie} »")
+        if b.image and not (media_dir / b.image).is_file():
+            errors.append(f"{b.code} : image introuvable {b.image}")
+        for r in b.contenu:
+            errors += [f"{b.code} : série inconnue « {x} » dans le contenu" for x in r.series or [] if x not in series_codes]
+            errors += [f"{b.code} : type d'objet inconnu « {x} »" for x in r.types or [] if x not in known_types]
+            errors += [f"{b.code} : objet inconnu « {x} »" for x in r.objets or [] if x not in known_slugs]
+        pool = pools[b.code]
+        if len(pool) < b.nb_cartes:
+            errors.append(f"{b.code} : contenu de {len(pool)} carte(s), moins que les {b.nb_cartes} du paquet")
+        rarities = {r for _, _, r in pool}
+        for s in b.emplacements:
+            for r in s.taux:
+                if r not in rarities:
+                    errors.append(f"{b.code} emplacement {s.position} : aucune carte de rareté {r} dans son contenu")
+    # chaque carte d'une série active doit pouvoir sortir d'au moins un booster à thème actif
+    covered = {(sc, n) for b in cat.boosters if b.active for sc, n, _ in pools[b.code]}
+    orphans = [(sf.serie.code, c.numero, c.objet) for sf in cat.series if sf.serie.active
+               for c in sf.cartes if (sf.serie.code, c.numero) not in covered]
+    if orphans:
+        sample = ", ".join(f"{sc} n°{n} ({o})" for sc, n, o in orphans[:10])
+        errors.append(f"{len(orphans)} carte(s) dans aucun booster à thème : {sample}{' …' if len(orphans) > 10 else ''}")
+    return errors
 
 
 def import_catalog(conn, cat: Catalog) -> dict:
@@ -198,6 +281,31 @@ def import_catalog(conn, cat: Catalog) -> dict:
                         conn.execute("INSERT INTO pack_slots (pack_type_id, position, rarete, probabilite) VALUES (%s, %s, %s, %s)",
                                      (pid, slot.position, r, p))
                 stats["boosters"] += 1
+
+        if cat.boosters:
+            series_ids = {r["code"]: r["id"] for r in conn.execute("SELECT id, code FROM series").fetchall()}
+            card_ids = {(r["code"], r["numero"]): r["id"] for r in conn.execute(
+                "SELECT c.id, s.code, c.numero FROM cards c JOIN series s ON s.id = c.series_id WHERE NOT c.retired").fetchall()}
+            pools = themed_pools(cat)
+            stats["contenus"] = 0
+            for b in cat.boosters:
+                pid = conn.execute("""
+                    INSERT INTO pack_types (series_id, code, nom, nb_cartes, image, active, description)
+                    VALUES (%s, %s, %s, %s, %s, %s, %s)
+                    ON CONFLICT (code) DO UPDATE SET series_id = EXCLUDED.series_id, nom = EXCLUDED.nom,
+                        nb_cartes = EXCLUDED.nb_cartes, image = EXCLUDED.image, active = EXCLUDED.active,
+                        description = EXCLUDED.description
+                    RETURNING id""", (series_ids[b.serie], b.code, b.nom, b.nb_cartes, b.image, b.active, b.description)).fetchone()["id"]
+                conn.execute("DELETE FROM pack_slots WHERE pack_type_id = %s", (pid,))
+                for slot in b.emplacements:
+                    for r, p in slot.taux.items():
+                        conn.execute("INSERT INTO pack_slots (pack_type_id, position, rarete, probabilite) VALUES (%s, %s, %s, %s)",
+                                     (pid, slot.position, r, p))
+                ids = [card_ids[(sc, n)] for sc, n, _ in pools[b.code]]
+                conn.execute("DELETE FROM pack_cards WHERE pack_type_id = %s", (pid,))
+                conn.execute("INSERT INTO pack_cards (pack_type_id, card_id) SELECT %s, unnest(%s::int[])", (pid, ids))
+                stats["boosters"] += 1
+                stats["contenus"] += len(ids)
     return stats
 
 
@@ -213,6 +321,12 @@ def main() -> None:
         sys.exit(1)
     n_cards = sum(len(s.cartes) for s in cat.series)
     print(f"Catalogue valide : {len(cat.objets)} objets, {len(cat.series)} série(s), {n_cards} cartes")
+    if cat.boosters:
+        pools = themed_pools(cat)
+        shared = n_cards and sum(len(p) for p in pools.values()) - len({(s, n) for p in pools.values() for s, n, _ in p})
+        for b in cat.boosters:
+            print(f"  {b.code:4} {b.nom:<20} {len(pools[b.code]):>5} cartes")
+        print(f"  ({shared} présences en plus d'une carte dans plusieurs boosters)")
     if args.check:
         return
     import psycopg

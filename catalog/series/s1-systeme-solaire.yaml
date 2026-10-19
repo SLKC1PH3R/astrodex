@@ -12,6 +12,7 @@ serie:
 boosters:
 - code: S1-STD
   nom: Booster Système solaire
+  active: false  # remplacé par les boosters à thème (catalog/boosters.yaml)
   nb_cartes: 5
   image: saturne.webp
   emplacements:
