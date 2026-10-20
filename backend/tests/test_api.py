@@ -62,6 +62,10 @@ def test_player_opens_boosters_and_collection_grows(client):
             total += 5
     me = client.get("/api/me", headers=h).json()
     assert me["boosters_ouverts"] == 21 and me["cartes_total"] == total
+    prog = {b["code"]: b for b in client.get("/api/me/progression", headers=h).json()}
+    assert sorted(prog) == ["S1A", "S1B", "S1C", "S2A", "S3A", "S3B", "S4A"]
+    assert prog["S1C"]["total"] == 23 and 1 <= prog["S1C"]["possedees"] <= 23
+    assert client.get("/api/me/progression").status_code == 401
     coll = client.get("/api/me/collection", headers=h).json()
     assert sum(c["quantite"] for c in coll) == total
 

@@ -1,6 +1,7 @@
 /* Menu de l'interface joueur. href relatif à /jeu ; "empty" = texte de la page tant que la fonctionnalité n'existe pas. */
 export const MENU = [
   { slug: "",           label: "Paquets",           icon: "ph-package" },
+  { slug: "boosters",   label: "Boosters",          icon: "ph-stack" },
   { slug: "collection", label: "Collection",        icon: "ph-cards" },
   { slug: "atlas",      label: "Atlas",             icon: "ph-planet" },
   { slug: "echanges",   label: "Échanges",          icon: "ph-arrows-left-right", empty: "Propose tes doubles à d'autres joueurs. Tes échanges en cours apparaîtront ici." },
