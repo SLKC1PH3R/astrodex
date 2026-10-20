@@ -12,6 +12,7 @@ export function useCoverflow(length, { initial = 0, loop = false } = {}) {
   const [pos, setPos] = useState(() => Math.max(0, Math.min(length - 1, initial)));
   const drag = useRef(null);
   const wheelLock = useRef(0);
+  const lastSwipe = useRef(0); // instant du dernier glisser : le clic qui suit n'est pas un choix
   const active = length ? (looping ? mod(pos, length) : pos) : 0;
 
   const setActive = i => {
@@ -38,7 +39,7 @@ export function useCoverflow(length, { initial = 0, loop = false } = {}) {
       const d = drag.current; drag.current = null;
       if (!d) return;
       const dx = e.clientX - d.x;
-      if (Math.abs(dx) > 40) (dx > 0 ? prev() : next());
+      if (Math.abs(dx) > 40) { lastSwipe.current = performance.now(); dx > 0 ? prev() : next(); }
     },
     onPointerCancel: () => { drag.current = null; },
     onWheel: e => {
@@ -53,7 +54,8 @@ export function useCoverflow(length, { initial = 0, loop = false } = {}) {
       else if (e.key === "ArrowLeft") { e.preventDefault(); prev(); }
     },
   };
-  return { active, pos, setActive, prev, next, offset, pointer, looping };
+  const justSwiped = () => performance.now() - lastSwipe.current < 350;
+  return { active, pos, setActive, prev, next, offset, pointer, looping, justSwiped };
 }
 
 /* Transform inline d'un élément du carrousel selon son décalage à l'actif (-N..+N). */

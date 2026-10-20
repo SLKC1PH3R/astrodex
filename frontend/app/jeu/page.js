@@ -82,13 +82,10 @@ export default function PaquetsPage() {
             <div className="pv-layout">
               <div className="pv-carousel">
                 <BoosterCarousel boosters={boosters} selected={booster} leaving={leaving}
-                  onSelect={b => { if (b.code !== booster?.code) setBooster(b); }} />
+                  onSelect={b => { if (b.code !== booster?.code) setBooster(b); }} onChoose={openSeries} />
               </div>
               {booster && (
                 <BoosterPanel booster={booster} owned={owned}>
-                  <button className={`btn btn-primary pk-open-series${leaving ? " is-leaving" : ""}`} type="button" disabled={noPacks || leaving} onClick={openSeries}>
-                    <i className="ph ph-door-open" />Ouvrir ce booster
-                  </button>
                   {left != null && <span>{noPacks ? "Reviens demain pour de nouveaux boosters" : `${plural(left, "booster")} disponible${left > 1 ? "s" : ""} aujourd'hui`}</span>}
                 </BoosterPanel>
               )}
