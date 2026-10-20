@@ -11,7 +11,7 @@ const toRoman = code => ROMAN[Number(String(code || "").replace(/\D/g, ""))] || 
    flèches du clavier ou toucher un paquet latéral le ramène au centre ; le paquet centré est
    celui transmis à onSelect. leaving : le paquet choisi est aspiré (trou noir) et les autres
    sont attirés vers lui. Styles : app/coverflow.css (.cv-*, .pka-*). */
-export default function BoosterCarousel({ boosters, selected, onSelect, leaving = false }) {
+export default function BoosterCarousel({ boosters, selected, onSelect, onChoose, leaving = false }) {
   const n = boosters?.length || 0;
   const initial = Math.max(0, boosters?.findIndex(b => b.code === selected?.code) ?? 0);
   const cf = useCoverflow(n, { initial, loop: true });
@@ -31,9 +31,13 @@ export default function BoosterCarousel({ boosters, selected, onSelect, leaving 
   }
   return (
     <div className={`cv-wrap${leaving ? " cv-leaving" : ""}`}>
-      <span className="cv-hint">Choisis un booster</span>
+      <span className="cv-hint">Touche le booster du centre pour le choisir</span>
       <div className="cv-stage" tabIndex={0} role="group" aria-roledescription="carrousel"
-        aria-label="Séries disponibles" {...cf.pointer}>
+        aria-label="Boosters disponibles" {...cf.pointer}
+        onKeyDown={e => {
+          if ((e.key === "Enter" || e.key === " ") && e.target === e.currentTarget) { e.preventDefault(); onChoose?.(boosters[cf.active]); }
+          else cf.pointer.onKeyDown(e);
+        }}>
         {boosters.map((b, i) => {
           const theme = coffretTheme(b);
           const off = cf.offset(i);
@@ -45,10 +49,14 @@ export default function BoosterCarousel({ boosters, selected, onSelect, leaving 
           return (
             <button key={b.code} type="button" tabIndex={isActive ? 0 : -1}
               className={`cv-item${isActive ? " is-active" : ""}${isActive && leaving ? " cv-suck" : ""}`}
-              style={{ ...cfStyle(off), ...(jumped ? { transition: "none" } : null) }}
-              aria-label={`${b.nom} — ${b.nb_cartes} cartes`} aria-current={isActive || undefined}
-              onClick={() => cf.setActive(i)}>
+              style={{ ...cfStyle(off), ...(jumped ? { transition: "none" } : null), "--cc": theme.couleur }}
+              aria-label={isActive ? `Choisir le booster ${theme.titre}` : `Voir le booster ${theme.titre}`} aria-current={isActive || undefined}
+              onClick={() => {
+                if (cf.justSwiped()) return;
+                isActive ? onChoose?.(b) : cf.setActive(i);
+              }}>
               <PackArt theme={theme} />
+              {isActive && onChoose && !leaving && <span className="cv-pick" aria-hidden="true"><i className="ph ph-hand-pointing" />Choisir</span>}
             </button>
           );
         })}

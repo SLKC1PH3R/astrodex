@@ -29,8 +29,8 @@ export default function PackRing({ count = 20, theme, onPick, intro = true }) {
 
     const measure = () => {
       const w = stage.clientWidth;
-      s.R = Math.max(150, Math.min(w * 0.4, 520));
-      s.tilt = s.R * 0.44; // écart vertical entre l'avant et le fond de l'anneau : on le voit d'en haut
+      s.R = Math.max(150, Math.min(w * 0.48, 640));
+      s.tilt = s.R * 0.5; // écart vertical entre l'avant et le fond de l'anneau : on le voit d'en haut
       s.last = null; // force un nouveau rendu
     };
     const ro = new ResizeObserver(measure); ro.observe(stage); measure();
@@ -68,7 +68,7 @@ export default function PackRing({ count = 20, theme, onPick, intro = true }) {
           const d = (Math.cos(a) + 1) / 2;               // 1 = devant, 0 = au fond
           const x = Math.sin(a) * s.R * e;
           const y = (d - 0.5) * s.tilt * e;              // l'avant descend, le fond remonte : l'anneau est vu d'en haut
-          const scale = (0.34 + 0.66 * Math.pow(d, 1.6)) * (0.15 + 0.85 * e);
+          const scale = (0.3 + 0.7 * Math.pow(d, 2.2)) * (0.15 + 0.85 * e); // décroît vite : les voisins se chevauchent moins
           el.style.transform = `translate(-50%, -50%) translate(${x.toFixed(1)}px, ${y.toFixed(1)}px) scale(${scale.toFixed(4)})`;
           el.style.zIndex = String(Math.round(d * 1000));
           el.style.opacity = String(Math.min(1, p * 2.5)); // opaques ; seuls les paquets du fond sont assombris
