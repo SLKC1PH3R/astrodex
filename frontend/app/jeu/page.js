@@ -4,6 +4,7 @@ import { useRouter } from "next/navigation";
 import { ORDER, RAR } from "@/components/Carte";
 import SachetOpening from "@/components/SachetOpening";
 import BoosterCarousel from "@/components/BoosterCarousel";
+import BoosterPanel from "@/components/BoosterPanel";
 import PackPicker from "@/components/PackPicker";
 import BlackHole, { BLACK_HOLE } from "@/components/BlackHole";
 import Topbar from "@/components/Topbar";
@@ -28,12 +29,19 @@ export default function PaquetsPage() {
   const [error, setError] = useState(null);
   const [odds, setOdds] = useState(false);
   const [run, setRun] = useState(0); // remonte la scène pour rouvrir
+  const [owned, setOwned] = useState(null); // ids des cartes possédées (progression par booster)
 
   useEffect(() => {
     api.boosters()
       .then(list => { setBoosters(list); list.length ? setBooster(list[0]) : setError("Aucun booster actif dans le catalogue."); })
       .catch(() => setError("Le serveur de jeu ne répond pas. Réessaie dans un instant."));
   }, []);
+
+  // collection du joueur : rechargée en revenant au choix du booster (après une ouverture)
+  useEffect(() => {
+    if (stage !== "series") return;
+    api.collection().then(list => setOwned(new Set(list.map(c => c.id)))).catch(() => {});
+  }, [stage, stats?.cartes_total]);
 
   const left = stats?.boosters_restants;
   const noPacks = left === 0;
@@ -70,16 +78,20 @@ export default function PaquetsPage() {
       <section className="ax-stage">
         {stage === "series" && (
           <>
-            <BoosterCarousel boosters={boosters} selected={booster} leaving={leaving}
-              onSelect={b => { if (b.code !== booster?.code) setBooster(b); }} />
             {error && <p className="ax-notice"><strong>Oups.</strong> {error}</p>}
-            {booster && (
-              <button className={`btn btn-primary pk-open-series${leaving ? " is-leaving" : ""}`} type="button" disabled={noPacks || leaving} onClick={openSeries}>
-                <i className="ph ph-door-open" />Ouvrir ce booster
-              </button>
-            )}
-            <div className="ax-draw-foot">
-              <div>{left == null ? "" : noPacks ? "Reviens demain pour de nouveaux boosters" : `${plural(left, "booster")} disponible${left > 1 ? "s" : ""} aujourd'hui`}</div>
+            <div className="pv-layout">
+              <div className="pv-carousel">
+                <BoosterCarousel boosters={boosters} selected={booster} leaving={leaving}
+                  onSelect={b => { if (b.code !== booster?.code) setBooster(b); }} />
+              </div>
+              {booster && (
+                <BoosterPanel booster={booster} owned={owned}>
+                  <button className={`btn btn-primary pk-open-series${leaving ? " is-leaving" : ""}`} type="button" disabled={noPacks || leaving} onClick={openSeries}>
+                    <i className="ph ph-door-open" />Ouvrir ce booster
+                  </button>
+                  {left != null && <span>{noPacks ? "Reviens demain pour de nouveaux boosters" : `${plural(left, "booster")} disponible${left > 1 ? "s" : ""} aujourd'hui`}</span>}
+                </BoosterPanel>
+              )}
             </div>
           </>
         )}

@@ -8,6 +8,7 @@ import "./coffret.css";
 import "./sachet.css";
 import "./coverflow.css";
 import "./packart.css";
+import "./boosterpanel.css";
 import "./packpicker.css";
 import "./packring.css";
 import "./blackhole.css";

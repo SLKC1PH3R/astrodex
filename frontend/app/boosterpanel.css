@@ -1,0 +1,55 @@
+/* Page Paquets, maquette « Vitrine » : carrousel à gauche, fiche du booster à droite
+   (components/BoosterPanel.js). Importé dans app/layout.js. --cc = couleur du booster. */
+
+.pv-layout { width: 100%; max-width: 1240px; display: grid; grid-template-columns: minmax(0, 1fr) minmax(320px, 390px); gap: 28px; align-items: start; }
+.pv-carousel { min-width: 0; display: grid; justify-items: center; gap: 10px; padding-top: 10px; }
+@media (max-width: 1100px) { .pv-layout { grid-template-columns: minmax(0, 1fr); } .bp-panel { max-width: 560px; justify-self: center; width: 100%; } }
+
+.bp-panel { box-sizing: border-box; padding: 24px; border-radius: 18px; background: var(--color-surface, #232532);
+  box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--color-text) 9%, transparent); display: flex; flex-direction: column; gap: 18px; min-width: 0; }
+.bp-head { display: flex; flex-direction: column; gap: 8px; }
+.bp-tag { align-self: flex-start; padding: 4px 10px; border-radius: 999px; font-size: 12px; font-weight: 600; letter-spacing: .6px;
+  background: color-mix(in srgb, var(--cc) 18%, transparent); color: color-mix(in srgb, var(--cc) 55%, white); }
+.bp-title { margin: 0; font-family: "Russo One", var(--font-heading); font-weight: 400; font-size: 30px; letter-spacing: .5px; line-height: 1.1; }
+.bp-desc { margin: 0; font-size: 14px; line-height: 1.55; color: var(--color-neutral-300); }
+
+.bp-stats { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 10px; }
+.bp-stats > div { padding: 12px; border-radius: 12px; background: color-mix(in srgb, var(--color-bg) 55%, var(--color-surface)); display: flex; flex-direction: column; gap: 2px; }
+.bp-stats b { font-size: 20px; font-weight: 600; font-variant-numeric: tabular-nums; }
+.bp-stats span { font-size: 12px; color: var(--color-neutral-400); }
+
+.bp-gallery-wrap { display: flex; flex-direction: column; gap: 10px; min-width: 0; }
+.bp-label { display: flex; justify-content: space-between; align-items: baseline; gap: 8px; flex-wrap: wrap; font-size: 12px; }
+.bp-label > span:first-child { font-weight: 600; letter-spacing: .8px; color: var(--color-neutral-400); }
+.bp-counts { color: var(--color-neutral-300); }
+.bp-counts b { font-weight: 600; }
+.bp-empty { margin: 0; font-size: 13px; color: var(--color-neutral-400); }
+
+/* Galerie : piste qui défile en boucle (contenu doublé), pause au survol ou au focus */
+.bp-gallery { margin: 0 -24px; padding: 6px 24px 10px; overflow: hidden; }
+.bp-gallery.is-loop { -webkit-mask: linear-gradient(90deg, transparent, #000 9%, #000 91%, transparent);
+  mask: linear-gradient(90deg, transparent, #000 9%, #000 91%, transparent); }
+.bp-track { display: flex; gap: 12px; width: max-content; }
+.bp-gallery.is-loop .bp-track { animation: bp-scroll var(--dur, 30s) linear infinite; }
+.bp-gallery.is-loop:hover .bp-track, .bp-gallery.is-loop:focus-within .bp-track { animation-play-state: paused; }
+@keyframes bp-scroll { to { transform: translateX(calc(-50% - 6px)); } }
+.bp-card { flex: none; width: 122px; }
+.bp-skeleton { display: flex; gap: 12px; }
+.bp-skeleton i { flex: none; width: 122px; aspect-ratio: 63 / 88; border-radius: 10px; background: color-mix(in srgb, var(--color-text) 7%, transparent); animation: bp-pulse 1.2s ease-in-out infinite alternate; }
+@keyframes bp-pulse { to { opacity: .45; } }
+
+.bp-progress { display: flex; flex-direction: column; gap: 6px; font-size: 13px; }
+.bp-progress > div:first-child { display: flex; justify-content: space-between; }
+.bp-progress span { color: var(--color-neutral-400); }
+.bp-progress b { font-weight: 600; font-variant-numeric: tabular-nums; }
+.bp-bar { height: 8px; border-radius: 4px; background: color-mix(in srgb, var(--color-text) 9%, transparent); overflow: hidden; }
+.bp-bar i { display: block; height: 100%; min-width: 2px; border-radius: inherit; background: var(--cc); transition: width .5s; }
+
+.bp-actions { display: flex; flex-direction: column; gap: 10px; align-items: stretch; text-align: center; font-size: 13px; color: var(--color-neutral-400); }
+.bp-actions .pk-open-series { margin: 0; justify-content: center; min-height: 52px; font-size: 16px; }
+
+@media (prefers-reduced-motion: reduce) {
+  .bp-gallery.is-loop { overflow-x: auto; }
+  .bp-gallery.is-loop .bp-track { animation: none; }
+  .bp-skeleton i { animation: none; }
+}
