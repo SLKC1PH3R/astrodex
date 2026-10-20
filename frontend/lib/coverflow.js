@@ -63,11 +63,12 @@ export function cfStyle(offset) {
   const tz = -abs * 90;
   const ry = sign * Math.min(abs, 1) * 32;
   const scale = Math.max(0.55, 1 - abs * 0.1);
-  const opacity = abs > 3.4 ? 0 : Math.max(0, 1 - abs * 0.24);
+  const opacity = abs > 3.4 ? 0 : 1; // opaques : les paquets latéraux sont assombris par un voile (--dim)
   return {
     transform: `translateX(${tx}px) translateZ(${tz}px) rotateY(${-ry}deg) scale(${scale})`,
     opacity, zIndex: 100 - Math.round(abs * 10),
     pointerEvents: abs > 3.4 ? "none" : "auto",
     "--pull": `${-offset * 140}px`,
+    "--dim": Math.min(0.62, abs * 0.22).toFixed(2),
   };
 }

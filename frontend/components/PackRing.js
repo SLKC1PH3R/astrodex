@@ -71,8 +71,8 @@ export default function PackRing({ count = 20, theme, onPick, intro = true }) {
           const scale = (0.34 + 0.66 * Math.pow(d, 1.6)) * (0.15 + 0.85 * e);
           el.style.transform = `translate(-50%, -50%) translate(${x.toFixed(1)}px, ${y.toFixed(1)}px) scale(${scale.toFixed(4)})`;
           el.style.zIndex = String(Math.round(d * 1000));
-          el.style.opacity = String(Math.min(1, p * 2.5) * (0.22 + 0.78 * Math.pow(d, 0.8)));
-          el.style.setProperty("--dim", (0.68 * (1 - d)).toFixed(3)); // voile sombre au fond (app/packring.css)
+          el.style.opacity = String(Math.min(1, p * 2.5)); // opaques ; seuls les paquets du fond sont assombris
+          el.style.setProperty("--dim", (0.78 * Math.pow(1 - d, 0.8)).toFixed(3)); // voile sombre (app/packring.css)
         }
         const f = mod(Math.round(-s.rot / step), count);
         if (f !== s.front) { s.front = f; setFront(f); }

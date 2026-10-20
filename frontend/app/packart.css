@@ -5,7 +5,7 @@
 .pka-pack { position: relative; display: block; width: 100%; height: 100%; container-type: inline-size;
   overflow: hidden; border-radius: 6px; background: var(--pk-bg, #0b0d2a);
   font-family: "Exo 2", var(--font-sans, sans-serif); color: #fff; text-align: left;
-  box-shadow: 0 18px 36px -14px rgba(0,0,0,.85), 0 0 46px -14px var(--pk-glow, transparent); }
+  box-shadow: 0 18px 36px -14px rgba(0,0,0,.85), 0 0 34px -16px var(--pk-glow, transparent); }
 
 /* Illustration : de 112 px (29,47cqw) du haut à 46 px (12,1cqw) du bas */
 .pka-window { position: absolute; left: 0; right: 0; top: 29.47cqw; bottom: 12.1cqw; overflow: hidden; }
@@ -60,6 +60,6 @@
 
 /* Reflet métallisé et bombé du sachet */
 .pka-sheen { position: absolute; inset: 0; pointer-events: none; mix-blend-mode: screen;
-  background: linear-gradient(112deg, transparent 26%, rgba(255,255,255,.16) 36%, transparent 46%, transparent 64%, rgba(255,255,255,.1) 72%, transparent 80%); }
+  background: linear-gradient(112deg, transparent 26%, rgba(255,255,255,.09) 36%, transparent 46%, transparent 64%, rgba(255,255,255,.05) 72%, transparent 80%); }
 .pka-edge { position: absolute; inset: 0; pointer-events: none; border-radius: inherit;
   box-shadow: inset 2.1cqw 0 3.68cqw -1.58cqw rgba(255,255,255,.28), inset -2.63cqw 0 4.21cqw -1.58cqw rgba(0,0,0,.45); }
