@@ -1,4 +1,4 @@
-import { PACK_DESIGNS, fallbackDesign } from "@/lib/packDesigns";
+import { PACK_DESIGNS, SERIES_DESIGNS, fallbackDesign } from "@/lib/packDesigns";
 
 /* Visuel d'un paquet scellé, au design des maquettes « booster à thème » : bandeaux sertis à motif,
    logo, code du booster, grande illustration composée, « BOOSTER À THÈME » et titre biseauté.
@@ -9,7 +9,7 @@ import { PACK_DESIGNS, fallbackDesign } from "@/lib/packDesigns";
 const tag = theme => (/^S\d+[A-Z]$/.test(theme.code || "") ? theme.code.slice(0, -1) + theme.code.slice(-1).toLowerCase() : theme.serie);
 
 export default function PackArt({ theme }) {
-  const d = PACK_DESIGNS[theme.code] || fallbackDesign(theme);
+  const d = PACK_DESIGNS[theme.code] || SERIES_DESIGNS[theme.serie] || fallbackDesign(theme);
   const [l1, ...rest] = String(theme.titre || "").toUpperCase().split(" ");
   const band = `linear-gradient(180deg, ${d.band[0]}, ${d.band[1]})`;
   const stripe = `linear-gradient(90deg, ${d.stripe[0]}, ${d.stripe[1]}, ${d.stripe[0]})`;
@@ -19,7 +19,7 @@ export default function PackArt({ theme }) {
         {d.stars > 0 && <span className="pka-stars" style={{ opacity: d.stars }} />}
         {d.layers.map((l, i) => (
           // eslint-disable-next-line @next/next/no-img-element
-          <img key={i} className="pka-layer" src={l.src} alt="" draggable={false} loading="lazy" decoding="async"
+          <img key={i} className="pka-layer" src={l.src} alt="" draggable={false} decoding="async"
             style={{
               left: `${l.x}%`, top: `${l.y}%`, width: `${l.w}%`, height: `${l.h}%`,
               objectFit: l.fit || "contain", objectPosition: l.pos, mixBlendMode: l.blend,

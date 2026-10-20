@@ -10,6 +10,9 @@
 .cv-item { position: absolute; left: 50%; top: 50%; width: 170px; height: 340px; margin: -170px 0 0 -85px;
   border: 0; padding: 0; background: none; cursor: pointer;
   transition: transform .45s cubic-bezier(.2,.8,.2,1), opacity .45s; }
+/* voile sombre sur les paquets latéraux (--dim, lib/coverflow.js) : ils restent opaques */
+.cv-item .pka-pack::after { content: ""; position: absolute; inset: 0; z-index: 5; background: #05060f; opacity: var(--dim, 0);
+  pointer-events: none; transition: opacity .45s; }
 .cv-item:focus-visible { outline: 2px solid var(--color-accent-300); outline-offset: 6px; border-radius: 16px; }
 
 /* Visuel du paquet : components/PackArt.js + app/packart.css (.pka-*) */
