@@ -11,6 +11,7 @@ import Topbar from "@/components/Topbar";
 import OddsDialog from "@/components/OddsDialog";
 import { usePlayer } from "@/components/PlayerProvider";
 import { api } from "@/lib/api";
+import { prefersReduced } from "@/lib/motion";
 
 /* Parcours : choisir une série → le paquet est aspiré par un trou noir → les 20 paquets de la série
    jaillissent en spirale sur un anneau qui tourne en boucle → on touche celui de devant → ouverture
@@ -58,7 +59,7 @@ export default function PaquetsPage() {
   const openSeries = () => {
     if (!booster || noPacks || leaving) return;
     setChosen(booster); setResult(null);
-    if (matchMedia("(prefers-reduced-motion: reduce)").matches) { setStage("picker"); return; }
+    if (prefersReduced()) { setStage("picker"); return; }
     // le trou noir s'ouvre là où se trouve le paquet choisi
     const r = document.querySelector(".cv-item.is-active")?.getBoundingClientRect();
     setWarp(r ? { x: r.left + r.width / 2, y: r.top + r.height / 2 } : {});

@@ -1,13 +1,14 @@
 "use client";
-/* Champ d'étoiles en canvas : parallaxe au pointeur, scintillement lent, figé si prefers-reduced-motion. */
+/* Champ d'étoiles en canvas : parallaxe au pointeur, scintillement lent, figé si animations réduites (lib/motion.js). */
 import { useEffect, useRef } from "react";
+import { prefersReduced } from "@/lib/motion";
 
 export default function StarField({ pointer }) {
   const ref = useRef(null);
   useEffect(() => {
     const cv = ref.current; if (!cv) return;
     const ctx = cv.getContext("2d");
-    const reduced = matchMedia("(prefers-reduced-motion: reduce)").matches;
+    const reduced = prefersReduced();
     let W = 0, H = 0, stars = [], raf = 0, last = 0;
     const p = { x: .5, y: .5 };
     const draw = t => {

@@ -5,6 +5,7 @@
 import * as THREE from "three";
 import { OrbitControls } from "three/examples/jsm/controls/OrbitControls.js";
 import { RAR } from "@/components/Carte";
+import { prefersReduced } from "@/lib/motion";
 
 export const LY_AU = 63241.077;
 export const LY_KM = 9.4607e12;
@@ -122,7 +123,7 @@ const loadImg = (() => {
    ================================================================ */
 export function mountAtlas(container, { data, onSelect, onLevel, onMeasure }) {
   const NOW = new Date();
-  const reduced = matchMedia("(prefers-reduced-motion: reduce)").matches;
+  const reduced = prefersReduced();
   const objects = data.objets;
   const bySlug = Object.fromEntries(objects.map(o => [o.slug, o]));
 

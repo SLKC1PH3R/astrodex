@@ -15,6 +15,7 @@ from pydantic import BaseModel, Field
 from . import db
 from .common import current_player
 from .inventory import add_eclats
+from .settings import allows
 from .social import DEFAULT_PSEUDO, ONLINE, are_friends, parse_id
 
 router = APIRouter()
@@ -180,22 +181,29 @@ def update_guild(body: GuildPatch, player: dict = Depends(current_player)):
 @router.post("/api/me/guilde/quitter")
 def leave_guild(player: dict = Depends(current_player)):
     """Le chef qui part passe la main à l'officier (ou au membre) le plus ancien ; la guilde vide disparaît."""
-    pid = player["id"]
     with db.connection() as conn, conn.transaction():
-        m = _require(conn, pid)
-        gid = m["guild_id"]
-        conn.execute("SELECT id FROM guilds WHERE id = %s FOR UPDATE", (gid,))
-        conn.execute("DELETE FROM guild_members WHERE player_id = %s", (pid,))
-        heir = conn.execute("""SELECT player_id FROM guild_members WHERE guild_id = %s
-            ORDER BY array_position(ARRAY['chef', 'officier', 'membre'], role), joined_at LIMIT 1""", (gid,)).fetchone()
-        if not heir:
-            conn.execute("DELETE FROM guilds WHERE id = %s", (gid,))
-            return {"guilde": None}
-        name = conn.execute("SELECT coalesce(pseudo, %s) AS p FROM players WHERE id = %s", (DEFAULT_PSEUDO, pid)).fetchone()["p"]
-        _system(conn, gid, f"{name} a quitté la guilde.")
-        if m["role"] == "chef":
-            conn.execute("UPDATE guild_members SET role = 'chef' WHERE player_id = %s", (heir["player_id"],))
+        _require(conn, player["id"])
+        leave_guild_conn(conn, player["id"])
     return {"guilde": None}
+
+
+def leave_guild_conn(conn, pid) -> None:
+    """Retire le joueur de sa guilde (s'il en a une). À appeler dans une transaction."""
+    m = _membership(conn, pid)
+    if not m:
+        return
+    gid = m["guild_id"]
+    conn.execute("SELECT id FROM guilds WHERE id = %s FOR UPDATE", (gid,))
+    conn.execute("DELETE FROM guild_members WHERE player_id = %s", (pid,))
+    heir = conn.execute("""SELECT player_id FROM guild_members WHERE guild_id = %s
+        ORDER BY array_position(ARRAY['chef', 'officier', 'membre'], role), joined_at LIMIT 1""", (gid,)).fetchone()
+    if not heir:
+        conn.execute("DELETE FROM guilds WHERE id = %s", (gid,))
+        return
+    name = conn.execute("SELECT coalesce(pseudo, %s) AS p FROM players WHERE id = %s", (DEFAULT_PSEUDO, pid)).fetchone()["p"]
+    _system(conn, gid, f"{name} a quitté la guilde.")
+    if m["role"] == "chef":
+        conn.execute("UPDATE guild_members SET role = 'chef' WHERE player_id = %s", (heir["player_id"],))
 
 
 class RoleIn(BaseModel):
@@ -247,6 +255,8 @@ def invite(body: InviteIn, player: dict = Depends(current_player)):
             raise HTTPException(403, "Tu ne peux inviter que tes amis")
         if _membership(conn, fid):
             raise HTTPException(409, "Ton ami fait déjà partie d'une guilde")
+        if not allows(conn, fid, "invitations_guilde"):
+            raise HTTPException(403, "Ton ami n'accepte pas les invitations de guilde")
         nom = conn.execute("SELECT nom FROM guilds WHERE id = %s", (m["guild_id"],)).fetchone()["nom"]
         conn.execute("INSERT INTO messages (sender, recipient, body) VALUES (%s, %s, %s)",
                      (pid, fid, f"Rejoins ma guilde « {nom} » ! Ouvre l'onglet Guilde : /jeu/guilde?rejoindre={m['guild_id']}"))

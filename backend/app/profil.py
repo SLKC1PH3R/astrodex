@@ -10,6 +10,8 @@ from pydantic import BaseModel, Field
 from . import db
 from .achievements import achievements_for, unlocked_titles
 from .common import CARD_SELECT, card_out, current_player
+from .settings import allows
+from .social import are_friends
 
 router = APIRouter()
 DEFAULT_PSEUDO = "Joueur"
@@ -67,7 +69,7 @@ def my_profile(player: dict = Depends(current_player)):
 
 
 @router.get("/api/joueurs/{player_id}/profil")
-def public_profile(player_id: str):
+def public_profile(player_id: str, player: dict = Depends(current_player)):
     try:
         pid = uuid.UUID(player_id)
     except ValueError:
@@ -76,6 +78,8 @@ def public_profile(player_id: str):
         row = conn.execute("SELECT id FROM players WHERE id = %s", (pid,)).fetchone()
         if not row:
             raise HTTPException(404, "Joueur inconnu")
+        if pid != player["id"] and not allows(conn, pid, "profil_public") and not are_friends(conn, pid, player["id"]):
+            raise HTTPException(403, "Ce joueur réserve son profil à ses amis")
         return _profile(conn, row, me=False)
 
 

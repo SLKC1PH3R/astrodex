@@ -4,6 +4,7 @@ import Carte, { ORDER, RAR } from "@/components/Carte";
 import Coffret from "@/components/Coffret";
 import PhotoDive from "@/components/PhotoDive";
 import { coffretTheme } from "@/lib/coffrets";
+import { prefersReduced } from "@/lib/motion";
 
 const PHASES = ["idle", "shake", "lid", "rise", "fan", "done"];
 const sleep = ms => new Promise(r => setTimeout(r, ms));
@@ -33,7 +34,7 @@ export default function CoffretOpening({ booster, onOpen, onDone, onError, disab
 
   const open = async () => {
     if (disabled || (P > 0 && P < 5)) return;
-    skip.current = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    skip.current = prefersReduced();
     setCards([]); setShown(0);
     if (P === 5) { setPhase("idle"); await sleep(400); }
     setPhase("shake");

@@ -2,6 +2,7 @@
 /* Composants animés portés de Magic UI (MIT), recolorés avec les tokens Nocturne. Styles : app/astrodex.css (.mu-*). */
 import Link from "next/link";
 import { useEffect, useRef, useState } from "react";
+import { prefersReduced } from "@/lib/motion";
 
 /* Magic UI · Shimmer Button */
 export function ShimmerButton({ href, icon = "ph-package", children }) {
@@ -31,7 +32,7 @@ export function NumberTicker({ value, duration = 1600 }) {
   useEffect(() => {
     const el = ref.current;
     if (!el) return;
-    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) { setN(value); return; }
+    if (prefersReduced()) { setN(value); return; }
     let raf;
     const io = new IntersectionObserver(([e]) => {
       if (!e.isIntersecting) return;
@@ -54,7 +55,7 @@ export function NumberTicker({ value, duration = 1600 }) {
 export function Marquee({ children, speed = 26 }) {
   const track = useRef(null);
   useEffect(() => {
-    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+    if (prefersReduced()) return;
     let off = 0, last = performance.now(), raf;
     const tick = t => {
       const dt = Math.min(64, t - last) / 1000; last = t;
