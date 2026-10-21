@@ -1,4 +1,5 @@
 /* Petits utilitaires d'affichage partagés par les onglets sociaux. */
+import Link from "next/link";
 
 const AVATAR_COLORS = ["#423a6a", "#1c5f7a", "#7a3a1c", "#2f5a35", "#5a2f55", "#3a4a7a", "#6a5a1c", "#1c6a5e"];
 
@@ -28,4 +29,21 @@ export function ago(date) {
 
 export function Avatar({ id, pseudo, size = 40, style }) {
   return <span className="sx-av" aria-hidden="true" style={{ "--s": `${size}px`, background: avatarColor(id), ...style }}>{initial(pseudo)}</span>;
+}
+
+/* Temps restant : « 3 j 14 h », « 5 h 20 min », « 12 min ». */
+export function until(date) {
+  const s = Math.max(0, (new Date(date).getTime() - Date.now()) / 1000);
+  const d = Math.floor(s / 86400), h = Math.floor((s % 86400) / 3600), m = Math.floor((s % 3600) / 60);
+  return d ? `${d} j ${h} h` : h ? `${h} h ${m} min` : `${m} min`;
+}
+
+/* Couleur d'emblème vive pour une guilde. */
+const CREST_COLORS = ["#ffcf6b", "#5ee0c0", "#6aa8ff", "#c58bff", "#ff8fb1", "#ffa86a", "#8fe36a"];
+export const crestColor = id => CREST_COLORS[Number(String(id).replace(/\D/g, "") || 0) % CREST_COLORS.length];
+
+/* Texte de message où les chemins du jeu (/jeu/…) deviennent des liens (invitations de guilde…). */
+export function Linkify({ text }) {
+  return String(text).split(/(\/jeu\/[\w\-/?=&%.]+)/g).map((part, i) =>
+    i % 2 ? <Link key={i} href={part} style={{ color: "inherit", textDecoration: "underline" }}>{part}</Link> : part);
 }

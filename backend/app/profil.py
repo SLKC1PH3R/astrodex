@@ -35,7 +35,10 @@ def player_stats(conn, player_id) -> dict:
         WHERE status = 'accepted' AND (requester = %(p)s OR addressee = %(p)s)""", {"p": player_id}).fetchone()["n"]
     commerce = conn.execute("""
         SELECT (SELECT count(*) FROM trades WHERE status = 'accepted' AND (proposer = %(p)s OR recipient = %(p)s)) AS echanges,
-               (SELECT count(*) FROM market_listings WHERE status = 'sold' AND seller = %(p)s) AS ventes""", {"p": player_id}).fetchone()
+               (SELECT count(*) FROM market_listings WHERE status = 'sold' AND seller = %(p)s) AS ventes,
+               (SELECT count(*) FROM battles WHERE won AND player_id = %(p)s) AS victoires,
+               (SELECT count(*) FROM battles WHERE mode = 'classee' AND won AND player_id = %(p)s) AS victoires_classees,
+               (SELECT count(*) FROM guild_members WHERE player_id = %(p)s) AS guilde""", {"p": player_id}).fetchone()
     return {**{k: int(v) for k, v in st.items()}, "amis": amis, **commerce, "series": {s["code"]: s for s in series}}
 
 
@@ -111,18 +114,29 @@ def my_achievements(player: dict = Depends(current_player)):
     return {"debloques": sum(a["debloque"] for a in ach), "total": len(ach), "succes": ach}
 
 
+# type → (expression classée, libellé de la valeur) ; « bataille » a sa propre requête (points de rang)
 RANKINGS = {
-    # type → (expression classée, libellé de la valeur)
     "collection": ("count(pc.card_id)", "cartes"),
     "semaine": ("count(pc.card_id) FILTER (WHERE pc.first_obtained_at > now() - interval '7 days')", "nouvelles cartes"),
 }
 
 
 @router.get("/api/classement")
-def ranking(type: Literal["collection", "semaine"] = "collection", limit: int = 50,
+def ranking(type: Literal["collection", "semaine", "bataille"] = "collection", limit: int = 50,
             player: dict = Depends(current_player)):
-    expr, label = RANKINGS[type]
     limit = max(1, min(limit, 100))
+    if type == "bataille":
+        label = "points de rang"
+        with db.connection() as conn:
+            rows = conn.execute("""
+                WITH scores AS (
+                    SELECT p.id, coalesce(p.pseudo, %(def)s) AS pseudo, p.titre, p.points_rang AS valeur,
+                           (SELECT count(*) FROM battles b WHERE b.player_id = p.id AND b.won) AS legendaires
+                    FROM players p WHERE EXISTS (SELECT 1 FROM battles b WHERE b.player_id = p.id))
+                SELECT *, rank() OVER (ORDER BY valeur DESC, legendaires DESC) AS rang
+                FROM scores ORDER BY rang, pseudo""", {"def": DEFAULT_PSEUDO}).fetchall()
+        return _ranking_out(type, label, rows, player, limit)
+    expr, label = RANKINGS[type]
     with db.connection() as conn:
         rows = conn.execute(f"""
             WITH scores AS (
@@ -132,6 +146,11 @@ def ranking(type: Literal["collection", "semaine"] = "collection", limit: int = 
                 GROUP BY p.id)
             SELECT *, rank() OVER (ORDER BY valeur DESC, legendaires DESC) AS rang
             FROM scores WHERE valeur > 0 ORDER BY rang, pseudo""", {"def": DEFAULT_PSEUDO}).fetchall()
+    return _ranking_out(type, label, rows, player, limit)
+
+
+def _ranking_out(type: str, label: str, rows: list, player: dict, limit: int) -> dict:
+    """Pour « bataille », le champ legendaires porte le nombre de victoires (critère de départage)."""
     me = next((r for r in rows if r["id"] == player["id"]), None)
     fmt = lambda r: {"rang": r["rang"], "id": r["id"], "pseudo": r["pseudo"], "titre": r["titre"],  # noqa: E731
                      "valeur": r["valeur"], "legendaires": r["legendaires"], "moi": r["id"] == player["id"]}

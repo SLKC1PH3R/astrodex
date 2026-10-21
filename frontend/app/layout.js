@@ -12,6 +12,7 @@ import "./boosterpanel.css";
 import "./boosters.css";
 import "./social.css";
 import "./commerce.css";
+import "./arene.css";
 import "./packpicker.css";
 import "./packring.css";
 import "./blackhole.css";
