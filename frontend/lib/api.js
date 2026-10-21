@@ -63,5 +63,10 @@ export const api = {
   progression: () => request("/api/me/progression", { auth: true }),
   collection: serie => request(`/api/me/collection${serie ? `?serie=${encodeURIComponent(serie)}` : ""}`, { auth: true }),
   boosterCards: code => request(`/api/boosters/${encodeURIComponent(code)}/cartes`),
+  profil: () => request("/api/me/profil", { auth: true }),
+  majProfil: patch => request("/api/me/profil", { method: "PATCH", body: patch, auth: true }),
+  profilJoueur: id => request(`/api/joueurs/${encodeURIComponent(id)}/profil`),
+  succes: () => request("/api/me/succes", { auth: true }),
+  classement: type => request(`/api/classement?type=${encodeURIComponent(type)}`, { auth: true }),
   open: code => request(`/api/boosters/${encodeURIComponent(code)}/open`, { method: "POST", auth: true }),
 };
