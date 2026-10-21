@@ -179,9 +179,10 @@ def send_message(player_id: str, body: MessageIn, player: dict = Depends(current
 
 @router.get("/api/me/notifications")
 def notifications(player: dict = Depends(current_player)):
-    """Compteurs pour le menu : messages non lus, demandes d'ami reçues."""
+    """Compteurs pour le menu : messages non lus, demandes d'ami et propositions d'échange reçues."""
     with db.connection() as conn:
         return conn.execute("""
             SELECT (SELECT count(*) FROM messages WHERE recipient = %(p)s AND read_at IS NULL) AS messages,
-                   (SELECT count(*) FROM friendships WHERE addressee = %(p)s AND status = 'pending') AS amis""",
+                   (SELECT count(*) FROM friendships WHERE addressee = %(p)s AND status = 'pending') AS amis,
+                   (SELECT count(*) FROM trades WHERE recipient = %(p)s AND status = 'pending') AS echanges""",
                             {"p": player["id"]}).fetchone()

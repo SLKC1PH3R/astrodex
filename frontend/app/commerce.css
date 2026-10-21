@@ -1,0 +1,81 @@
+/* Échanges et Marché. Réutilise les classes partagées de social.css (.sx-*). */
+
+/* ---------- Vignette de carte ---------- */
+.mc { position: relative; display: block; aspect-ratio: 63 / 88; border-radius: 12px; overflow: hidden; isolation: isolate;
+  background: #0b0d2a; box-shadow: inset 0 0 0 2px var(--rc); }
+.mc > img { position: absolute; inset: 0; z-index: -1; width: 100%; height: 100%; object-fit: cover; }
+.mc > img.globe { inset: 8% 8% 22%; width: 84%; height: 70%; object-fit: contain; }
+.mc:has(img.globe) { background: radial-gradient(circle at 50% 40%, color-mix(in srgb, var(--rc) 22%, #0b0d2a), #070818 70%); }
+.mc-r { position: absolute; top: 6px; left: 6px; padding: 1px 6px; border-radius: 6px; background: var(--rc); color: #0b0d1c; font-size: 11px; font-weight: 700; }
+.mc-q { position: absolute; top: 6px; right: 6px; padding: 1px 6px; border-radius: 6px; background: rgba(8,9,20,.8); color: #fff; font-size: 11px; font-weight: 700; }
+.mc-f { position: absolute; top: 28px; right: 6px; padding: 1px 6px; border-radius: 6px; background: #5ee0c0; color: #0b0d1c; font-size: 10px; font-weight: 700; text-transform: uppercase; }
+.mc-n { position: absolute; left: 0; right: 0; bottom: 0; padding: 18px 8px 7px; display: flex; flex-direction: column; gap: 1px;
+  background: linear-gradient(transparent, rgba(8,9,20,.92) 45%); color: #fff; text-align: left; }
+.mc-n b { font-size: 12px; font-weight: 600; line-height: 1.2; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.mc-n i { font-style: normal; font-size: 10px; color: #b9bdd3; }
+.mc.sm .mc-n { padding: 12px 5px 4px; }
+.mc.sm .mc-n b { font-size: 10px; }
+.mc.sm .mc-n i, .mc.sm .mc-f { display: none; }
+
+.cm-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(104px, 1fr)); gap: 10px; }
+.cm-grid.sm { grid-template-columns: repeat(auto-fill, minmax(72px, 1fr)); gap: 8px; }
+.cm-scroll { max-height: 420px; overflow-y: auto; padding: 4px; margin: -4px; }
+.cm-pick { position: relative; display: block; width: 100%; padding: 0; border: 0; border-radius: 12px; background: none; cursor: pointer; }
+.cm-pick[aria-pressed="true"] { outline: 3px solid var(--color-accent); outline-offset: 2px; }
+.cm-pick:disabled { opacity: .35; cursor: not-allowed; }
+.cm-filters { display: flex; flex-wrap: wrap; gap: 8px; }
+.cm-filters .input { flex: 1 1 140px; min-width: 0; }
+.cm-filters select.input { flex: 0 1 150px; }
+.cm-msg { margin: 0; font-size: 14px; color: #5ee0c0; }
+.cm-msg.err { color: #ffb3b3; }
+
+/* ---------- Échanges ---------- */
+.ex-compose { display: grid; grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr); gap: 16px; align-items: start; }
+.ex-side { display: flex; flex-direction: column; gap: 10px; min-width: 0; }
+.ex-slots { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 6px; }
+.ex-slot { aspect-ratio: 63 / 88; border-radius: 10px; border: 2px dashed color-mix(in srgb, var(--color-text) 16%, transparent); }
+.ex-mid { display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 8px; padding-top: 40px; color: var(--color-neutral-400); }
+.ex-mid i.ph { font-size: 28px; color: var(--color-accent); }
+.ex-balance { font-size: 13px; text-align: center; font-variant-numeric: tabular-nums; }
+.ex-trade { display: flex; flex-direction: column; gap: 10px; padding: 14px; border-radius: 14px;
+  background: color-mix(in srgb, var(--color-text) 4%, transparent); }
+.ex-trade-head { display: flex; align-items: center; gap: 10px; font-size: 14px; }
+.ex-trade-head .sx-muted { margin-left: auto; }
+.ex-trade-cards { display: grid; grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr); gap: 8px; align-items: center; }
+.ex-trade-cards > div { display: grid; grid-template-columns: repeat(auto-fill, minmax(46px, 1fr)); gap: 4px; }
+.ex-trade-cards > i { color: var(--color-neutral-400); }
+.ex-trade-actions { display: flex; flex-wrap: wrap; gap: 8px; }
+.ex-status { font-size: 12px; font-weight: 600; padding: 2px 8px; border-radius: 999px; }
+.ex-status.accepted { background: color-mix(in srgb, #5ee0c0 18%, transparent); color: #5ee0c0; }
+.ex-status.refused, .ex-status.cancelled { background: color-mix(in srgb, var(--color-text) 10%, transparent); color: var(--color-neutral-400); }
+.ex-friend { display: flex; align-items: center; gap: 10px; }
+.ex-friend select { flex: 1 1 auto; }
+
+@media (max-width: 760px) {
+  .ex-compose { grid-template-columns: minmax(0, 1fr); }
+  .ex-mid { flex-direction: row; padding-top: 0; }
+  .ex-mid i.ph { transform: rotate(90deg); }
+}
+
+/* ---------- Marché ---------- */
+.mk-wallet { display: flex; flex-wrap: wrap; align-items: center; gap: 14px; padding: 14px 18px; border-radius: 16px;
+  background: linear-gradient(120deg, color-mix(in srgb, #ffcf6b 14%, var(--color-surface)), var(--color-surface)); }
+.mk-wallet b { font-size: 26px; font-weight: 600; font-variant-numeric: tabular-nums; }
+.mk-wallet .ph-diamond { font-size: 26px; color: #ffcf6b; }
+.mk-wallet .sx-btn { margin-left: auto; }
+.mk-lots { display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 14px; }
+.mk-lot { display: flex; flex-direction: column; gap: 8px; padding: 8px; border-radius: 16px; background: var(--color-surface);
+  box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--color-text) 8%, transparent); }
+.mk-lot-foot { display: flex; align-items: center; justify-content: space-between; gap: 6px; padding: 0 4px 2px; }
+.mk-price { display: inline-flex; align-items: center; gap: 4px; font-weight: 600; font-variant-numeric: tabular-nums; }
+.mk-price .ph { color: #ffcf6b; }
+.mk-seller { padding: 0 4px; font-size: 12px; color: var(--color-neutral-400); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.mk-trend { display: flex; align-items: center; gap: 10px; font-size: 13px; }
+.mk-trend img { width: 36px; height: 36px; border-radius: 8px; object-fit: cover; }
+.mk-trend > span:nth-child(2) { flex: 1 1 auto; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.mk-sell { display: grid; grid-template-columns: 140px minmax(0, 1fr); gap: 16px; align-items: start; }
+.mk-sell-form { display: flex; flex-direction: column; gap: 10px; }
+.mk-sell-form label { display: flex; flex-direction: column; gap: 6px; font-size: 13px; color: var(--color-neutral-300); }
+.mk-mine { display: flex; align-items: center; gap: 12px; padding: 10px; border-radius: 14px; background: var(--color-surface); }
+.mk-mine .mc { width: 56px; flex: none; }
+.mk-mine > div { flex: 1 1 auto; min-width: 0; display: flex; flex-direction: column; gap: 2px; font-size: 14px; }

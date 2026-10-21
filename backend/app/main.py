@@ -14,7 +14,7 @@ from . import config, db
 from .catalog_import import import_catalog, load_catalog
 from .common import CARD_SELECT, card_out, current_player, hash_token
 from .draw import draw_pack
-from . import profil, social
+from . import market, profil, social, trades
 
 logging.basicConfig(level=logging.INFO, format="%(asctime)s %(levelname)s %(name)s %(message)s")
 log = logging.getLogger("astrodex")
@@ -35,6 +35,8 @@ if config.CORS_ORIGINS:
     app.add_middleware(CORSMiddleware, allow_origins=config.CORS_ORIGINS, allow_methods=["*"], allow_headers=["*"])
 app.include_router(profil.router)
 app.include_router(social.router)
+app.include_router(trades.router)
+app.include_router(market.router)
 app.mount("/media", StaticFiles(directory=config.MEDIA_DIR, check_dir=False), name="media")
 
 def boosters_out(conn, where: str = "", params: tuple = ()) -> list[dict]:
