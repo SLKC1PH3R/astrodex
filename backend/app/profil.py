@@ -31,7 +31,9 @@ def player_stats(conn, player_id) -> dict:
         FROM series s JOIN cards c ON c.series_id = s.id AND NOT c.retired
         LEFT JOIN player_cards pc ON pc.card_id = c.id AND pc.player_id = %s
         WHERE s.active GROUP BY s.id ORDER BY s.date_sortie NULLS LAST, s.code""", (player_id,)).fetchall()
-    return {**{k: int(v) for k, v in st.items()}, "series": {s["code"]: s for s in series}}
+    amis = conn.execute("""SELECT count(*) AS n FROM friendships
+        WHERE status = 'accepted' AND (requester = %(p)s OR addressee = %(p)s)""", {"p": player_id}).fetchone()["n"]
+    return {**{k: int(v) for k, v in st.items()}, "amis": amis, "series": {s["code"]: s for s in series}}
 
 
 def _profile(conn, player: dict, *, me: bool) -> dict:

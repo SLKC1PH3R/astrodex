@@ -2,6 +2,9 @@
 
 const AVATAR_COLORS = ["#423a6a", "#1c5f7a", "#7a3a1c", "#2f5a35", "#5a2f55", "#3a4a7a", "#6a5a1c", "#1c6a5e"];
 
+/* Demande au menu de relire ses compteurs (message lu, demande d'ami traitée…). */
+export const notifyBadges = () => { if (typeof window !== "undefined") window.dispatchEvent(new Event("astrodex:notifications")); };
+
 /* Couleur d'avatar stable, dérivée de l'identifiant du joueur. */
 export function avatarColor(id = "") {
   let h = 7;
