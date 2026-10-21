@@ -4,7 +4,7 @@ import { notFound, useParams } from "next/navigation";
 import Topbar from "@/components/Topbar";
 import { findSection } from "@/lib/menu";
 
-/* Sections du menu pas encore développées (aujourd'hui : Paramètres) : page d'attente générique. */
+/* Page d'attente générique pour une future section du menu (toutes les sections actuelles ont leur propre page). */
 export default function SectionPage() {
   const { section } = useParams();
   const m = findSection(section);

@@ -1,6 +1,7 @@
 "use client";
 import { useEffect, useMemo, useRef } from "react";
 import Carte from "@/components/Carte";
+import { prefersReduced } from "@/lib/motion";
 
 const SPEEDS = [22, -16, 28, -20, 18]; // px/s, signe = sens
 const COLS = SPEEDS.length;
@@ -21,7 +22,7 @@ export default function CardCarousel({ cards }) {
   }, [cards]);
 
   useEffect(() => {
-    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+    if (prefersReduced()) return;
     const off = new Array(COLS).fill(0);
     let last = performance.now(), raf;
     const tick = t => {

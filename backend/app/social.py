@@ -8,6 +8,7 @@ from pydantic import BaseModel, Field
 
 from . import db
 from .common import current_player
+from .settings import allows
 
 router = APIRouter()
 DEFAULT_PSEUDO = "Joueur"
@@ -85,6 +86,8 @@ def add_friend(body: FriendIn, player: dict = Depends(current_player)):
         if existing:  # demande inverse en attente : on accepte
             conn.execute("UPDATE friendships SET status = 'accepted', accepted_at = now() WHERE requester = %s AND addressee = %s", (fid, pid))
             return {"statut": "amis", "id": fid}
+        if not allows(conn, fid, "demandes_amis"):
+            raise HTTPException(403, "Ce joueur n'accepte pas de demandes d'ami")
         conn.execute("INSERT INTO friendships (requester, addressee) VALUES (%s, %s)", (pid, fid))
         return {"statut": "demande_envoyee", "id": fid}
 

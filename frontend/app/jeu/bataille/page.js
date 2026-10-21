@@ -4,6 +4,7 @@ import Topbar from "@/components/Topbar";
 import MiniCarte from "@/components/MiniCarte";
 import { api } from "@/lib/api";
 import { ago, fr, until } from "@/lib/social";
+import { prefersReduced } from "@/lib/motion";
 
 /* Onglet « Bataille » : composer sa main de 5 cartes, choisir un mode (rapide, classée, défi d'un ami),
    jouer et voir les manches se dérouler une à une, rang et historique.
@@ -62,7 +63,7 @@ function HandPicker({ hand, onSave, onClose }) {
 function Arena({ r, onAgain, onBack }) {
   const [shown, setShown] = useState(0);
   useEffect(() => {
-    const reduced = matchMedia("(prefers-reduced-motion: reduce)").matches;
+    const reduced = prefersReduced();
     if (reduced) { setShown(r.manches.length); return; }
     setShown(0);
     const t = setInterval(() => setShown(n => { if (n >= r.manches.length) { clearInterval(t); return n; } return n + 1; }), 900);

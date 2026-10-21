@@ -4,6 +4,7 @@ import Carte, { ORDER, RAR } from "@/components/Carte";
 import PackArt from "@/components/PackArt";
 import PhotoDive from "@/components/PhotoDive";
 import { coffretTheme } from "@/lib/coffrets";
+import { prefersReduced } from "@/lib/motion";
 
 /* Ouverture « Déchirure » : on déchire la bande du sachet → les cartes sortent en pile, faces visibles,
    de la moins rare à la plus rare → on touche (ou on fait glisser) la carte du dessus pour passer à la suivante
@@ -41,7 +42,7 @@ export default function SachetOpening({ booster, onOpen, onDone, onError, disabl
 
   const tear = async () => {
     if (disabled || phase !== "idle") return;
-    reduced.current = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    reduced.current = prefersReduced();
     finished.current = false;
     setPhase("tear");
     let drawn;

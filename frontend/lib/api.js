@@ -55,6 +55,31 @@ export const signup = pseudo => createPlayer(pseudo?.trim() || null);
 export function logout() { memoryToken = null; writeToken(""); }
 export const hasPlayer = () => !!(memoryToken || readToken());
 
+/* Clé de connexion (le jeton du joueur) : la noter permet de retrouver son compte sur un autre appareil. */
+export const currentKey = () => memoryToken || readToken() || "";
+
+/* Se connecter avec une clé : vérifiée auprès du serveur avant de remplacer la clé actuelle. */
+export async function loginWithKey(key) {
+  const k = key.trim();
+  const res = await fetch("/api/me", { headers: { Authorization: `Bearer ${k}` }, cache: "no-store" });
+  if (res.status === 401) throw new Error("Cette clé ne correspond à aucun compte");
+  const me = await handle(res);
+  memoryToken = k; writeToken(k);
+  return me;
+}
+
+/* Nouvelle clé : l'ancienne cesse de fonctionner partout. */
+export async function rotateKey() {
+  const { token } = await request("/api/me/cle", { method: "POST", auth: true });
+  memoryToken = token; writeToken(token);
+  return token;
+}
+
+export async function deleteAccount(confirmation) {
+  await request("/api/me", { method: "DELETE", body: { confirmation }, auth: true });
+  logout();
+}
+
 export const api = {
   boosters: () => request("/api/boosters"),
   series: () => request("/api/series"),
@@ -65,7 +90,7 @@ export const api = {
   boosterCards: code => request(`/api/boosters/${encodeURIComponent(code)}/cartes`),
   profil: () => request("/api/me/profil", { auth: true }),
   majProfil: patch => request("/api/me/profil", { method: "PATCH", body: patch, auth: true }),
-  profilJoueur: id => request(`/api/joueurs/${encodeURIComponent(id)}/profil`),
+  profilJoueur: id => request(`/api/joueurs/${encodeURIComponent(id)}/profil`, { auth: true }),
   succes: () => request("/api/me/succes", { auth: true }),
   classement: type => request(`/api/classement?type=${encodeURIComponent(type)}`, { auth: true }),
   amis: () => request("/api/me/amis", { auth: true }),
@@ -106,6 +131,8 @@ export const api = {
   messagesGuilde: apres => request(`/api/me/guilde/messages${apres ? `?apres=${apres}` : ""}`, { auth: true }),
   ecrireGuilde: texte => request("/api/me/guilde/messages", { method: "POST", body: { texte }, auth: true }),
   recompenseObjectif: id => request(`/api/me/guilde/objectifs/${id}/recompense`, { method: "POST", auth: true }),
+  parametres: () => request("/api/me/parametres", { auth: true }),
+  majParametres: patch => request("/api/me/parametres", { method: "PATCH", body: patch, auth: true }),
   notifications: () => request("/api/me/notifications", { auth: true }),
   open: code => request(`/api/boosters/${encodeURIComponent(code)}/open`, { method: "POST", auth: true }),
 };

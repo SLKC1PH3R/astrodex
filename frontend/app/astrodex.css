@@ -421,3 +421,9 @@ a:hover { color: var(--color-accent-300); }
 .auth-flip-link:hover { color: var(--color-accent-200); }
 .auth-flip-link i { font-size: 15px; color: var(--color-accent); }
 @media (prefers-reduced-motion: reduce) { .auth-flip { transition: none; } }
+
+/* Animations réduites choisies dans les Paramètres (lib/motion.js) : même effet que le réglage système. */
+html[data-motion="reduit"] *, html[data-motion="reduit"] *::before, html[data-motion="reduit"] *::after {
+  animation-duration: .01ms !important; animation-iteration-count: 1 !important;
+  transition-duration: .01ms !important; scroll-behavior: auto !important;
+}

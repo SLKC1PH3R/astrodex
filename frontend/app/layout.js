@@ -26,8 +26,10 @@ export const viewport = { themeColor: "#161826", width: "device-width", initialS
 
 export default function RootLayout({ children }) {
   return (
-    <html lang="fr">
+    <html lang="fr" suppressHydrationWarning>
       <head>
+        {/* préférence d'animation (Paramètres) appliquée avant le premier rendu : voir lib/motion.js */}
+        <script dangerouslySetInnerHTML={{ __html: "try{document.documentElement.dataset.motion=localStorage.getItem('astrodex-animations')||'systeme'}catch(e){}" }} />
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="" />
         <link rel="stylesheet" href="https://unpkg.com/@phosphor-icons/web@2.1.1/src/regular/style.css" />

@@ -87,3 +87,29 @@
   .bt-round { grid-template-columns: 72px minmax(0, 1fr) 72px; gap: 8px; }
   .bt-score { font-size: 28px; }
 }
+
+/* ---------- Paramètres ---------- */
+.st-page { max-width: 900px; margin: 0; }
+.st-field .sx-btn, .st-key .sx-btn { white-space: nowrap; }
+.st-sec { display: flex; flex-direction: column; gap: 14px; }
+.st-sec.danger { box-shadow: inset 0 0 0 1px color-mix(in srgb, #ff6b6b 30%, transparent); }
+.st-line { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 10px 16px; }
+.st-line > span, .st-line > label { flex: 1 1 260px; display: flex; flex-direction: column; gap: 2px; font-size: 14px; }
+.st-line small, .st-toggle small { font-size: 12px; color: var(--color-neutral-400); }
+.st-field { display: flex; align-items: center; gap: 8px; flex: 0 1 380px; min-width: 0; }
+.st-field .input { flex: 1 1 auto; min-width: 0; }
+.st-sec code { font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-size: 14px; padding: 8px 12px; border-radius: 10px;
+  background: color-mix(in srgb, var(--color-text) 6%, transparent); overflow-wrap: anywhere; }
+.st-key { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; }
+.st-key code { flex: 1 1 260px; min-width: 0; }
+.st-note { margin: 0; font-size: 14px; line-height: 1.5; color: var(--color-neutral-300); }
+.st-toggle { display: flex; align-items: center; gap: 16px; cursor: pointer; }
+.st-toggle > span { flex: 1 1 auto; display: flex; flex-direction: column; gap: 2px; font-size: 14px; }
+.st-toggle b { font-weight: 500; }
+.st-toggle input { position: absolute; opacity: 0; width: 1px; height: 1px; }
+.st-toggle i { flex: none; position: relative; width: 44px; height: 26px; border-radius: 13px; background: color-mix(in srgb, var(--color-text) 18%, transparent); transition: background .2s; }
+.st-toggle i::after { content: ""; position: absolute; top: 3px; left: 3px; width: 20px; height: 20px; border-radius: 50%; background: #fff; transition: transform .2s; }
+.st-toggle input:checked + i { background: var(--color-accent); }
+.st-toggle input:checked + i::after { transform: translateX(18px); }
+.st-toggle input:focus-visible + i { outline: 2px solid var(--color-accent); outline-offset: 2px; }
+.sx-tab[aria-checked="true"] { background: var(--color-text); color: var(--color-bg); font-weight: 600; }

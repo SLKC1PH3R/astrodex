@@ -1,6 +1,7 @@
 "use client";
 import { useEffect, useRef, useState } from "react";
 import PackArt from "@/components/PackArt";
+import { prefersReduced } from "@/lib/motion";
 
 const TAU = Math.PI * 2;
 const mod = (a, n) => ((a % n) + n) % n;
@@ -21,7 +22,7 @@ export default function PackRing({ count = 20, theme, onPick, intro = true }) {
 
   useEffect(() => {
     const stage = stageRef.current;
-    const reduced = matchMedia("(prefers-reduced-motion: reduce)").matches;
+    const reduced = prefersReduced();
     const s = sim.current = {
       rot: 0, vel: 0, target: null, drag: null, justDragged: false, wheelTimer: 0,
       R: 400, tilt: 64, t0: performance.now(), intro: intro && !reduced, last: null, front: 0, raf: 0,

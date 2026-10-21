@@ -49,9 +49,9 @@ def test_profile_stats_and_edits(client):
     assert client.patch("/api/me/profil", headers=h, json={"favoris": [not_owned]}).status_code == 422
     assert client.patch("/api/me/profil", headers=h, json={"favoris": list(range(6))}).status_code == 422
 
-    pub = client.get(f"/api/joueurs/{p['id']}/profil").json()
+    pub = client.get(f"/api/joueurs/{p['id']}/profil", headers=h).json()
     assert pub["pseudo"] == "Nouvel Astre" and "titres_disponibles" not in pub
-    assert client.get("/api/joueurs/pas-un-id/profil").status_code == 404
+    assert client.get("/api/joueurs/pas-un-id/profil", headers=h).status_code == 404
 
 
 def test_achievements(client):

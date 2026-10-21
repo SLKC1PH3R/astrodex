@@ -19,6 +19,7 @@ from pydantic import BaseModel, Field
 
 from . import db
 from .common import CARD_SELECT, card_out, current_player
+from .settings import allows
 from .social import DEFAULT_PSEUDO, are_friends, parse_id
 
 router = APIRouter()
@@ -95,6 +96,8 @@ def _opponent(conn, me, mode: str, friend: str | None, my_power: int, rng: rando
         oid = parse_id(friend)
         if not are_friends(conn, me, oid):
             raise HTTPException(403, "Tu ne peux défier que tes amis")
+        if not allows(conn, oid, "defis"):
+            raise HTTPException(403, "Ton ami n'accepte pas les défis pour le moment")
         hand = _owned_hand(conn, oid)
         if len(hand) < HAND:
             raise HTTPException(409, "Ton ami n'a pas encore composé sa main de 5 cartes")

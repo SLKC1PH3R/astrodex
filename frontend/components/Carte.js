@@ -14,6 +14,7 @@
    Styles : app/astrodex.css (.ax-card, dos, en-tête) + app/filigrane.css + app/cartes.css (.cx-*). */
 import { useEffect, useRef } from "react";
 import { installFiligrane, numeroMask } from "@/lib/filigrane";
+import { prefersReduced } from "@/lib/motion";
 
 export const RAR = {
   C:  { label: "Commune",     color: "#9aa1b9", n: 1 },
@@ -102,11 +103,11 @@ function Sky() {
   );
 }
 
-/* Lumière et inclinaison au pointeur. Désactivées si prefers-reduced-motion. */
+/* Lumière et inclinaison au pointeur. Désactivées si animations réduites (lib/motion.js). */
 function useLight(ref) {
   useEffect(() => {
     const el = ref.current; if (!el) return;
-    if (matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+    if (prefersReduced()) return;
     let raf = 0, tgt = null;
     const s = { x: .5, y: .4 };
     const tick = () => {

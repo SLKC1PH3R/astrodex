@@ -6,6 +6,7 @@ import Carte, { ORDER, RAR } from "@/components/Carte";
 import StarField from "@/components/StarField";
 import { api, hasPlayer } from "@/lib/api";
 import { DEMO, RC, SLOTS, COUNT, NOTES, SOURCES } from "@/lib/landing-data";
+import { prefersReduced } from "@/lib/motion";
 
 const pct = x => Math.round(x * 100) + " %";
 const anyOf = r => 1 - SLOTS.reduce((p, s) => p * (1 - (s[r] || 0)), 1);
@@ -65,7 +66,7 @@ export default function Landing() {
 
   useEffect(() => {
     const els = document.querySelectorAll(".lx-rise");
-    if (!els.length || matchMedia("(prefers-reduced-motion: reduce)").matches) {
+    if (!els.length || prefersReduced()) {
       els.forEach(el => el.classList.add("is-in"));
       return;
     }
