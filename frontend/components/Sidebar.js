@@ -18,7 +18,7 @@ function Item({ m, path, badge }) {
   );
 }
 
-/* Compteurs du menu (messages non lus, demandes d'ami), relus toutes les 30 s et à chaque page. */
+/* Compteurs du menu (messages non lus, demandes d'ami, propositions d'échange), relus toutes les 30 s et à chaque page. */
 function useBadges(path) {
   const [n, setN] = useState({});
   useEffect(() => {
@@ -29,7 +29,7 @@ function useBadges(path) {
     addEventListener("astrodex:notifications", load); // une page signale qu'un compteur a changé
     return () => { alive = false; clearInterval(t); removeEventListener("astrodex:notifications", load); };
   }, [path]);
-  return { messages: n.messages || 0, amis: n.amis || 0 };
+  return { messages: n.messages || 0, amis: n.amis || 0, echanges: n.echanges || 0 };
 }
 
 export default function Sidebar() {

@@ -33,7 +33,10 @@ def player_stats(conn, player_id) -> dict:
         WHERE s.active GROUP BY s.id ORDER BY s.date_sortie NULLS LAST, s.code""", (player_id,)).fetchall()
     amis = conn.execute("""SELECT count(*) AS n FROM friendships
         WHERE status = 'accepted' AND (requester = %(p)s OR addressee = %(p)s)""", {"p": player_id}).fetchone()["n"]
-    return {**{k: int(v) for k, v in st.items()}, "amis": amis, "series": {s["code"]: s for s in series}}
+    commerce = conn.execute("""
+        SELECT (SELECT count(*) FROM trades WHERE status = 'accepted' AND (proposer = %(p)s OR recipient = %(p)s)) AS echanges,
+               (SELECT count(*) FROM market_listings WHERE status = 'sold' AND seller = %(p)s) AS ventes""", {"p": player_id}).fetchone()
+    return {**{k: int(v) for k, v in st.items()}, "amis": amis, **commerce, "series": {s["code"]: s for s in series}}
 
 
 def _profile(conn, player: dict, *, me: bool) -> dict:
