@@ -173,6 +173,20 @@ def me(player: dict = Depends(current_player)):
     return {**player, **st, "boosters_restants": _remaining(player["id"])}
 
 
+@app.get("/api/me/progression")
+def progression(player: dict = Depends(current_player)):
+    """Pour chaque booster à thème actif : cartes de son contenu déjà possédées / taille du contenu."""
+    with db.connection() as conn:
+        return conn.execute("""
+            SELECT p.code, count(own.card_id) AS possedees, count(*) AS total
+            FROM pack_types p JOIN series s ON s.id = p.series_id
+            JOIN pack_cards pc ON pc.pack_type_id = p.id
+            JOIN cards c ON c.id = pc.card_id AND NOT c.retired
+            LEFT JOIN player_cards own ON own.card_id = pc.card_id AND own.player_id = %s
+            WHERE p.active AND s.active
+            GROUP BY p.code ORDER BY p.code""", (player["id"],)).fetchall()
+
+
 @app.get("/api/me/collection")
 def collection(serie: str | None = None, player: dict = Depends(current_player)):
     with db.connection() as conn:

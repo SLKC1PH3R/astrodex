@@ -33,7 +33,15 @@ export default function PaquetsPage() {
 
   useEffect(() => {
     api.boosters()
-      .then(list => { setBoosters(list); list.length ? setBooster(list[0]) : setError("Aucun booster actif dans le catalogue."); })
+      .then(list => {
+        setBoosters(list);
+        if (!list.length) return setError("Aucun booster actif dans le catalogue.");
+        // /jeu?booster=CODE (onglet Boosters) : on va directement à l'anneau de paquets de ce booster
+        const wanted = new URLSearchParams(window.location.search).get("booster");
+        const b = list.find(x => x.code === wanted);
+        setBooster(b || list[0]);
+        if (b) { setChosen(b); setStage("picker"); window.history.replaceState(null, "", "/jeu"); }
+      })
       .catch(() => setError("Le serveur de jeu ne répond pas. Réessaie dans un instant."));
   }, []);
 

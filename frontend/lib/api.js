@@ -60,6 +60,7 @@ export const api = {
   series: () => request("/api/series"),
   seriesDetail: code => request(`/api/series/${encodeURIComponent(code)}`),
   me: () => request("/api/me", { auth: true }),
+  progression: () => request("/api/me/progression", { auth: true }),
   collection: serie => request(`/api/me/collection${serie ? `?serie=${encodeURIComponent(serie)}` : ""}`, { auth: true }),
   boosterCards: code => request(`/api/boosters/${encodeURIComponent(code)}/cartes`),
   open: code => request(`/api/boosters/${encodeURIComponent(code)}/open`, { method: "POST", auth: true }),
