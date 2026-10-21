@@ -1,19 +1,20 @@
 """API Astrodex : catalogue, joueurs, collections et ouverture de boosters côté serveur."""
 from __future__ import annotations
 
-import hashlib
 import logging
 import secrets
 from contextlib import asynccontextmanager
 
-from fastapi import Depends, FastAPI, Header, HTTPException
+from fastapi import Depends, FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.staticfiles import StaticFiles
 from pydantic import BaseModel, Field
 
 from . import config, db
 from .catalog_import import import_catalog, load_catalog
+from .common import CARD_SELECT, card_out, current_player, hash_token
 from .draw import draw_pack
+from . import profil
 
 logging.basicConfig(level=logging.INFO, format="%(asctime)s %(levelname)s %(name)s %(message)s")
 log = logging.getLogger("astrodex")
@@ -32,27 +33,8 @@ async def lifespan(_app: FastAPI):
 app = FastAPI(title="Astrodex API", version="1.0.0", lifespan=lifespan)
 if config.CORS_ORIGINS:
     app.add_middleware(CORSMiddleware, allow_origins=config.CORS_ORIGINS, allow_methods=["*"], allow_headers=["*"])
+app.include_router(profil.router)
 app.mount("/media", StaticFiles(directory=config.MEDIA_DIR, check_dir=False), name="media")
-
-CARD_SELECT = """
-    SELECT c.id, c.numero, c.rarete, c.attaque, c.defense, c.vitesse, c.image, c.credit, c.licence, c.variante, c.cadrage,
-           o.slug, o.nom, o.type, o.constellation, o.description, o.faits,
-           s.code AS serie, t.total
-    FROM cards c JOIN celestial_objects o ON o.id = c.object_id JOIN series s ON s.id = c.series_id
-    JOIN (SELECT series_id, count(*) AS total FROM cards WHERE NOT retired GROUP BY series_id) t ON t.series_id = c.series_id
-"""
-
-
-def card_out(r: dict) -> dict:
-    return {
-        "id": r["id"], "numero": r["numero"], "total": r["total"], "serie": r["serie"],
-        "slug": r["slug"], "nom": r["nom"], "type": r["type"], "constellation": r["constellation"],
-        "description": r["description"], "faits": r["faits"], "rarete": r["rarete"],
-        "attaque": r["attaque"], "defense": r["defense"], "vitesse": r["vitesse"],
-        "puissance": r["attaque"] + r["defense"] + r["vitesse"],
-        "image_url": f"/media/{r['image']}", "credit": r["credit"], "licence": r["licence"], "variante": r["variante"], "cadrage": r["cadrage"],
-    }
-
 
 def boosters_out(conn, where: str = "", params: tuple = ()) -> list[dict]:
     rows = conn.execute(f"""
@@ -72,25 +54,6 @@ def boosters_out(conn, where: str = "", params: tuple = ()) -> list[dict]:
     for b in out.values():
         b["emplacements"] = [{"position": k, "taux": v} for k, v in sorted(b["emplacements"].items())]
     return list(out.values())
-
-
-# ---------- Authentification légère par jeton ----------
-# Un joueur reçoit un jeton aléatoire à sa création ; seul son SHA-256 est stocké.
-# À remplacer plus tard par Authentik / NextAuth : il suffira de faire correspondre l'identité à players.id.
-
-def _hash(token: str) -> str:
-    return hashlib.sha256(token.encode()).hexdigest()
-
-
-def current_player(authorization: str | None = Header(default=None)) -> dict:
-    if not authorization or not authorization.lower().startswith("bearer "):
-        raise HTTPException(401, "Jeton manquant : créez un joueur avec POST /api/players")
-    with db.connection() as conn:
-        row = conn.execute("SELECT id, pseudo, created_at FROM players WHERE token_hash = %s",
-                           (_hash(authorization[7:].strip()),)).fetchone()
-    if not row:
-        raise HTTPException(401, "Jeton inconnu")
-    return row
 
 
 # ---------- Routes ----------
@@ -158,7 +121,7 @@ def create_player(body: PlayerIn | None = None):
     token = secrets.token_urlsafe(32)
     with db.connection() as conn:
         row = conn.execute("INSERT INTO players (token_hash, pseudo) VALUES (%s, %s) RETURNING id, pseudo, created_at",
-                           (_hash(token), body.pseudo if body else None)).fetchone()
+                           (hash_token(token), body.pseudo if body else None)).fetchone()
     return {**row, "token": token}
 
 

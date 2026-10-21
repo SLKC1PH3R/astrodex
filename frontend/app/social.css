@@ -1,0 +1,112 @@
+/* Onglets sociaux et de progression (Profil, Succès, Classement, Amis, Messages, Échanges, Marché,
+   Guilde, Bataille). Importé dans app/layout.js. Préfixe .sx-. Reprend les maquettes « onglets du jeu ». */
+
+.sx-page { width: 100%; max-width: 1400px; margin: 0 auto; box-sizing: border-box; padding: 8px 32px 40px; display: flex; flex-direction: column; gap: 20px; }
+.sx-row { display: flex; flex-wrap: wrap; gap: 20px; align-items: stretch; }
+.sx-grow { flex: 999 1 460px; min-width: 0; }
+.sx-side { flex: 1 1 300px; max-width: 380px; min-width: 0; }
+.sx-pane { background: var(--color-surface); border-radius: 18px; box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--color-text) 8%, transparent);
+  padding: 20px; box-sizing: border-box; display: flex; flex-direction: column; gap: 14px; min-width: 0; }
+.sx-lbl { margin: 0; font-size: 12px; font-weight: 600; letter-spacing: .8px; color: var(--color-neutral-400); text-transform: uppercase; }
+.sx-head { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: baseline; gap: 8px; }
+.sx-muted { font-size: 13px; color: var(--color-neutral-400); }
+.sx-empty { margin: 0; padding: 18px; border-radius: 14px; text-align: center; font-size: 14px; color: var(--color-neutral-400);
+  background: color-mix(in srgb, var(--color-text) 4%, transparent); }
+.sx-chip { display: inline-flex; align-items: center; gap: 6px; min-height: 36px; padding: 0 14px; border-radius: 999px; font-size: 13px;
+  background: var(--color-surface); color: var(--color-neutral-200); }
+.sx-chip b { color: var(--color-text); font-weight: 600; }
+.sx-tag { align-self: flex-start; display: inline-flex; padding: 4px 10px; border-radius: 999px; font-size: 12px; font-weight: 600; letter-spacing: .6px;
+  background: color-mix(in srgb, var(--tc, #ffcf6b) 16%, transparent); color: color-mix(in srgb, var(--tc, #ffcf6b) 60%, white); }
+
+/* Boutons pleins (les .btn du thème sont en contour) */
+.sx-btn { display: inline-flex; align-items: center; justify-content: center; gap: 8px; min-height: 44px; padding: 0 18px; border: 0; border-radius: 12px;
+  font: inherit; font-size: 14px; font-weight: 600; cursor: pointer; text-decoration: none; background: var(--color-accent); color: var(--color-bg); }
+.sx-btn:hover { filter: brightness(1.08); }
+.sx-btn:disabled { opacity: .45; cursor: not-allowed; filter: none; }
+.sx-btn.alt { background: color-mix(in srgb, var(--color-text) 10%, transparent); color: var(--color-text); }
+.sx-btn.alt:hover { background: color-mix(in srgb, var(--color-text) 16%, transparent); }
+.sx-btn.sm { min-height: 36px; padding: 0 12px; font-size: 13px; border-radius: 10px; }
+.sx-btn.danger { background: color-mix(in srgb, #ff6b6b 20%, transparent); color: #ffb3b3; }
+
+/* Onglets en pastilles */
+.sx-tabs { display: inline-flex; flex-wrap: wrap; gap: 4px; padding: 4px; border-radius: 999px; background: var(--color-surface); align-self: flex-start; }
+.sx-tab { min-height: 38px; padding: 0 16px; border: 0; border-radius: 999px; background: transparent; color: var(--color-neutral-400);
+  font: inherit; font-size: 14px; cursor: pointer; }
+.sx-tab[aria-selected="true"], .sx-tab[aria-pressed="true"] { background: var(--color-text); color: var(--color-bg); font-weight: 600; }
+
+/* Barres de progression */
+.sx-bar { height: 8px; border-radius: 4px; background: color-mix(in srgb, var(--color-text) 10%, transparent); overflow: hidden; }
+.sx-bar > i { display: block; height: 100%; min-width: 2px; border-radius: inherit; background: var(--bc, var(--color-accent)); transition: width .4s; }
+
+/* Avatars à initiale */
+.sx-av { flex: none; display: grid; place-items: center; border-radius: 50%; font-weight: 700; color: #fff;
+  width: var(--s, 40px); height: var(--s, 40px); font-size: calc(var(--s, 40px) * .4); }
+
+/* Fenêtre modale */
+.sx-modal-bg { position: fixed; inset: 0; z-index: 40; display: grid; place-items: center; padding: 20px; background: rgba(8,9,20,.72); backdrop-filter: blur(6px); }
+.sx-modal { width: min(820px, 100%); max-height: min(86vh, 900px); display: flex; flex-direction: column; gap: 14px; padding: 22px; box-sizing: border-box;
+  border-radius: 20px; background: var(--color-surface); box-shadow: 0 30px 80px -20px rgba(0,0,0,.8), inset 0 0 0 1px color-mix(in srgb, var(--color-text) 10%, transparent); }
+.sx-modal h2 { margin: 0; font-size: 18px; font-weight: 600; }
+.sx-modal-body { flex: 1 1 auto; min-height: 0; overflow-y: auto; }
+.sx-modal-foot { display: flex; flex-wrap: wrap; justify-content: flex-end; gap: 10px; }
+.sx-cards { display: grid; grid-template-columns: repeat(auto-fill, minmax(110px, 1fr)); gap: 12px; }
+.sx-pick { position: relative; padding: 0; border: 0; border-radius: 12px; background: none; cursor: pointer; }
+.sx-pick[aria-pressed="true"] { outline: 3px solid var(--color-accent); outline-offset: 2px; }
+.sx-pick .sx-n { position: absolute; top: -6px; right: -6px; z-index: 3; width: 22px; height: 22px; border-radius: 50%; display: grid; place-items: center;
+  background: var(--color-accent); color: var(--color-bg); font-size: 12px; font-weight: 700; }
+.sx-qty { position: absolute; right: 6px; bottom: 6px; z-index: 3; padding: 1px 6px; border-radius: 6px; background: var(--color-accent); color: var(--color-bg); font-size: 11px; font-weight: 700; }
+
+/* ---------- Profil ---------- */
+.pf-banner { position: relative; overflow: hidden; isolation: isolate; border-radius: 22px; min-height: 200px; padding: 28px 32px; box-sizing: border-box;
+  display: flex; flex-wrap: wrap; align-items: flex-end; gap: 20px; background: #0b0d2a; }
+.pf-banner > img { position: absolute; z-index: -2; right: -120px; top: -220px; width: 760px; height: 760px; object-fit: contain; opacity: .5; transform: rotate(-14deg); }
+.pf-banner::before { content: ""; position: absolute; inset: 0; z-index: -1; background: linear-gradient(90deg, rgba(22,24,38,.95), rgba(22,24,38,.6) 55%, rgba(22,24,38,.1)); }
+.pf-id { flex: 1 1 260px; display: flex; flex-direction: column; gap: 6px; }
+.pf-id h1 { margin: 0; font-family: "Russo One", var(--font-heading); font-weight: 400; font-size: clamp(28px, 3vw, 40px); }
+.pf-stats { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 12px; }
+.pf-stat { padding: 14px 16px; border-radius: 14px; background: var(--color-surface); box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--color-text) 8%, transparent);
+  display: flex; flex-direction: column; gap: 4px; }
+.pf-stat b { font-size: 24px; font-weight: 600; font-variant-numeric: tabular-nums; }
+.pf-stat span { font-size: 12px; color: var(--color-neutral-400); }
+.pf-vitrine { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 12px; }
+.pf-slot { aspect-ratio: 63 / 88; border-radius: 12px; border: 2px dashed color-mix(in srgb, var(--color-text) 18%, transparent); background: none;
+  display: grid; place-items: center; color: var(--color-neutral-500); font-size: 26px; cursor: pointer; }
+.pf-serie { display: flex; flex-direction: column; gap: 6px; }
+.pf-serie > div:first-child { display: flex; justify-content: space-between; font-size: 14px; }
+.pf-form { display: flex; flex-direction: column; gap: 12px; }
+.pf-form label { display: flex; flex-direction: column; gap: 6px; font-size: 13px; color: var(--color-neutral-300); }
+
+/* ---------- Succès ---------- */
+.ac-ring { display: flex; align-items: center; gap: 14px; padding: 12px 18px; border-radius: 16px; background: var(--color-surface); }
+.ac-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 14px; }
+.ac-card { display: flex; gap: 14px; align-items: flex-start; padding: 16px; border-radius: 16px; background: var(--color-surface);
+  box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--color-text) 8%, transparent); }
+.ac-card.is-done { box-shadow: inset 0 0 0 1px color-mix(in srgb, #ffcf6b 45%, transparent); }
+.ac-ico { flex: none; width: 52px; height: 52px; border-radius: 14px; display: grid; place-items: center; font-size: 26px;
+  background: color-mix(in srgb, var(--ic) 16%, transparent); color: var(--ic); }
+.ac-body { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 6px; }
+.ac-body > div:first-child { display: flex; justify-content: space-between; gap: 8px; }
+.ac-body b { font-size: 15px; }
+.ac-reward { align-self: flex-start; padding: 3px 8px; border-radius: 6px; background: rgba(255,207,107,.12); color: #ffe2a3; font-size: 12px; }
+
+/* ---------- Classement ---------- */
+.rk-podium { flex: 1 1 380px; max-width: 520px; padding: 24px 24px 0; border-radius: 20px; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 12px; align-items: end; background: radial-gradient(70% 60% at 50% 0%, rgba(255,207,107,.18), transparent 70%), var(--color-surface); }
+.rk-pod { display: flex; flex-direction: column; align-items: center; justify-content: flex-end; gap: 8px; text-align: center; min-width: 0; }
+.rk-pod a { text-decoration: none; }
+.rk-pod b { max-width: 100%; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.rk-step { width: 100%; border-radius: 14px 14px 0 0; display: grid; place-items: start center; padding-top: 12px; font-family: "Russo One", var(--font-heading); font-size: 28px; }
+.rk-table { flex: 999 1 460px; min-width: 0; border-radius: 20px; background: var(--color-surface); overflow-x: auto; }
+.rk-table table { width: 100%; border-collapse: collapse; font-size: 14px; }
+.rk-table th { text-align: left; font-size: 12px; font-weight: 600; letter-spacing: .8px; text-transform: uppercase; color: var(--color-neutral-400); padding: 12px 16px;
+  border-bottom: 1px solid color-mix(in srgb, var(--color-text) 10%, transparent); }
+.rk-table td { padding: 11px 16px; border-bottom: 1px solid color-mix(in srgb, var(--color-text) 6%, transparent); }
+.rk-table tr.is-me td { background: color-mix(in srgb, var(--color-accent) 14%, transparent); font-weight: 600; }
+.rk-table .num { text-align: right; font-variant-numeric: tabular-nums; }
+.rk-who { display: inline-flex; align-items: center; gap: 10px; color: inherit; text-decoration: none; }
+.rk-who:hover { text-decoration: underline; }
+
+@media (max-width: 760px) {
+  .sx-page { padding: 8px 16px 32px; }
+  .pf-vitrine { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+}
