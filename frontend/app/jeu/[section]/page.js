@@ -4,7 +4,7 @@ import { notFound, useParams } from "next/navigation";
 import Topbar from "@/components/Topbar";
 import { findSection } from "@/lib/menu";
 
-/* Sections du menu pas encore développées : Échanges, Marché, Profil, Guilde, Amis, Messages, Bataille, Succès, Classement, Paramètres. */
+/* Sections du menu pas encore développées (aujourd'hui : Paramètres) : page d'attente générique. */
 export default function SectionPage() {
   const { section } = useParams();
   const m = findSection(section);

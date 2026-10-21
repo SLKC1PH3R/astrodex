@@ -3,7 +3,7 @@ import { useCallback, useEffect, useRef, useState } from "react";
 import Link from "next/link";
 import Topbar from "@/components/Topbar";
 import { api } from "@/lib/api";
-import { Avatar, ago, notifyBadges } from "@/lib/social";
+import { Avatar, ago, notifyBadges, Linkify } from "@/lib/social";
 
 /* Onglet « Messages » : conversations à gauche, fil de discussion à droite, envoi entre amis.
    /jeu/messages?avec=ID ouvre directement la conversation avec ce joueur. Le fil ouvert est relu
@@ -106,7 +106,7 @@ export default function MessagesPage() {
                     return (
                       <div key={m.id} style={{ display: "contents" }}>
                         {gap && <span className="ms-time">{new Date(m.le).toLocaleString("fr-FR", { weekday: "short", hour: "2-digit", minute: "2-digit" })}</span>}
-                        <div className={m.de_moi ? "ms-me" : "ms-them"}>{m.texte}</div>
+                        <div className={m.de_moi ? "ms-me" : "ms-them"}><Linkify text={m.texte} /></div>
                       </div>
                     );
                   })}
