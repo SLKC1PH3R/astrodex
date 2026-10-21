@@ -17,6 +17,8 @@ ACHIEVEMENTS: list[tuple[str, str, str, str, str, int, str | None]] = [
     ("ultra_10", "Collection", "Chasseur d'Ultra rares", "Obtenir 10 cartes Ultra rares différentes.", "ultra_rares", 10, "Chasseur d'Ultra rares"),
     ("legende_1", "Collection", "Première légende", "Obtenir une carte Légendaire.", "legendaires", 1, "Porte-bonheur"),
     ("legende_5", "Collection", "Panthéon", "Obtenir 5 cartes Légendaires différentes.", "legendaires", 5, "Gardien du Panthéon"),
+    ("amis_1", "Social", "Signal reçu", "Avoir un premier ami.", "amis", 1, None),
+    ("amis_5", "Social", "Équipage au complet", "Avoir 5 amis.", "amis", 5, "Capitaine d'équipage"),
     ("serie_S1", "Séries", "Maître du Système solaire", "Compléter la série I · Système solaire.", "serie_S1", 0, "Maître du Système solaire"),
     ("serie_S2", "Séries", "Ceinture d'astéroïdes", "Compléter la série II · Astéroïdes.", "serie_S2", 0, "Mineur d'astéroïdes"),
     ("serie_S3", "Séries", "Pouponnière d'étoiles", "Compléter la série III · Nébuleuses.", "serie_S3", 0, "Seigneur des nébuleuses"),
