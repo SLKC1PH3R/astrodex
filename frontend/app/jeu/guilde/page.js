@@ -192,7 +192,7 @@ function MyGuild({ g, setG }) {
         <Crest g={g} />
         <div className="gd-id">
           <span className="sx-lbl">Guilde · niveau {g.niveau}</span>
-          <h1>{g.nom}</h1>
+          <h2>{g.nom}</h2>
           <span className="sx-muted">{g.membres} / {g.max_membres} membres · {ordinal(g.rang)} au classement des guildes · {g.recrutement ? "Recrutement ouvert" : "Sur invitation"}</span>
           {g.description && <p>{g.description}</p>}
         </div>

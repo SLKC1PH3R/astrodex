@@ -13,6 +13,7 @@ import "./boosters.css";
 import "./social.css";
 import "./commerce.css";
 import "./arene.css";
+import "./observatoire.css";
 import "./packpicker.css";
 import "./packring.css";
 import "./blackhole.css";
@@ -32,6 +33,8 @@ export default function RootLayout({ children }) {
         <script dangerouslySetInnerHTML={{ __html: "try{document.documentElement.dataset.motion=localStorage.getItem('astrodex-animations')||'systeme'}catch(e){}" }} />
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="" />
+        {/* polices de la landing et du jeu (thème Observatoire) */}
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,500;0,600;0,700;1,500;1,600&family=Geist:wght@400;500;600&family=Geist+Mono:wght@400;500&display=swap" />
         <link rel="stylesheet" href="https://unpkg.com/@phosphor-icons/web@2.1.1/src/regular/style.css" />
         <link rel="stylesheet" href="https://unpkg.com/@phosphor-icons/web@2.1.1/src/fill/style.css" />
       </head>
