@@ -207,33 +207,34 @@
 .ax-auth .ax-carousel-caption b em { font-style: italic; font-weight: 500; color: var(--ob-ink-2); }
 .ax-auth .ax-carousel-caption span { max-width: 460px; font-size: 15px; line-height: 1.6; color: var(--ob-ink-2); }
 
-/* ---------- Administration (/jeu/admin) ---------- */
-.ad-stats { display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 16px; }
-.ad-purge { display: flex; flex-wrap: wrap; align-items: flex-end; gap: 14px 22px; }
-.ad-purge > label { display: flex; flex-direction: column; gap: 6px; font-size: 13px; color: var(--color-neutral-300); }
-.ad-inline { display: flex; align-items: center; gap: 8px; }
-.ad-inline .input { width: 90px; }
-.ad-check { flex-direction: row !important; align-items: center; gap: 8px !important; min-height: 40px; cursor: pointer; }
-.ad-check input, .ad-cb input { accent-color: var(--ob-sage); width: 16px; height: 16px; }
-.ad-tools { display: flex; flex-direction: column; gap: 14px; }
-.ad-filters { display: flex; flex-wrap: wrap; align-items: center; gap: 10px; }
-.ad-filters .input { flex: 1 1 240px; min-width: 0; }
-.ad-filters select.input { flex: 0 1 200px; }
-.ad-table { border-radius: 20px; background: var(--ob-tile); border: 1px solid var(--ob-tile-line); overflow-x: auto; }
-.ad-table table { width: 100%; border-collapse: collapse; font-size: 14px; }
-.ad-table th { text-align: left; padding: 14px 14px 10px; font-family: var(--ob-mono); font-size: 10px; font-weight: 400; letter-spacing: .14em; text-transform: uppercase;
+/* ---------- Administration (/jeu/admin) ----------
+   Préfixe .gm- (gestion des membres) : surtout pas .ad-…, que les bloqueurs de publicité masquent. */
+.gm-stats { display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 16px; }
+.gm-purge { display: flex; flex-wrap: wrap; align-items: flex-end; gap: 14px 22px; }
+.gm-purge > label { display: flex; flex-direction: column; gap: 6px; font-size: 13px; color: var(--color-neutral-300); }
+.gm-inline { display: flex; align-items: center; gap: 8px; }
+.gm-inline .input { width: 90px; }
+.gm-check { flex-direction: row !important; align-items: center; gap: 8px !important; min-height: 40px; cursor: pointer; }
+.gm-check input, .gm-cb input { accent-color: var(--ob-sage); width: 16px; height: 16px; }
+.gm-tools { display: flex; flex-direction: column; gap: 14px; }
+.gm-filters { display: flex; flex-wrap: wrap; align-items: center; gap: 10px; }
+.gm-filters .input { flex: 1 1 240px; min-width: 0; }
+.gm-filters select.input { flex: 0 1 200px; }
+.gm-table { border-radius: 20px; background: var(--ob-tile); border: 1px solid var(--ob-tile-line); overflow-x: auto; }
+.gm-table table { width: 100%; border-collapse: collapse; font-size: 14px; }
+.gm-table th { text-align: left; padding: 14px 14px 10px; font-family: var(--ob-mono); font-size: 10px; font-weight: 400; letter-spacing: .14em; text-transform: uppercase;
   color: #a3a6b8; border-bottom: 1px solid var(--ob-tile-line); white-space: nowrap; }
-.ad-table td { padding: 10px 14px; border-bottom: 1px solid rgba(233,233,237,.06); white-space: nowrap; color: var(--ob-ink-2); }
-.ad-table tr:last-child td { border-bottom: 0; }
-.ad-table tr.on td { background: rgba(174,191,162,.07); }
-.ad-table .num { text-align: right; font-variant-numeric: tabular-nums; }
-.ad-cb { width: 36px; }
-.ad-who { display: flex; align-items: center; gap: 10px; color: var(--ob-ink); text-decoration: none; }
-.ad-who > span { display: flex; flex-direction: column; line-height: 1.3; min-width: 0; }
-.ad-who b { font-weight: 500; }
-.ad-who small { font-size: 12px; color: #a3a6b8; overflow: hidden; text-overflow: ellipsis; max-width: 260px; }
-.ad-role { margin-left: 8px; padding: 1px 7px; border-radius: 99px; background: var(--ob-sage); color: var(--ob-bg); font-family: var(--ob-mono); font-style: normal; font-size: 9.5px; letter-spacing: .1em; text-transform: uppercase; }
-.ad-actions { display: flex; justify-content: flex-end; gap: 6px; }
-.ad-pages { display: flex; align-items: center; justify-content: center; gap: 16px; }
-.ad-p { margin: 0; font-size: 14px; line-height: 1.6; color: var(--color-neutral-300); }
+.gm-table td { padding: 10px 14px; border-bottom: 1px solid rgba(233,233,237,.06); white-space: nowrap; color: var(--ob-ink-2); }
+.gm-table tr:last-child td { border-bottom: 0; }
+.gm-table tr.on td { background: rgba(174,191,162,.07); }
+.gm-table .num { text-align: right; font-variant-numeric: tabular-nums; }
+.gm-cb { width: 36px; }
+.gm-who { display: flex; align-items: center; gap: 10px; color: var(--ob-ink); text-decoration: none; }
+.gm-who > span { display: flex; flex-direction: column; line-height: 1.3; min-width: 0; }
+.gm-who b { font-weight: 500; }
+.gm-who small { font-size: 12px; color: #a3a6b8; overflow: hidden; text-overflow: ellipsis; max-width: 260px; }
+.gm-role { margin-left: 8px; padding: 1px 7px; border-radius: 99px; background: var(--ob-sage); color: var(--ob-bg); font-family: var(--ob-mono); font-style: normal; font-size: 9.5px; letter-spacing: .1em; text-transform: uppercase; }
+.gm-actions { display: flex; justify-content: flex-end; gap: 6px; }
+.gm-pages { display: flex; align-items: center; justify-content: center; gap: 16px; }
+.gm-p { margin: 0; font-size: 14px; line-height: 1.6; color: var(--color-neutral-300); }
 .sx-sr { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); }

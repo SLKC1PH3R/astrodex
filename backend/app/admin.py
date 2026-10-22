@@ -36,7 +36,9 @@ SORTS = {"recent": "p.created_at DESC", "actif": "p.last_seen DESC NULLS LAST", 
 
 @router.get("/api/admin/joueurs")
 def players(q: str | None = None, type: Literal["tous", "comptes", "invites"] = "tous",
-            tri: Literal["recent", "actif", "cartes", "pseudo"] = "recent", page: int = 1, admin: dict = Depends(current_admin)):
+            tri: Literal["recent", "actif", "cartes", "pseudo"] = "recent", inactif: int = 0, page: int = 1,
+            admin: dict = Depends(current_admin)):
+    """inactif = N : seulement les joueurs sans activité depuis N jours (0 = tous)."""
     where, params = ["true"], {}
     if q and q.strip():
         where.append("(p.pseudo ILIKE %(q)s OR p.email ILIKE %(q)s OR p.id::text = %(exact)s)")
@@ -45,6 +47,9 @@ def players(q: str | None = None, type: Literal["tous", "comptes", "invites"] = 
         where.append("p.email IS NOT NULL")
     elif type == "invites":
         where.append("p.email IS NULL")
+    if inactif > 0:
+        where.append("coalesce(p.last_seen, p.created_at) < now() - make_interval(days => %(inactif)s)")
+        params["inactif"] = min(inactif, 3650)
     page = max(1, page)
     with db.connection() as conn:
         total = conn.execute(f"SELECT count(*) AS n FROM players p WHERE {' AND '.join(where)}", params).fetchone()["n"]
@@ -96,14 +101,15 @@ def delete_many(body: BulkDeleteIn, admin: dict = Depends(current_admin)):
 class PurgeIn(BaseModel):
     jours: int = Field(default=7, ge=0, le=3650)
     vides_seulement: bool = True
+    inclure_comptes: bool = False  # aussi les comptes e-mail (jamais les administrateurs)
     confirmer: bool = False
 
 
 @router.post("/api/admin/purge-invites")
 def purge_guests(body: PurgeIn, admin: dict = Depends(current_admin)):
-    """Profils invités (sans e-mail) inactifs depuis N jours ; vides_seulement = sans aucune carte.
-    Sans confirmer, renvoie seulement le nombre de profils concernés."""
-    cond = f"""email IS NULL AND NOT is_admin AND coalesce(last_seen, created_at) < now() - make_interval(days => %s)
+    """Profils inactifs depuis N jours : invités (sans e-mail) et, si inclure_comptes, comptes e-mail aussi ;
+    vides_seulement = sans aucune carte. Sans confirmer, renvoie seulement le nombre de profils concernés."""
+    cond = f"""{"true" if body.inclure_comptes else "email IS NULL"} AND NOT is_admin AND coalesce(last_seen, created_at) < now() - make_interval(days => %s)
                {"AND NOT EXISTS (SELECT 1 FROM player_cards pc WHERE pc.player_id = players.id)" if body.vides_seulement else ""}"""
     with db.connection() as conn, conn.transaction():
         ids = [r["id"] for r in conn.execute(f"SELECT id FROM players WHERE {cond}", (body.jours,)).fetchall()]

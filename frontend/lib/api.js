@@ -159,7 +159,7 @@ export const api = {
   adminSupprimer: id => request(`/api/admin/joueurs/${encodeURIComponent(id)}`, { method: "DELETE", auth: true }),
   adminSupprimerPlusieurs: ids => request("/api/admin/joueurs/supprimer", { method: "POST", body: { ids }, auth: true }),
   adminMotDePasse: (id, nouveau) => request(`/api/admin/joueurs/${encodeURIComponent(id)}/mot-de-passe`, { method: "POST", body: { nouveau }, auth: true }),
-  adminPurge: (jours, videsSeulement, confirmer) => request("/api/admin/purge-invites", { method: "POST", body: { jours, vides_seulement: videsSeulement, confirmer }, auth: true }),
+  adminPurge: (jours, videsSeulement, confirmer, inclureComptes = false) => request("/api/admin/purge-invites", { method: "POST", body: { jours, vides_seulement: videsSeulement, confirmer, inclure_comptes: inclureComptes }, auth: true }),
   notifications: () => request("/api/me/notifications", { auth: true }),
   open: code => request(`/api/boosters/${encodeURIComponent(code)}/open`, { method: "POST", auth: true }),
 };

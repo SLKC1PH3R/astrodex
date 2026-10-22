@@ -101,3 +101,21 @@ def test_admin(client, monkeypatch):
     assert done["supprime"] >= 1
     assert client.get("/api/me", headers=H(ghost["token"])).status_code == 401
     assert client.get("/api/me", headers=H(adm["token"])).status_code == 200
+
+
+def test_admin_inactive_filter_and_purge_accounts(client, monkeypatch):
+    boss = mail()
+    monkeypatch.setattr(config, "ADMIN_EMAILS", {boss})
+    adm = client.post("/api/auth/inscription", json={"pseudo": "Admin2", "email": boss, "mot_de_passe": "admin-2026"}).json()
+    old = client.post("/api/auth/inscription", json={"pseudo": "Ancien", "email": mail(), "mot_de_passe": "ancien-2026"}).json()
+    import psycopg as pg
+    with pg.connect(os.environ["DATABASE_URL"], autocommit=True) as c:
+        c.execute("UPDATE players SET last_seen = now() - interval '40 days', created_at = now() - interval '60 days' WHERE id = %s", (old["id"],))
+    ids = {j["id"] for j in client.get("/api/admin/joueurs?inactif=30&type=comptes", headers=H(adm["token"])).json()["joueurs"]}
+    assert old["id"] in ids and adm["id"] not in ids
+    only_guests = client.post("/api/admin/purge-invites", headers=H(adm["token"]), json={"jours": 30}).json()
+    with_accounts = client.post("/api/admin/purge-invites", headers=H(adm["token"]), json={"jours": 30, "inclure_comptes": True}).json()
+    assert with_accounts["concernes"] >= only_guests["concernes"] + 1
+    client.post("/api/admin/purge-invites", headers=H(adm["token"]), json={"jours": 30, "inclure_comptes": True, "confirmer": True})
+    assert client.post("/api/auth/connexion", json={"email": old["email"], "mot_de_passe": "ancien-2026"}).status_code == 401
+    assert client.get("/api/me", headers=H(adm["token"])).status_code == 200
