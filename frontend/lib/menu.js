@@ -16,6 +16,8 @@ export const MENU = [
   { slug: "succes", group: "moi",     label: "Succès",            icon: "ph-trophy",            empty: "Complète des séries et ouvre des boosters pour débloquer des succès." },
   { slug: "classement", group: "communaute", label: "Classement",        icon: "ph-ranking",           empty: "Le classement des collectionneurs de la semaine." },
 ];
+/* Entrée visible seulement des administrateurs (players.is_admin). */
+export const ADMIN = { slug: "admin", group: "moi", label: "Administration", icon: "ph-shield-check" };
 export const SETTINGS = { slug: "parametres", group: "moi", label: "Paramètres", icon: "ph-gear", empty: "Compte, notifications et préférences d'animation." };
 /* Groupes du rail, dans l'ordre d'affichage ; chaque groupe liste ses entrées dans cet ordre. */
 export const GROUPS = [
@@ -27,7 +29,7 @@ export const GROUPS = [
 ];
 export const findSection = slug => [...MENU, SETTINGS].find(m => m.slug === slug);
 
-const ALL = [...MENU, SETTINGS];
+const ALL = [...MENU, SETTINGS, ADMIN];
 export const hrefOf = slug => (slug ? `/jeu/${slug}` : "/jeu");
 /* Entrée du menu correspondant à un chemin (/jeu, /jeu/marche, /jeu/profil?id=…). */
 export const sectionForPath = path => ALL.find(m => hrefOf(m.slug) === (path || "").split("?")[0].replace(/\/$/, "")) || null;

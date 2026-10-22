@@ -10,18 +10,25 @@ function writeToken(t) {
 }
 
 let memoryToken = null;
+const LOGIN_URL = "/inscription?mode=connexion";
+
+/* Pas de session valide : on n'invente plus de profil en silence (c'était la source des comptes en double),
+   on renvoie vers la page de connexion. */
+function needLogin() {
+  memoryToken = null; writeToken("");
+  if (typeof window !== "undefined" && !window.location.pathname.startsWith("/inscription")) window.location.assign(LOGIN_URL);
+  return new Error("Connecte-toi pour continuer");
+}
 
 async function request(path, { method = "GET", body, auth = false } = {}) {
   const headers = { "Content-Type": "application/json" };
-  if (auth) headers.Authorization = `Bearer ${await ensurePlayer()}`;
-  const res = await fetch(path, { method, headers, body: body ? JSON.stringify(body) : undefined, cache: "no-store" });
-  if (res.status === 401 && auth) {
-    // jeton perdu ou base réinitialisée : on recrée un joueur une fois
-    memoryToken = null; writeToken("");
-    headers.Authorization = `Bearer ${await ensurePlayer()}`;
-    const retry = await fetch(path, { method, headers, body: body ? JSON.stringify(body) : undefined, cache: "no-store" });
-    return handle(retry);
+  if (auth) {
+    const token = currentKey();
+    if (!token) throw needLogin();
+    headers.Authorization = `Bearer ${token}`;
   }
+  const res = await fetch(path, { method, headers, body: body ? JSON.stringify(body) : undefined, cache: "no-store" });
+  if (res.status === 401 && auth) throw needLogin();
   return handle(res);
 }
 
@@ -31,32 +38,44 @@ async function handle(res) {
   return data;
 }
 
-async function createPlayer(pseudo) {
-  const res = await fetch("/api/players", {
-    method: "POST", headers: { "Content-Type": "application/json" },
-    body: JSON.stringify(pseudo ? { pseudo } : {}),
-  });
-  const p = await handle(res);
-  writeToken(p.token);
-  memoryToken = p.token;
-  return p;
+function keep(token) { memoryToken = token; writeToken(token); }
+
+async function post(path, body, token) {
+  const headers = { "Content-Type": "application/json", ...(token ? { Authorization: `Bearer ${token}` } : {}) };
+  return handle(await fetch(path, { method: "POST", headers, body: JSON.stringify(body), cache: "no-store" }));
 }
 
-export async function ensurePlayer() {
-  if (memoryToken) return memoryToken;
-  const saved = readToken();
-  if (saved) return (memoryToken = saved);
-  return (await createPlayer()).token;
+/* Inscription par e-mail. Si cet appareil joue déjà en invité, sa collection est rattachée au nouveau compte. */
+export async function signup({ pseudo, email, motDePasse }) {
+  const r = await post("/api/auth/inscription", { pseudo, email, mot_de_passe: motDePasse }, currentKey() || null);
+  keep(r.token);
+  return r;
 }
 
-/* Inscription : crée un joueur avec son pseudo. E-mail et mot de passe ne sont pas encore gérés par le backend
-   (voir README : brancher Authentik / NextAuth et associer l'identité à players.id). */
-export const signup = pseudo => createPlayer(pseudo?.trim() || null);
-export function logout() { memoryToken = null; writeToken(""); }
-export const hasPlayer = () => !!(memoryToken || readToken());
+/* Connexion par e-mail : ouvre une session pour cet appareil, sur n'importe quel ordinateur. */
+export async function login({ email, motDePasse }) {
+  const r = await post("/api/auth/connexion", { email, mot_de_passe: motDePasse });
+  keep(r.token);
+  return r;
+}
 
-/* Clé de connexion (le jeton du joueur) : la noter permet de retrouver son compte sur un autre appareil. */
-export const currentKey = () => memoryToken || readToken() || "";
+/* Jouer sans compte (profil invité lié à ce navigateur). Réutilise le profil invité existant s'il y en a un. */
+export async function playAsGuest() {
+  if (currentKey()) return currentKey();
+  const p = await post("/api/players", {});
+  keep(p.token);
+  return p.token;
+}
+
+export function logout() {
+  const token = currentKey();
+  if (token) fetch("/api/auth/deconnexion", { method: "POST", headers: { Authorization: `Bearer ${token}` } }).catch(() => {});
+  memoryToken = null; writeToken("");
+}
+export const hasPlayer = () => !!currentKey();
+
+/* Clé de connexion (le jeton de cet appareil). */
+export function currentKey() { return memoryToken || readToken() || ""; }
 
 /* Se connecter avec une clé : vérifiée auprès du serveur avant de remplacer la clé actuelle. */
 export async function loginWithKey(key) {
@@ -64,20 +83,20 @@ export async function loginWithKey(key) {
   const res = await fetch("/api/me", { headers: { Authorization: `Bearer ${k}` }, cache: "no-store" });
   if (res.status === 401) throw new Error("Cette clé ne correspond à aucun compte");
   const me = await handle(res);
-  memoryToken = k; writeToken(k);
+  keep(k);
   return me;
 }
 
 /* Nouvelle clé : l'ancienne cesse de fonctionner partout. */
 export async function rotateKey() {
   const { token } = await request("/api/me/cle", { method: "POST", auth: true });
-  memoryToken = token; writeToken(token);
+  keep(token);
   return token;
 }
 
 export async function deleteAccount(confirmation) {
   await request("/api/me", { method: "DELETE", body: { confirmation }, auth: true });
-  logout();
+  memoryToken = null; writeToken("");
 }
 
 export const api = {
@@ -133,6 +152,14 @@ export const api = {
   recompenseObjectif: id => request(`/api/me/guilde/objectifs/${id}/recompense`, { method: "POST", auth: true }),
   parametres: () => request("/api/me/parametres", { auth: true }),
   majParametres: patch => request("/api/me/parametres", { method: "PATCH", body: patch, auth: true }),
+  changerMotDePasse: (actuel, nouveau) => request("/api/me/mot-de-passe", { method: "POST", body: { actuel, nouveau }, auth: true }),
+  sessions: () => request("/api/me/sessions", { auth: true }),
+  adminStats: () => request("/api/admin/stats", { auth: true }),
+  adminJoueurs: (f = {}) => request(`/api/admin/joueurs?${new URLSearchParams(Object.entries(f).filter(([, v]) => v))}`, { auth: true }),
+  adminSupprimer: id => request(`/api/admin/joueurs/${encodeURIComponent(id)}`, { method: "DELETE", auth: true }),
+  adminSupprimerPlusieurs: ids => request("/api/admin/joueurs/supprimer", { method: "POST", body: { ids }, auth: true }),
+  adminMotDePasse: (id, nouveau) => request(`/api/admin/joueurs/${encodeURIComponent(id)}/mot-de-passe`, { method: "POST", body: { nouveau }, auth: true }),
+  adminPurge: (jours, videsSeulement, confirmer) => request("/api/admin/purge-invites", { method: "POST", body: { jours, vides_seulement: videsSeulement, confirmer }, auth: true }),
   notifications: () => request("/api/me/notifications", { auth: true }),
   open: code => request(`/api/boosters/${encodeURIComponent(code)}/open`, { method: "POST", auth: true }),
 };

@@ -14,7 +14,7 @@ from . import config, db
 from .catalog_import import import_catalog, load_catalog
 from .common import CARD_SELECT, card_out, current_player, hash_token
 from .draw import draw_pack
-from . import battle, guild, market, profil, settings, social, trades
+from . import admin, auth, battle, guild, market, profil, settings, social, trades
 
 logging.basicConfig(level=logging.INFO, format="%(asctime)s %(levelname)s %(name)s %(message)s")
 log = logging.getLogger("astrodex")
@@ -40,6 +40,8 @@ app.include_router(market.router)
 app.include_router(battle.router)
 app.include_router(guild.router)
 app.include_router(settings.router)
+app.include_router(auth.router)
+app.include_router(admin.router)
 app.mount("/media", StaticFiles(directory=config.MEDIA_DIR, check_dir=False), name="media")
 
 def boosters_out(conn, where: str = "", params: tuple = ()) -> list[dict]:

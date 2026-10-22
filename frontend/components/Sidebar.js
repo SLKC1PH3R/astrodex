@@ -2,7 +2,7 @@
 import Link from "next/link";
 import { useEffect, useState } from "react";
 import { usePathname, useRouter } from "next/navigation";
-import { GROUPS, SETTINGS, groupOf, hrefOf, itemsOf, sectionForPath } from "@/lib/menu";
+import { ADMIN, GROUPS, SETTINGS, groupOf, hrefOf, itemsOf, sectionForPath } from "@/lib/menu";
 import { api, logout } from "@/lib/api";
 import { usePlayer } from "@/components/PlayerProvider";
 
@@ -52,6 +52,7 @@ export default function Sidebar() {
           <div key={g.id} className="ob-group" role="group" aria-labelledby={`ob-g-${g.id}`}>
             <span id={`ob-g-${g.id}`}>{g.label}</span>
             {itemsOf(g).filter(m => m.slug !== SETTINGS.slug).map(m => <Item key={m.slug || "paquets"} m={m} path={path} badge={badges[m.slug]} />)}
+            {g.id === ADMIN.group && stats?.is_admin && <Item m={ADMIN} path={path} />}
           </div>
         ))}
       </nav>
@@ -72,7 +73,7 @@ export default function Sidebar() {
 
       {/* Mobile : sous-onglets du groupe courant, puis barre d'onglets des groupes */}
       <nav className="ob-subnav" aria-label={current.label}>
-        {itemsOf(current).map(m => {
+        {[...itemsOf(current), ...(current.id === ADMIN.group && stats?.is_admin ? [ADMIN] : [])].map(m => {
           const h = hrefOf(m.slug);
           return (
             <Link key={m.slug || "paquets"} href={h} aria-current={path === h ? "page" : undefined}>
