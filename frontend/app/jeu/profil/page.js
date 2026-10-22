@@ -49,7 +49,7 @@ export default function ProfilPage() {
               <Avatar id={p.id} pseudo={p.pseudo} size={104} style={{ boxShadow: "0 0 0 4px var(--color-bg), 0 0 0 6px var(--color-accent)" }} />
               <div className="pf-id">
                 {p.titre && <span className="sx-tag">TITRE · {p.titre.toUpperCase()}</span>}
-                <h1>{p.pseudo}</h1>
+                <h2>{p.pseudo}</h2>
                 <span className="sx-muted" style={{ color: "var(--color-neutral-300)" }}>
                   Collectionneur depuis le {new Date(p.inscrit_le).toLocaleDateString("fr-FR", { day: "numeric", month: "long", year: "numeric" })}
                 </span>

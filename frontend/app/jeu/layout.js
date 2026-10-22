@@ -1,4 +1,5 @@
 import Sidebar from "@/components/Sidebar";
+import JeuMain from "@/components/JeuMain";
 import { PlayerProvider } from "@/components/PlayerProvider";
 
 export default function JeuLayout({ children }) {
@@ -6,7 +7,7 @@ export default function JeuLayout({ children }) {
     <PlayerProvider>
       <div className="ax-app">
         <Sidebar />
-        <main className="ax-main">{children}</main>
+        <JeuMain>{children}</JeuMain>
       </div>
     </PlayerProvider>
   );

@@ -60,7 +60,7 @@
 /* ---------- Marché ---------- */
 .mk-wallet { display: flex; flex-wrap: wrap; align-items: center; gap: 14px; padding: 14px 18px; border-radius: 16px;
   background: linear-gradient(120deg, color-mix(in srgb, #ffcf6b 14%, var(--color-surface)), var(--color-surface)); }
-.mk-wallet b { font-size: 26px; font-weight: 600; font-variant-numeric: tabular-nums; }
+.mk-wallet b { font-family: var(--font-heading); font-size: 34px; font-weight: 700; line-height: 1; font-variant-numeric: tabular-nums; }
 .mk-wallet .ph-diamond { font-size: 26px; color: #ffcf6b; }
 .mk-wallet .sx-btn { margin-left: auto; }
 .mk-lots { display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 14px; }

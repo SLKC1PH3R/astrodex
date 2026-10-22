@@ -1,0 +1,153 @@
+/* Thème « Observatoire » de la partie jeu (/jeu) : le langage de la landing (app/landing.css) appliqué à l'application.
+   Noir d'observatoire, un seul accent (sauge), titres en serif Playfair Display, texte en Geist, libellés en Geist Mono.
+   Les couleurs vives restent réservées aux cartes et aux raretés.
+
+   Les tokens Nocturne (--color-*) sont redéfinis sur .ax-app. Deux zones gardent les anciens tokens, à l'identique :
+   - .ax-legacy : pages Paquets et Boosters (anneau, carrousels, transitions, ouverture des boosters) ;
+   - .ax-card : le dessin des cartes.
+   Les éléments du cadre (menu, barre du haut) lisent les variables --ob-*, que .ax-legacy ne touche pas. */
+
+.ax-app {
+  --ob-bg: #0b0c0d; --ob-bg-2: #121314; --ob-surf: #161718; --ob-ink: #f4f4f1; --ob-ink-2: #c7c8c2; --ob-muted: #a7a8a2; --ob-faint: #6e6f68;
+  --ob-line: rgba(244,244,241,.08); --ob-line-2: rgba(244,244,241,.16);
+  --ob-sage: #aebfa2; --ob-sage-dk: #8fa283; --ob-gold: #c9b991; --ob-cream: #faf9f6; --ob-cream-ink: #15151a;
+  --ob-tile: linear-gradient(180deg, #1a1c2b, #12131d); --ob-tile-line: rgba(233,233,237,.09);
+  --ob-serif: "Playfair Display", Georgia, serif; --ob-sans: "Geist", system-ui, sans-serif; --ob-mono: "Geist Mono", ui-monospace, monospace;
+  --ob-ease: cubic-bezier(.16,1,.3,1);
+
+  --color-bg: var(--ob-bg);
+  --color-surface: var(--ob-surf);
+  --color-text: var(--ob-ink);
+  --color-accent: var(--ob-sage);
+  --color-accent-2: var(--ob-gold);
+  --color-divider: var(--ob-line-2);
+  --color-neutral-100: #f4f4f1; --color-neutral-200: #e3e3df; --color-neutral-300: #c7c8c2; --color-neutral-400: #a7a8a2; --color-neutral-500: #8c8d87;
+  --color-neutral-600: #6e6f68; --color-neutral-700: #56574f; --color-neutral-800: #3a3b36; --color-neutral-900: #232421;
+  --color-accent-100: #eef2ea; --color-accent-200: #dbe4d4; --color-accent-300: #c3d1b8; --color-accent-400: #aebfa2; --color-accent-500: #8fa283;
+  --color-accent-600: #73866a; --color-accent-700: #4c5b46; --color-accent-800: #364132; --color-accent-900: #20271e;
+  --font-heading: var(--ob-serif); --font-heading-weight: 600; --font-body: var(--ob-sans);
+  --shadow-sm: 0 0 0 1px var(--ob-line-2);
+
+  grid-template-columns: 248px minmax(0, 1fr);
+  background: var(--ob-bg); color: var(--ob-ink); font-family: var(--ob-sans);
+}
+
+/* Anciens tokens, à l'identique de nocturne.css, là où rien ne doit changer */
+.ax-app .ax-legacy, .ax-app .ax-card {
+  --color-bg: #161826; --color-surface: #232532; --color-text: #e9e9ed; --color-accent: #9184d9; --color-accent-2: #a7a1db;
+  --color-divider: color-mix(in srgb, #e9e9ed 16%, transparent);
+  --color-neutral-100: #f3f5fe; --color-neutral-200: #e4e7f5; --color-neutral-300: #cfd3e5; --color-neutral-400: #b2b6ca; --color-neutral-500: #9397ab;
+  --color-neutral-600: #75798c; --color-neutral-700: #595d6c; --color-neutral-800: #3f424d; --color-neutral-900: #292b31;
+  --color-accent-100: #f5f4ff; --color-accent-200: #e7e5fe; --color-accent-300: #d2cefd; --color-accent-400: #b5abfc; --color-accent-500: #968ae0;
+  --color-accent-600: #796cbf; --color-accent-700: #5d5294; --color-accent-800: #423a6a; --color-accent-900: #2b2741;
+  --font-heading: "Inter", system-ui, sans-serif; --font-heading-weight: 500; --font-body: "Inter", system-ui, sans-serif;
+  --shadow-sm: 0 0 0 1px #3f424d;
+  font-family: var(--font-body);
+}
+/* Les pages Paquets et Boosters gardent leur halo d'origine */
+.ax-app .ax-main.ax-legacy { background: radial-gradient(ellipse 60% 50% at 50% 40%, rgba(43,39,65,.7), transparent 75%), var(--ob-bg); }
+
+.ax-app :focus-visible { outline: 2px solid var(--ob-sage); outline-offset: 3px; }
+
+/* ---------- Rail de navigation ---------- */
+.ob-side { display: flex; flex-direction: column; gap: 22px; min-height: 0; padding: 26px 16px 16px; background: var(--ob-bg); border-right: 1px solid var(--ob-line); }
+.ob-brand { display: flex; align-items: center; gap: 10px; padding: 0 10px; color: var(--ob-ink); text-decoration: none; }
+.ob-brand .ax-mark { width: 18px; height: 18px; }
+.ob-brand b { font-family: var(--ob-mono); font-weight: 500; font-size: 13px; letter-spacing: .32em; }
+.ob-menu { flex: 1; min-height: 0; overflow-y: auto; display: flex; flex-direction: column; gap: 18px; scrollbar-width: thin; }
+.ob-group { display: flex; flex-direction: column; gap: 2px; }
+.ob-group > span { padding: 0 10px 6px; font-family: var(--ob-mono); font-size: 10px; letter-spacing: .18em; color: var(--ob-faint); text-transform: uppercase; }
+.ob-item { display: flex; align-items: center; gap: 10px; min-height: 36px; padding: 0 10px; border-radius: 10px; font-size: 14px; color: var(--ob-muted);
+  text-decoration: none; transition: color .2s, background .2s; }
+.ob-item::before { content: ""; width: 5px; height: 5px; flex: none; border-radius: 50%; background: transparent; transition: background .2s; }
+.ob-item:hover { color: var(--ob-ink); background: rgba(244,244,241,.04); }
+.ob-item[aria-current="page"] { color: var(--ob-ink); background: rgba(244,244,241,.06); }
+.ob-item[aria-current="page"]::before { background: var(--ob-sage); }
+.ob-item span { flex: 1; min-width: 0; }
+.ob-badge { flex: none; min-width: 18px; padding: 1px 7px; box-sizing: border-box; border-radius: 99px; text-align: center;
+  background: var(--ob-sage); color: var(--ob-bg); font-family: var(--ob-mono); font-size: 11px; font-weight: 500; }
+.ob-user { display: flex; align-items: center; gap: 10px; padding: 12px 6px 0 10px; border-top: 1px solid var(--ob-line); }
+.ob-avatar { width: 34px; height: 34px; flex: none; border-radius: 50%; display: grid; place-items: center; background: var(--ob-surf);
+  border: 1px solid var(--ob-line-2); font-family: var(--ob-serif); font-weight: 700; font-size: 15px; color: var(--ob-ink); text-decoration: none; }
+.ob-user > div { flex: 1; min-width: 0; display: flex; flex-direction: column; line-height: 1.3; }
+.ob-user b { font-size: 14px; font-weight: 500; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.ob-user small { font-family: var(--ob-mono); font-size: 10px; letter-spacing: .08em; color: var(--ob-faint); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.ob-icon { width: 36px; height: 36px; flex: none; display: grid; place-items: center; border: 0; border-radius: 50%; background: none; color: var(--ob-muted);
+  font-size: 17px; cursor: pointer; text-decoration: none; }
+.ob-icon:hover, .ob-icon[aria-current="page"] { color: var(--ob-ink); background: rgba(244,244,241,.06); }
+.ob-subnav, .ob-tabbar { display: none; }
+
+/* ---------- Barre du haut ---------- */
+.ax-app .ax-topbar { position: sticky; top: 0; z-index: 5; display: flex; flex-wrap: wrap; align-items: flex-end; gap: 14px 28px; padding: 26px 40px 18px;
+  background: linear-gradient(180deg, var(--ob-bg) 70%, rgba(11,12,13,0)); backdrop-filter: none; font-family: var(--ob-sans); color: var(--ob-ink); }
+.ax-app .ax-topbar > div:first-child { margin-right: auto; display: flex; flex-direction: column; gap: 6px; min-width: 0; }
+.ob-crumb { font-family: var(--ob-mono); font-size: 11px; letter-spacing: .16em; color: var(--ob-faint); text-transform: uppercase; }
+.ob-crumb b { font-weight: 400; color: var(--ob-sage); }
+.ax-app .ax-topbar h1 { margin: 0; font-family: var(--ob-serif); font-weight: 700; font-size: clamp(30px, 3.4vw, 46px); line-height: 1.02; letter-spacing: -.01em; color: var(--ob-ink); }
+.ax-app .ax-topbar small { font-size: 14px; color: var(--ob-muted); }
+.ob-readouts { display: flex; flex-wrap: wrap; align-items: center; gap: 10px 26px; }
+.ob-readout { display: flex; flex-direction: column; gap: 4px; }
+.ob-readout span { font-family: var(--ob-mono); font-size: 9px; letter-spacing: .14em; color: var(--ob-muted); text-transform: uppercase; }
+.ob-readout b { font-family: var(--ob-serif); font-weight: 700; font-size: 22px; line-height: 1; font-variant-numeric: tabular-nums; color: var(--ob-ink); }
+.ob-readout b small { font-family: var(--ob-serif); font-size: 14px !important; color: var(--ob-muted) !important; }
+
+/* Lien texte mono souligné, comme sur la landing */
+.ob-link { display: inline-flex; align-items: center; gap: 8px; min-height: 44px; padding: 0; border: 0; background: none; cursor: pointer;
+  font-family: var(--ob-mono); font-size: 12px; font-weight: 500; letter-spacing: .14em; text-transform: uppercase; color: var(--ob-ink);
+  text-decoration: underline; text-decoration-thickness: 1px; text-underline-offset: 8px; }
+.ob-link:hover { color: var(--ob-sage); }
+
+/* ---------- Pages « grille » : Collection, Toutes les cartes ---------- */
+.ax-app .ax-main:not(.ax-legacy) { background: radial-gradient(ellipse 55% 50% at 85% 0%, rgba(143,162,131,.06), transparent 70%), var(--ob-bg); }
+.ax-app .ax-grid-page { padding: 4px 40px 56px; gap: 26px; }
+.ax-app .ax-filters { gap: 6px; }
+.ax-app .ax-filters[role="tablist"] { padding-inline: 40px !important; } /* sélecteur de série (SeriesTabs) */
+.ax-app .ax-filters .btn { min-height: 34px; padding: 0 12px; border-radius: 999px; border: 1px solid var(--ob-line-2); background: transparent;
+  font-family: var(--ob-mono); font-size: 10.5px; letter-spacing: .12em; text-transform: uppercase; color: var(--ob-ink-2); }
+.ax-app .ax-filters .btn:hover { color: var(--ob-ink); border-color: rgba(244,244,241,.32); }
+.ax-app .ax-filters .btn[aria-pressed="true"] { background: var(--ob-sage); border-color: var(--ob-sage); color: var(--ob-bg); }
+.ax-app .ax-filters .btn[aria-pressed="true"] .ax-dot { outline: 1px solid rgba(11,12,13,.4); }
+.ax-app .ax-progress > div:first-child { font-family: var(--ob-mono); font-size: 10px; letter-spacing: .12em; text-transform: uppercase; color: var(--ob-muted); }
+.ax-app .ax-progress b { font-family: var(--ob-serif); font-size: 15px; letter-spacing: 0; text-transform: none; color: var(--ob-ink); }
+.ax-app .ax-track { height: 2px; background: var(--ob-line-2); }
+.ax-app .ax-track i { background: var(--ob-sage); }
+.ax-app .ax-grid { gap: 30px 18px; }
+.ax-app .ax-missing { border: 1px dashed var(--ob-line-2); background: transparent; color: var(--ob-faint);
+  font-family: var(--ob-serif); font-style: italic; font-size: 22px; }
+.ax-app .ax-loadmore .btn, .ax-app .ax-grid-page > .btn { font-family: var(--ob-mono); font-size: 11px; letter-spacing: .14em; text-transform: uppercase; }
+.ax-app .ax-empty i { color: var(--ob-sage); }
+.ax-app .ax-empty h4 { font-family: var(--ob-serif); font-size: 26px; }
+.ax-app .ax-notice { color: var(--ob-ink-2); }
+
+/* Boutons du thème hors zones protégées */
+.ax-app .btn:not(.ax-legacy .btn):not(.ax-card .btn) { border-radius: 999px; font-family: var(--ob-mono); font-weight: 500; font-size: 11px; letter-spacing: .12em; text-transform: uppercase; }
+.ax-app .btn-primary:not(.ax-legacy .btn) { background: var(--ob-cream); color: var(--ob-cream-ink); border-color: var(--ob-cream); }
+.ax-app .btn-primary:not(.ax-legacy .btn):hover { background: #fff; }
+.ax-app .input:not(.ax-legacy .input) { min-height: 40px; border-radius: 12px; border-color: var(--ob-line-2); background: transparent; color: var(--ob-ink); }
+.ax-app .input:not(.ax-legacy .input):focus-visible { border-color: var(--ob-sage); }
+
+/* ---------- Mobile : barre d'onglets en bas, sous-onglets du groupe en haut ---------- */
+@media (max-width: 860px) {
+  .ax-app { grid-template-columns: 1fr !important; grid-template-rows: auto minmax(0, 1fr) auto !important; }
+  .ob-side { display: contents; }
+  .ob-side > .ob-brand, .ob-menu, .ob-user { display: none; }
+  .ob-subnav { grid-row: 1; display: flex; gap: 22px; overflow-x: auto; padding: 14px 18px 0; background: var(--ob-bg); border-bottom: 1px solid var(--ob-line); scrollbar-width: none; }
+  .ob-subnav a { flex: none; min-height: 40px; display: inline-flex; align-items: center; gap: 8px; font-family: var(--ob-mono); font-size: 10.5px; letter-spacing: .14em;
+    text-transform: uppercase; color: var(--ob-muted); text-decoration: none; border-bottom: 1px solid transparent; margin-bottom: -1px; }
+  .ob-subnav a[aria-current="page"] { color: var(--ob-ink); border-bottom-color: var(--ob-ink); }
+  .ax-app .ax-main { grid-row: 2; }
+  .ob-tabbar { grid-row: 3; display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); padding: 6px 4px calc(10px + env(safe-area-inset-bottom));
+    background: rgba(11,12,13,.97); border-top: 1px solid var(--ob-line); }
+  .ob-tabbar a { position: relative; min-height: 48px; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 4px;
+    font-family: var(--ob-mono); font-size: 8.5px; letter-spacing: .1em; text-transform: uppercase; color: var(--ob-muted); text-decoration: none; }
+  .ob-tabbar a i { font-size: 20px; }
+  .ob-tabbar a[aria-current="true"] { color: var(--ob-ink); }
+  .ob-tabbar a[aria-current="true"] i { color: var(--ob-sage); }
+  .ob-tabbar a b { position: absolute; top: 4px; left: calc(50% + 6px); min-width: 16px; padding: 0 4px; box-sizing: border-box; border-radius: 99px;
+    background: var(--ob-sage); color: var(--ob-bg); font-size: 9px; font-weight: 500; line-height: 16px; text-align: center; }
+  .ax-app .ax-topbar { padding: 16px 18px 12px; }
+  .ax-app .ax-topbar .ob-crumb { display: none; }
+  .ax-app .ax-grid-page { padding: 4px 18px 40px; }
+  .ax-app .ax-filters[role="tablist"] { padding-inline: 18px !important; }
+  .sx-page { padding: 4px 18px 32px; }
+}

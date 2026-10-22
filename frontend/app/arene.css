@@ -1,13 +1,13 @@
 /* Guilde et Bataille. Réutilise social.css (.sx-*, .ms-*) et commerce.css (.mc-*, .cm-*). */
 
 /* ---------- Guilde ---------- */
-.gd-banner { position: relative; overflow: hidden; isolation: isolate; border-radius: 22px; padding: 26px 30px; box-sizing: border-box;
+.gd-banner { position: relative; overflow: hidden; isolation: isolate; border-radius: 22px; padding: 26px 30px; box-sizing: border-box; border: 1px solid var(--color-divider);
   display: flex; flex-wrap: wrap; align-items: center; gap: 20px;
-  background: radial-gradient(120% 140% at 100% 0%, color-mix(in srgb, var(--gc) 45%, transparent), transparent 60%), #12142a; }
-.gd-crest { width: 84px; height: 84px; flex: none; border-radius: 22px; display: grid; place-items: center; font-family: "Russo One", var(--font-heading);
-  font-size: 34px; color: #0b0d1c; background: linear-gradient(145deg, var(--gc), color-mix(in srgb, var(--gc) 55%, #0b0d1c)); box-shadow: 0 10px 30px -10px var(--gc); }
+  background: radial-gradient(120% 140% at 100% 0%, color-mix(in srgb, var(--gc) 30%, transparent), transparent 60%), #0e0f10; }
+.gd-crest { width: 84px; height: 84px; flex: none; border-radius: 22px; display: grid; place-items: center; font-family: var(--font-heading); font-weight: 700;
+  font-size: 36px; color: #0b0d1c; background: linear-gradient(145deg, var(--gc), color-mix(in srgb, var(--gc) 55%, #0b0d1c)); box-shadow: 0 10px 30px -10px var(--gc); }
 .gd-id { flex: 1 1 260px; display: flex; flex-direction: column; gap: 4px; min-width: 0; }
-.gd-id h1 { margin: 0; font-family: "Russo One", var(--font-heading); font-weight: 400; font-size: clamp(26px, 3vw, 38px); overflow-wrap: anywhere; }
+.gd-id h2 { margin: 0; font-family: var(--font-heading); font-weight: 700; font-size: clamp(32px, 3.4vw, 48px); line-height: 1.02; overflow-wrap: anywhere; }
 .gd-id p { margin: 4px 0 0; font-size: 14px; color: var(--color-neutral-300); }
 .gd-actions { display: flex; flex-wrap: wrap; gap: 8px; }
 .gd-obj { display: flex; flex-direction: column; gap: 8px; padding: 14px; border-radius: 14px; background: color-mix(in srgb, var(--color-text) 4%, transparent); }
@@ -41,22 +41,22 @@
 
 /* ---------- Bataille ---------- */
 .bt-head { display: flex; flex-wrap: wrap; align-items: center; gap: 12px; }
-.bt-chip { display: inline-flex; align-items: center; gap: 8px; padding: 8px 14px; border-radius: 999px; background: var(--color-surface); font-size: 14px; }
-.bt-chip b { font-weight: 600; }
+.bt-chip { display: inline-flex; align-items: baseline; gap: 8px; padding: 0 22px 0 0; border-right: 1px solid var(--color-divider); font-family: var(--ob-mono, inherit); font-size: 10px; letter-spacing: .14em; text-transform: uppercase; color: var(--color-neutral-400); }
+.bt-chip b { font-family: var(--font-heading); font-weight: 700; font-size: 22px; letter-spacing: 0; text-transform: none; color: var(--color-text); }
 .bt-hand { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 12px; }
 .bt-slot { aspect-ratio: 63 / 88; border-radius: 12px; border: 2px dashed color-mix(in srgb, var(--color-text) 18%, transparent); background: none;
   display: grid; place-items: center; color: var(--color-neutral-500); font-size: 28px; cursor: pointer; }
 .bt-slot:hover { border-color: var(--color-accent); color: var(--color-accent); }
 .bt-totals { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 10px; }
-.bt-totals > div { padding: 10px 12px; border-radius: 12px; background: color-mix(in srgb, var(--color-text) 5%, transparent); display: flex; flex-direction: column; gap: 2px; }
-.bt-totals b { font-size: 20px; font-weight: 600; font-variant-numeric: tabular-nums; }
-.bt-totals span { font-size: 12px; color: var(--color-neutral-400); }
+.bt-totals > div { padding: 12px 0 0; border-top: 1px solid var(--color-divider); display: flex; flex-direction: column; gap: 4px; }
+.bt-totals b { font-family: var(--font-heading); font-size: 26px; font-weight: 700; line-height: 1; font-variant-numeric: tabular-nums; }
+.bt-totals span { font-family: var(--ob-mono, inherit); font-size: 10px; letter-spacing: .14em; text-transform: uppercase; color: var(--color-neutral-400); }
 .bt-modes { display: flex; flex-direction: column; gap: 10px; }
-.bt-mode { display: flex; align-items: flex-start; gap: 12px; width: 100%; padding: 14px; border: 0; border-radius: 14px; text-align: left; cursor: pointer;
-  background: color-mix(in srgb, var(--color-text) 5%, transparent); color: var(--color-text); font: inherit; }
-.bt-mode[aria-pressed="true"] { background: color-mix(in srgb, var(--color-accent) 20%, transparent); box-shadow: inset 0 0 0 2px var(--color-accent); }
+.bt-mode { display: flex; align-items: flex-start; gap: 12px; width: 100%; padding: 16px 18px; border: 1px solid var(--color-divider); border-radius: 16px; text-align: left; cursor: pointer;
+  background: transparent; color: var(--color-text); font: inherit; }
+.bt-mode[aria-pressed="true"] { background: color-mix(in srgb, var(--color-accent) 8%, transparent); border-color: var(--color-accent); }
 .bt-mode i.ph { font-size: 22px; color: var(--color-accent); }
-.bt-mode b { display: block; font-size: 15px; }
+.bt-mode b { display: block; font-family: var(--font-heading); font-size: 20px; font-weight: 600; }
 .bt-mode span { font-size: 13px; color: var(--color-neutral-400); }
 .bt-hist { display: flex; align-items: center; gap: 10px; font-size: 14px; padding: 6px 0; }
 .bt-hist > span:first-child { flex: 1 1 auto; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
@@ -67,8 +67,8 @@
 
 /* Déroulé d'une partie */
 .bt-arena { display: flex; flex-direction: column; gap: 16px; }
-.bt-score { display: flex; align-items: center; justify-content: center; gap: 18px; font-family: "Russo One", var(--font-heading); font-size: 36px; }
-.bt-score span { font-family: var(--font-body, inherit); font-size: 15px; color: var(--color-neutral-300); max-width: 34%; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.bt-score { display: flex; align-items: center; justify-content: center; gap: 18px; font-family: var(--font-heading); font-weight: 700; font-size: 44px; }
+.bt-score span { font-family: var(--ob-mono, inherit); text-transform: uppercase; letter-spacing: .12em; font-weight: 400; font-size: 15px; color: var(--color-neutral-300); max-width: 34%; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 .bt-round { display: grid; grid-template-columns: minmax(0, 120px) minmax(0, 1fr) minmax(0, 120px); align-items: center; gap: 14px;
   padding: 12px; border-radius: 16px; background: color-mix(in srgb, var(--color-text) 4%, transparent); animation: bt-in .45s ease both; }
 .bt-round .mc { transition: opacity .3s, transform .3s; }
@@ -76,7 +76,7 @@
 .bt-round .won .mc { box-shadow: inset 0 0 0 2px var(--rc), 0 0 0 3px #5ee0c0; }
 .bt-log { display: flex; flex-direction: column; gap: 4px; align-items: center; text-align: center; font-size: 13px; color: var(--color-neutral-300); }
 .bt-log b { font-size: 15px; color: var(--color-text); }
-.bt-verdict { text-align: center; font-family: "Russo One", var(--font-heading); font-size: 28px; }
+.bt-verdict { text-align: center; font-family: var(--font-heading); font-weight: 700; font-style: italic; font-size: 34px; }
 @keyframes bt-in { from { opacity: 0; transform: translateY(10px); } }
 @media (prefers-reduced-motion: reduce) { .bt-round { animation: none; } }
 
