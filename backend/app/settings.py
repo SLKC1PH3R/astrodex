@@ -32,9 +32,9 @@ def allows(conn, player_id, key: str) -> bool:
 
 
 def _out(conn, pid) -> dict:
-    p = conn.execute("SELECT pseudo, friend_code, created_at FROM players WHERE id = %s", (pid,)).fetchone()
+    p = conn.execute("SELECT pseudo, friend_code, created_at, email, is_admin FROM players WHERE id = %s", (pid,)).fetchone()
     prefs = preferences(conn, pid)
-    return {"pseudo": p["pseudo"], "code_ami": p["friend_code"], "inscrit_le": p["created_at"],
+    return {"pseudo": p["pseudo"], "code_ami": p["friend_code"], "inscrit_le": p["created_at"], "email": p["email"], "admin": p["is_admin"],
             "confidentialite": [{"id": k, "libelle": label, "actif": prefs[k]} for k, (_, label) in PRIVACY.items()]}
 
 
@@ -56,10 +56,11 @@ def update_settings(body: dict[str, bool], player: dict = Depends(current_player
 
 @router.post("/api/me/cle")
 def rotate_key(player: dict = Depends(current_player)):
-    """Remplace la clé de connexion : l'ancienne cesse de fonctionner (sur tous les appareils)."""
+    """Remplace la clé de connexion : l'ancienne cesse de fonctionner, et tous les appareils sont déconnectés."""
     token = secrets.token_urlsafe(32)
-    with db.connection() as conn:
+    with db.connection() as conn, conn.transaction():
         conn.execute("UPDATE players SET token_hash = %s WHERE id = %s", (hash_token(token), player["id"]))
+        conn.execute("DELETE FROM sessions WHERE player_id = %s", (player["id"],))
     return {"token": token}
 
 

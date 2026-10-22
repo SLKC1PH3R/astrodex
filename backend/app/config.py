@@ -13,3 +13,5 @@ IMPORT_CATALOG_ON_START = os.environ.get("IMPORT_CATALOG_ON_START", "true").lowe
 # Boosters gratuits par joueur sur 24 h glissantes (0 = illimité)
 PACKS_PER_DAY = int(os.environ.get("PACKS_PER_DAY", "0"))
 CORS_ORIGINS = [o for o in os.environ.get("CORS_ORIGINS", "").split(",") if o]
+# Comptes administrateurs : e-mails séparés par des virgules (le rôle est donné à l'inscription ou à la connexion)
+ADMIN_EMAILS = {e.strip().lower() for e in os.environ.get("ADMIN_EMAILS", "").split(",") if e.strip()}

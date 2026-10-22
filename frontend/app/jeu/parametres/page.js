@@ -1,5 +1,6 @@
 "use client";
 import { useEffect, useState } from "react";
+import Link from "next/link";
 import { useRouter } from "next/navigation";
 import Topbar from "@/components/Topbar";
 import { usePlayer } from "@/components/PlayerProvider";
@@ -73,6 +74,7 @@ export default function ParametresPage() {
   const [msg, setMsg] = useState(null);
   const [del, setDel] = useState(false);
   const [confirmRotate, setConfirmRotate] = useState(false);
+  const [pwd, setPwd] = useState({ actuel: "", nouveau: "" });
 
   const load = () => api.parametres().then(x => { setS(x); setPseudo(x.pseudo || ""); setKey(currentKey()); }).catch(e => setMsg({ err: true, text: e.message }));
   useEffect(() => { load(); setMotionState(getMotion()); }, []);
@@ -91,6 +93,12 @@ export default function ParametresPage() {
     loginWithKey(other).then(me => { say(`Connecté au compte ${me.pseudo || "Joueur"}.`); setOther(""); refresh(); load(); }).catch(x => say(x.message, true));
   };
   const rotate = () => rotateKey().then(k => { setKey(k); setShown(true); setConfirmRotate(false); say("Nouvelle clé créée : note-la, l'ancienne ne fonctionne plus."); }).catch(x => say(x.message, true));
+  const changePwd = e => {
+    e.preventDefault();
+    api.changerMotDePasse(pwd.actuel, pwd.nouveau)
+      .then(() => { setPwd({ actuel: "", nouveau: "" }); say("Mot de passe changé. Tes autres appareils ont été déconnectés."); })
+      .catch(x => say(x.message, true));
+  };
   const chooseMotion = v => { setMotion(v); setMotionState(v); };
 
   return (
@@ -108,14 +116,33 @@ export default function ParametresPage() {
             </div>
           </form>
           <div className="st-line">
+            <span><b>E-mail</b><small>{s?.email ? "Sert à te connecter sur n'importe quel appareil" : "Profil invité : il n'existe que sur ce navigateur"}</small></span>
+            {s?.email
+              ? <div className="st-field"><code>{s.email}</code></div>
+              : <Link className="sx-btn sm" href="/inscription">Créer mon compte</Link>}
+          </div>
+          <div className="st-line">
             <span><b>Code ami</b><small>À partager pour qu'on t'ajoute</small></span>
             <div className="st-field"><code>{s?.code_ami || "…"}</code><button type="button" className="sx-btn alt sm" onClick={() => copy(s.code_ami, "Code ami")} disabled={!s}>Copier</button></div>
           </div>
           {s && <span className="sx-muted">Joueur depuis le {new Date(s.inscrit_le).toLocaleDateString("fr-FR", { day: "numeric", month: "long", year: "numeric" })}.</span>}
         </Section>
 
-        <Section id="st-key" title="Clé de connexion">
-          <p className="st-note">Ton compte est lié à cette clé, enregistrée dans ce navigateur. Note-la en lieu sûr : elle permet de retrouver ta collection sur un autre appareil ou après avoir vidé le navigateur. Ne la partage avec personne.</p>
+        {s?.email && (
+          <Section id="st-pwd" title="Mot de passe">
+            <form className="st-pwd" onSubmit={changePwd}>
+              <label>Mot de passe actuel<input className="input" type="password" autoComplete="current-password" required value={pwd.actuel} onChange={e => setPwd(p => ({ ...p, actuel: e.target.value }))} /></label>
+              <label>Nouveau mot de passe<input className="input" type="password" autoComplete="new-password" minLength={8} required value={pwd.nouveau} onChange={e => setPwd(p => ({ ...p, nouveau: e.target.value }))} /></label>
+              <button type="submit" className="sx-btn sm">Changer</button>
+            </form>
+            <span className="sx-muted">Les autres appareils connectés à ton compte seront déconnectés.</span>
+          </Section>
+        )}
+
+        <Section id="st-key" title="Clé de connexion de cet appareil">
+          <p className="st-note">{s?.email
+            ? "Avec ton e-mail, tu n'en as normalement pas besoin : connecte-toi simplement avec ton e-mail et ton mot de passe. Cette clé sert de secours. Ne la partage avec personne."
+            : "Ton profil invité est lié à cette clé, enregistrée dans ce navigateur. Crée plutôt un compte avec ton e-mail pour retrouver ta collection partout. Ne la partage avec personne."}</p>
           <div className="st-key">
             <code aria-label="Clé de connexion">{key ? (shown ? key : `${key.slice(0, 4)}${"•".repeat(24)}`) : "…"}</code>
             <button type="button" className="sx-btn alt sm" onClick={() => setShown(v => !v)} disabled={!key}>{shown ? "Masquer" : "Afficher"}</button>
@@ -152,7 +179,7 @@ export default function ParametresPage() {
 
         <Section id="st-danger" title="Session et compte" danger>
           <div className="st-line">
-            <span><b>Se déconnecter</b><small>Sans ta clé, tu ne pourras plus revenir sur ce compte</small></span>
+            <span><b>Se déconnecter</b><small>{s?.email ? "Tu pourras te reconnecter avec ton e-mail, ici ou ailleurs" : "Profil invité : sans compte ni clé, tu ne pourras plus revenir sur ce profil"}</small></span>
             <button type="button" className="sx-btn alt sm" onClick={() => { logout(); router.push("/"); }}>Se déconnecter</button>
           </div>
           <div className="st-line">
