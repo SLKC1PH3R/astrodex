@@ -5,9 +5,10 @@
    Les tokens Nocturne (--color-*) sont redéfinis sur .ax-app. Deux zones gardent les anciens tokens, à l'identique :
    - .ax-legacy : pages Paquets et Boosters (anneau, carrousels, transitions, ouverture des boosters) ;
    - .ax-card : le dessin des cartes.
-   Les éléments du cadre (menu, barre du haut) lisent les variables --ob-*, que .ax-legacy ne touche pas. */
+   Les éléments du cadre (menu, barre du haut) lisent les variables --ob-*, que .ax-legacy ne touche pas.
+   La page d'inscription / connexion (.ax-auth) reçoit le même thème. */
 
-.ax-app {
+.ax-app, .ax-auth {
   --ob-bg: #0b0c0d; --ob-bg-2: #121314; --ob-surf: #161718; --ob-ink: #f4f4f1; --ob-ink-2: #c7c8c2; --ob-muted: #a7a8a2; --ob-faint: #6e6f68;
   --ob-line: rgba(244,244,241,.08); --ob-line-2: rgba(244,244,241,.16);
   --ob-sage: #aebfa2; --ob-sage-dk: #8fa283; --ob-gold: #c9b991; --ob-cream: #faf9f6; --ob-cream-ink: #15151a;
@@ -28,12 +29,12 @@
   --font-heading: var(--ob-serif); --font-heading-weight: 600; --font-body: var(--ob-sans);
   --shadow-sm: 0 0 0 1px var(--ob-line-2);
 
-  grid-template-columns: 248px minmax(0, 1fr);
   background: var(--ob-bg); color: var(--ob-ink); font-family: var(--ob-sans);
 }
+.ax-app { grid-template-columns: 248px minmax(0, 1fr); }
 
 /* Anciens tokens, à l'identique de nocturne.css, là où rien ne doit changer */
-.ax-app .ax-legacy, .ax-app .ax-card {
+.ax-app .ax-legacy, .ax-app .ax-card, .ax-auth .ax-card {
   --color-bg: #161826; --color-surface: #232532; --color-text: #e9e9ed; --color-accent: #9184d9; --color-accent-2: #a7a1db;
   --color-divider: color-mix(in srgb, #e9e9ed 16%, transparent);
   --color-neutral-100: #f3f5fe; --color-neutral-200: #e4e7f5; --color-neutral-300: #cfd3e5; --color-neutral-400: #b2b6ca; --color-neutral-500: #9397ab;
@@ -151,3 +152,55 @@
   .ax-app .ax-filters[role="tablist"] { padding-inline: 18px !important; }
   .sx-page { padding: 4px 18px 32px; }
 }
+
+/* ---------- Inscription / connexion (/inscription) ---------- */
+.ax-auth { min-height: 100vh; }
+.ax-auth :focus-visible { outline: 2px solid var(--ob-sage); outline-offset: 3px; }
+.ax-auth-side { gap: 8px; background: radial-gradient(ellipse 70% 50% at 0% 100%, rgba(143,162,131,.07), transparent 70%), var(--ob-bg); }
+.ax-auth .ax-brand b { font-family: var(--ob-mono); font-weight: 500; font-size: 13px; letter-spacing: .32em; }
+.ax-auth .ax-brand .ax-mark { width: 18px; height: 18px; }
+.ob-credit { font-family: var(--ob-mono); font-size: 10px; letter-spacing: .12em; color: var(--ob-faint); text-transform: uppercase; }
+
+/* Bascule Inscription / Connexion : onglets soulignés */
+.ax-auth .seg { display: flex; gap: 26px; padding: 0; border: 0; border-radius: 0; background: none; box-shadow: none; border-bottom: 1px solid var(--ob-line-2); justify-self: stretch !important; }
+.ax-auth .seg-opt { min-height: 40px; padding: 0; margin-bottom: -1px; border: 0 !important; border-bottom: 1px solid transparent !important; border-radius: 0;
+  font-family: var(--ob-mono); font-size: 11px; letter-spacing: .16em; text-transform: uppercase; color: var(--ob-muted); background: none !important; box-shadow: none !important; }
+.ax-auth .seg-opt:hover { color: var(--ob-ink); }
+.ax-auth .seg-opt:has(input:checked) { color: var(--ob-ink); border-bottom-color: var(--ob-ink) !important; }
+
+/* La carte recto / verso : tuile bleu nuit de la landing */
+.ax-auth .auth-face { gap: 18px; padding: 32px; border-radius: 22px; background: var(--ob-tile);
+  box-shadow: 0 0 0 1px var(--ob-tile-line), inset 0 1px 0 rgba(233,233,237,.05), 0 40px 80px -30px rgba(0,0,0,.8); }
+.ax-auth .auth-face-ring { inset: 8px; border-radius: 16px; box-shadow: inset 0 0 0 1px rgba(174,191,162,.14); }
+.ax-auth .auth-face-top { font-family: var(--ob-mono); font-size: 10px; letter-spacing: .18em; color: var(--ob-sage); }
+.ax-auth .auth-gems i { background: rgba(244,244,241,.18); }
+.ax-auth .auth-gems i.on { background: var(--ob-sage); }
+.ax-auth .auth-face h2 { margin: 2px 0 8px; font-family: var(--ob-serif); font-weight: 700; font-size: 44px; line-height: 1; letter-spacing: -.01em; }
+.ax-auth .auth-face .sub { font-size: 15px; line-height: 1.6; color: var(--ob-ink-2); }
+.ax-auth .field > label { margin-bottom: 7px; font-family: var(--ob-mono); font-size: 10px; letter-spacing: .14em; text-transform: uppercase; color: #a3a6b8; }
+.ax-auth .field > .auth-label-row { display: flex; justify-content: space-between; align-items: baseline; gap: 12px; }
+.ax-auth .auth-label-row a { font-family: var(--ob-mono); font-size: 10px; letter-spacing: .12em; color: var(--ob-sage); }
+.ax-auth .input { min-height: 46px; padding: 0 14px; border-radius: 12px; border: 1px solid rgba(233,233,237,.14); background: rgba(11,12,13,.35); color: var(--ob-ink); font-size: 15px; }
+.ax-auth .input::placeholder { color: #6d7086; }
+.ax-auth .input:hover { border-color: rgba(233,233,237,.28); }
+.ax-auth .input:focus-visible { border-color: var(--ob-sage); outline: none; }
+.ax-auth .ax-check { font-size: 13px; line-height: 1.5; color: #a3a6b8; }
+.ax-auth .ax-check input { accent-color: var(--ob-sage); }
+.ax-auth .ax-error { color: #e3b4ad; }
+.ax-auth .btn { justify-content: center; gap: 10px; min-height: 48px; border-radius: 999px; font-family: var(--ob-mono); font-weight: 500; font-size: 12px; letter-spacing: .14em; text-transform: uppercase; }
+.ax-auth .auth-submit { background: var(--ob-cream); border-color: var(--ob-cream); color: var(--ob-cream-ink); }
+.ax-auth .auth-submit:hover { background: #fff; }
+.ax-auth .auth-guest { background: transparent; border-color: rgba(233,233,237,.22); color: var(--ob-ink); }
+.ax-auth .auth-guest:hover { border-color: rgba(233,233,237,.45); background: rgba(244,244,241,.04); }
+.ax-auth .ax-or { font-family: var(--ob-mono); font-size: 10px; letter-spacing: .16em; text-transform: uppercase; color: #6d7086; }
+.ax-auth .ax-or::before, .ax-auth .ax-or::after { background: rgba(233,233,237,.1); }
+.ax-auth .auth-flip-link { min-height: 44px; font-size: 14px; color: var(--ob-ink-2); text-decoration: underline; text-decoration-color: rgba(244,244,241,.25); text-underline-offset: 6px; }
+.ax-auth .auth-flip-link:hover { color: var(--ob-ink); }
+.ax-auth .auth-flip-link i { color: var(--ob-sage); }
+
+/* Colonne du carrousel : fond noir, légende éditoriale */
+.ax-auth .ax-carousel { background: radial-gradient(ellipse 60% 50% at 50% 45%, rgba(143,162,131,.10), transparent 75%), #08090a; border-left: 1px solid var(--ob-line); }
+.ax-auth .ax-carousel-caption { padding: 56px 44px 40px; background: linear-gradient(180deg, transparent, rgba(11,12,13,.94) 50%); display: flex; flex-direction: column; gap: 8px; }
+.ax-auth .ax-carousel-caption b { font-family: var(--ob-serif); font-weight: 700; font-size: clamp(30px, 3vw, 44px); line-height: 1.05; letter-spacing: -.01em; }
+.ax-auth .ax-carousel-caption b em { font-style: italic; font-weight: 500; color: var(--ob-ink-2); }
+.ax-auth .ax-carousel-caption span { max-width: 460px; font-size: 15px; line-height: 1.6; color: var(--ob-ink-2); }
