@@ -108,12 +108,12 @@ export default function InscriptionPage() {
       <div className="ax-auth-side">
         <Link className="ax-brand" href="/"><span className="ax-mark" /><b>ASTRODEX</b></Link>
         <Suspense><AuthCard /></Suspense>
-        <span style={{ fontSize: 12, color: "var(--color-neutral-600)" }}>Images NASA, ESA/Hubble et ESO</span>
+        <span className="ob-credit">Images NASA, ESA/Hubble et ESO</span>
       </div>
       <div className="ax-carousel">
         {cards.length > 0 && <CardCarousel cards={cards} />}
         <div className="ax-carousel-caption">
-          <b>{cards.length || ""} cartes à découvrir</b>
+          <b>{cards.length || ""} cartes <em>à découvrir.</em></b>
           <span>Planètes, lunes, nébuleuses, galaxies et amas — photographiés par Hubble, l'ESO et la NASA.</span>
         </div>
       </div>
