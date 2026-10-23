@@ -9,9 +9,8 @@ const toRoman = code => ROMAN[Number(String(code || "").replace(/\D/g, ""))] || 
 
 /* Carrousel 3D des séries disponibles (un paquet par série active), qui boucle. Glisser, molette,
    flèches du clavier ou toucher un paquet latéral le ramène au centre ; le paquet centré est
-   celui transmis à onSelect. leaving : le paquet choisi est aspiré (trou noir) et les autres
-   sont attirés vers lui. Styles : app/coverflow.css (.cv-*, .pka-*). */
-export default function BoosterCarousel({ boosters, selected, onSelect, onChoose, leaving = false }) {
+   celui transmis à onSelect ; le toucher l'ouvre (onChoose). Styles : app/coverflow.css (.cv-*, .pka-*). */
+export default function BoosterCarousel({ boosters, selected, onSelect, onChoose }) {
   const n = boosters?.length || 0;
   const initial = Math.max(0, boosters?.findIndex(b => b.code === selected?.code) ?? 0);
   const cf = useCoverflow(n, { initial, loop: true });
@@ -30,8 +29,8 @@ export default function BoosterCarousel({ boosters, selected, onSelect, onChoose
     memo.current = { pos: cf.pos, shift: memo.current.pos == null ? 0 : cf.pos - memo.current.pos, prev: memo.current.cur, cur: {} };
   }
   return (
-    <div className={`cv-wrap${leaving ? " cv-leaving" : ""}`}>
-      <span className="cv-hint">Touche le booster du centre pour le choisir</span>
+    <div className="cv-wrap">
+      <span className="cv-hint">Touche le booster du centre pour l'ouvrir</span>
       <div className="cv-stage" tabIndex={0} role="group" aria-roledescription="carrousel"
         aria-label="Boosters disponibles" {...cf.pointer}
         onKeyDown={e => {
@@ -48,15 +47,15 @@ export default function BoosterCarousel({ boosters, selected, onSelect, onChoose
           const isActive = off === 0;
           return (
             <button key={b.code} type="button" tabIndex={isActive ? 0 : -1}
-              className={`cv-item${isActive ? " is-active" : ""}${isActive && leaving ? " cv-suck" : ""}`}
+              className={`cv-item${isActive ? " is-active" : ""}`}
               style={{ ...cfStyle(off), ...(jumped ? { transition: "none" } : null), "--cc": theme.couleur }}
-              aria-label={isActive ? `Choisir le booster ${theme.titre}` : `Voir le booster ${theme.titre}`} aria-current={isActive || undefined}
+              aria-label={isActive ? `Ouvrir le booster ${theme.titre}` : `Voir le booster ${theme.titre}`} aria-current={isActive || undefined}
               onClick={() => {
                 if (cf.justSwiped()) return;
                 isActive ? onChoose?.(b) : cf.setActive(i);
               }}>
               <PackArt theme={theme} />
-              {isActive && onChoose && !leaving && <span className="cv-pick" aria-hidden="true"><i className="ph ph-hand-pointing" />Choisir</span>}
+              {isActive && onChoose && <span className="cv-pick" aria-hidden="true"><i className="ph ph-hand-pointing" />Ouvrir</span>}
             </button>
           );
         })}
