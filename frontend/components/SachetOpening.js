@@ -8,7 +8,7 @@ import { prefersReduced } from "@/lib/motion";
 
 /* Ouverture « Déchirure » : on déchire la bande du sachet → les cartes sortent en pile, faces visibles,
    de la moins rare à la plus rare → on touche (ou on fait glisser) la carte du dessus pour passer à la suivante
-   → récapitulatif. Même interface que CoffretOpening : onOpen() renvoie une promesse de la liste de cartes (api.open).
+   → récapitulatif. autoStart : la déchirure démarre seule à l'affichage. Même interface que CoffretOpening : onOpen() renvoie une promesse de la liste de cartes (api.open).
    Styles : app/sachet.css (.sa-*). */
 
 const sleep = ms => new Promise(r => setTimeout(r, ms));
@@ -21,7 +21,7 @@ const byRarity = cards => cards
   .sort((a, b) => ORDER.indexOf(a.c.rarete) - ORDER.indexOf(b.c.rarete) || a.k - b.k)
   .map(x => x.c);
 
-export default function SachetOpening({ booster, onOpen, onDone, onError, disabled = false }) {
+export default function SachetOpening({ booster, onOpen, onDone, onError, disabled = false, autoStart = false }) {
   const [phase, setPhase] = useState("idle"); // idle → tear → stack → done
   const [cards, setCards] = useState([]);
   const [idx, setIdx] = useState(0);
@@ -33,6 +33,7 @@ export default function SachetOpening({ booster, onOpen, onDone, onError, disabl
   const reduced = useRef(false);
   const ptr = useRef(null);
   const finished = useRef(false);
+  const started = useRef(false);
   useEffect(() => () => { alive.current = false; }, []);
 
   const theme = coffretTheme(booster);
@@ -41,7 +42,8 @@ export default function SachetOpening({ booster, onOpen, onDone, onError, disabl
   const best = cards[n - 1];
 
   const tear = async () => {
-    if (disabled || phase !== "idle") return;
+    if (disabled || phase !== "idle" || started.current) return;
+    started.current = true;
     reduced.current = prefersReduced();
     finished.current = false;
     setPhase("tear");
@@ -49,6 +51,7 @@ export default function SachetOpening({ booster, onOpen, onDone, onError, disabl
     try {
       [drawn] = await Promise.all([onOpen(), reduced.current ? null : sleep(950)]);
     } catch (e) {
+      started.current = false;
       if (alive.current) { setPhase("idle"); onError?.(e); }
       return;
     }
@@ -57,6 +60,9 @@ export default function SachetOpening({ booster, onOpen, onDone, onError, disabl
     setCards(sorted); setDirs(sorted.map(() => -1)); setIdx(0); setDrag(0);
     setPhase("stack");
   };
+
+  // autoStart : le sachet se déchire tout seul dès l'affichage (choix d'une série sur la page Paquets)
+  useEffect(() => { if (autoStart) tear(); }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
   const finish = list => {
     if (finished.current) return;

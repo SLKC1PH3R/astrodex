@@ -5,26 +5,19 @@ import { ORDER, RAR } from "@/components/Carte";
 import SachetOpening from "@/components/SachetOpening";
 import BoosterCarousel from "@/components/BoosterCarousel";
 import BoosterPanel from "@/components/BoosterPanel";
-import PackPicker from "@/components/PackPicker";
-import BlackHole, { BLACK_HOLE } from "@/components/BlackHole";
 import Topbar from "@/components/Topbar";
 import OddsDialog from "@/components/OddsDialog";
 import { usePlayer } from "@/components/PlayerProvider";
 import { api } from "@/lib/api";
-import { prefersReduced } from "@/lib/motion";
 
-/* Parcours : choisir une série → le paquet est aspiré par un trou noir → les 20 paquets de la série
-   jaillissent en spirale sur un anneau qui tourne en boucle → on touche celui de devant → ouverture
-   (SachetOpening, inchangée). "stage" piloté ici ; "warp" est un calque indépendant qui continue
-   son animation pendant que le contenu change dessous (chronologie : components/BlackHole.js). */
+/* Parcours : choisir une série dans le carrousel → le booster s'ouvre aussitôt (SachetOpening en autoStart :
+   déchirure, puis les cartes de la moins rare à la plus rare) → récapitulatif. "stage" piloté ici. */
 export default function PaquetsPage() {
   const router = useRouter();
   const { stats, refresh } = usePlayer();
   const [boosters, setBoosters] = useState([]);
   const [booster, setBooster] = useState(null);
-  const [stage, setStage] = useState("series"); // series | picker | opening
-  const [warp, setWarp] = useState(null);      // { x, y } : centre du trou noir pendant la transition
-  const [leaving, setLeaving] = useState(false); // le paquet choisi est en train d'être aspiré
+  const [stage, setStage] = useState("series"); // series | opening
   const [chosen, setChosen] = useState(null);
   const [result, setResult] = useState(null);
   const [error, setError] = useState(null);
@@ -37,11 +30,11 @@ export default function PaquetsPage() {
       .then(list => {
         setBoosters(list);
         if (!list.length) return setError("Aucun booster actif dans le catalogue.");
-        // /jeu?booster=CODE (onglet Boosters) : on va directement à l'anneau de paquets de ce booster
+        // /jeu?booster=CODE (onglet Boosters) : on ouvre directement ce booster
         const wanted = new URLSearchParams(window.location.search).get("booster");
         const b = list.find(x => x.code === wanted);
         setBooster(b || list[0]);
-        if (b) { setChosen(b); setStage("picker"); window.history.replaceState(null, "", "/jeu"); }
+        if (b) { setChosen(b); setStage("opening"); setRun(n => n + 1); window.history.replaceState(null, "", "/jeu"); }
       })
       .catch(() => setError("Le serveur de jeu ne répond pas. Réessaie dans un instant."));
   }, []);
@@ -57,18 +50,12 @@ export default function PaquetsPage() {
   const plural = (n, w) => `${n} ${w}${n > 1 ? "s" : ""}`;
 
   const openSeries = () => {
-    if (!booster || noPacks || leaving) return;
-    setChosen(booster); setResult(null);
-    if (prefersReduced()) { setStage("picker"); return; }
-    // le trou noir s'ouvre là où se trouve le paquet choisi
-    const r = document.querySelector(".cv-item.is-active")?.getBoundingClientRect();
-    setWarp(r ? { x: r.left + r.width / 2, y: r.top + r.height / 2 } : {});
-    setLeaving(true);
-    setTimeout(() => { setStage("picker"); setLeaving(false); }, BLACK_HOLE.swapAt);
-    setTimeout(() => setWarp(null), BLACK_HOLE.total);
+    if (!booster || noPacks) return;
+    setChosen(booster); setResult(null); setError(null);
+    setStage("opening"); setRun(n => n + 1);
   };
+  const again = () => { setResult(null); setError(null); setRun(n => n + 1); };
   const backToSeries = () => { setStage("series"); setResult(null); };
-  const pickPack = () => { setStage("opening"); setRun(n => n + 1); };
 
   const open = async () => {
     setError(null); setResult(null);
@@ -90,7 +77,7 @@ export default function PaquetsPage() {
             {error && <p className="ax-notice"><strong>Oups.</strong> {error}</p>}
             <div className="pv-layout">
               <div className="pv-carousel">
-                <BoosterCarousel boosters={boosters} selected={booster} leaving={leaving}
+                <BoosterCarousel boosters={boosters} selected={booster}
                   onSelect={b => { if (b.code !== booster?.code) setBooster(b); }} onChoose={openSeries} />
               </div>
               {booster && (
@@ -102,15 +89,11 @@ export default function PaquetsPage() {
           </>
         )}
 
-        {stage === "picker" && chosen && (
-          <PackPicker booster={chosen} onPick={pickPack} onBack={backToSeries} />
-        )}
-
         {stage === "opening" && chosen && (
           <>
             {error && <p className="ax-notice"><strong>Oups.</strong> {error}</p>}
             <SachetOpening key={`${chosen.code}-${run}`} booster={chosen} disabled={noPacks}
-              onOpen={open} onDone={done} onError={e => setError(e.message)} />
+              autoStart onOpen={open} onDone={done} onError={e => setError(e.message)} />
             <div className="ax-draw-foot">
               <div>
                 {result
@@ -119,7 +102,7 @@ export default function PaquetsPage() {
               </div>
               {result && (
                 <div className="ax-actions" style={{ justifyContent: "center" }}>
-                  <button className="btn btn-primary" type="button" disabled={noPacks} onClick={() => setStage("picker")}><i className="ph ph-package" />Choisir un autre paquet</button>
+                  <button className="btn btn-primary" type="button" disabled={noPacks} onClick={again}><i className="ph ph-package" />Ouvrir un autre booster</button>
                   <button className="btn btn-secondary" type="button" onClick={backToSeries}>Changer de booster</button>
                   <button className="btn btn-secondary" type="button" onClick={() => router.push("/jeu/collection")}>Voir la collection</button>
                 </div>
@@ -128,7 +111,6 @@ export default function PaquetsPage() {
           </>
         )}
       </section>
-      {warp && <BlackHole x={warp.x} y={warp.y} />}
       {odds && <OddsDialog booster={booster} onClose={() => setOdds(false)} />}
     </>
   );

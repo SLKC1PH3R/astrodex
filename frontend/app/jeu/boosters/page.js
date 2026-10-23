@@ -11,7 +11,7 @@ import { api } from "@/lib/api";
    en haut, la présentation du booster sélectionné (au départ, le booster du jour) ; en bas, tous
    les boosters en vignettes, filtrables par série — seule cette liste défile si elle déborde.
    Toucher une vignette présente ce booster en haut ; « Ouvrir » mène à /jeu?booster=CODE, qui
-   affiche directement l'anneau de paquets. Styles : app/boosters.css (.bx-*). */
+   ouvre directement ce booster. Styles : app/boosters.css (.bx-*). */
 
 const ROMAN = ["", "I", "II", "III", "IV", "V", "VI", "VII", "VIII", "IX", "X"];
 const tagOf = code => (/^S\d+[A-Z]$/.test(code || "") ? code.slice(0, -1) + code.slice(-1).toLowerCase() : code);

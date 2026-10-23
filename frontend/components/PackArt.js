@@ -3,7 +3,7 @@ import { PACK_DESIGNS, SERIES_DESIGNS, fallbackDesign } from "@/lib/packDesigns"
 /* Visuel d'un paquet scellé, au design des maquettes « booster à thème » : bandeaux sertis à motif,
    logo, code du booster, grande illustration composée, « BOOSTER À THÈME » et titre biseauté.
    Toutes les tailles sont relatives à la largeur du paquet (unités cqw) : le même visuel sert au
-   carrousel, à l'anneau et à l'écran d'ouverture. Format 1 × 2.
+   carrousel et à l'écran d'ouverture. Format 1 × 2.
    Données : lib/packDesigns.js · styles : app/packart.css (.pka-*). */
 
 const tag = theme => (/^S\d+[A-Z]$/.test(theme.code || "") ? theme.code.slice(0, -1) + theme.code.slice(-1).toLowerCase() : theme.serie);

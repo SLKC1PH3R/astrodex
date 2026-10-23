@@ -3,7 +3,7 @@
    Les couleurs vives restent réservées aux cartes et aux raretés.
 
    Les tokens Nocturne (--color-*) sont redéfinis sur .ax-app. Deux zones gardent les anciens tokens, à l'identique :
-   - .ax-legacy : pages Paquets et Boosters (anneau, carrousels, transitions, ouverture des boosters) ;
+   - .ax-legacy : pages Paquets et Boosters (carrousels, ouverture des boosters) ;
    - .ax-card : le dessin des cartes.
    Les éléments du cadre (menu, barre du haut) lisent les variables --ob-*, que .ax-legacy ne touche pas.
    La page d'inscription / connexion (.ax-auth) reçoit le même thème. */

@@ -14,9 +14,6 @@ import "./social.css";
 import "./commerce.css";
 import "./arene.css";
 import "./observatoire.css";
-import "./packpicker.css";
-import "./packring.css";
-import "./blackhole.css";
 import "./landing.css";
 
 export const metadata = {
