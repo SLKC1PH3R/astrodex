@@ -14,7 +14,7 @@ from . import config, db
 from .catalog_import import import_catalog, load_catalog
 from .common import CARD_SELECT, card_out, current_player, hash_token
 from .draw import draw_pack
-from . import admin, auth, battle, guild, market, profil, settings, social, trades
+from . import admin, auth, progression, battle, guild, market, profil, settings, social, trades
 
 logging.basicConfig(level=logging.INFO, format="%(asctime)s %(levelname)s %(name)s %(message)s")
 log = logging.getLogger("astrodex")
@@ -141,11 +141,15 @@ def me(player: dict = Depends(current_player)):
                    (SELECT count(*) FROM player_cards WHERE player_id = %(p)s) AS cartes_uniques,
                    (SELECT coalesce(sum(quantite), 0) FROM player_cards WHERE player_id = %(p)s) AS cartes_total,
                    (SELECT count(*) FROM cards WHERE NOT retired) AS catalogue""", {"p": player["id"]}).fetchone()
-    return {**player, **st, "boosters_restants": _remaining(player["id"])}
+        progression.sync_achievements(conn, player["id"])
+        row = conn.execute("SELECT xp, embleme FROM players WHERE id = %s", (player["id"],)).fetchone()
+        packs = progression.public_packs(progression.pack_state(conn, player["id"]))
+    return {**player, **st, "boosters_restants": packs["stock"], "reserve": packs,
+            "progression": progression.summary(row["xp"], row["embleme"])}
 
 
 @app.get("/api/me/progression")
-def progression(player: dict = Depends(current_player)):
+def booster_progress(player: dict = Depends(current_player)):
     """Pour chaque booster à thème actif : cartes de son contenu déjà possédées / taille du contenu."""
     with db.connection() as conn:
         return conn.execute("""
@@ -169,20 +173,8 @@ def collection(serie: str | None = None, player: dict = Depends(current_player))
     return [{**card_out(r), "quantite": r["quantite"], "obtenue_le": r["first_obtained_at"]} for r in rows]
 
 
-def _remaining(player_id) -> int | None:
-    if config.PACKS_PER_DAY <= 0:
-        return None
-    with db.connection() as conn:
-        n = conn.execute("SELECT count(*) AS n FROM pack_openings WHERE player_id = %s AND opened_at > now() - interval '24 hours'",
-                         (player_id,)).fetchone()["n"]
-    return max(0, config.PACKS_PER_DAY - n)
-
-
 @app.post("/api/boosters/{code}/open")
 def open_booster(code: str, player: dict = Depends(current_player)):
-    remaining = _remaining(player["id"])
-    if remaining == 0:
-        raise HTTPException(429, f"Limite de {config.PACKS_PER_DAY} boosters par 24 h atteinte")
     with db.connection() as conn, conn.transaction():
         pack = conn.execute("""SELECT p.id, p.series_id FROM pack_types p JOIN series s ON s.id = p.series_id
                                WHERE p.code = %s AND p.active AND s.active""", (code,)).fetchone()
@@ -199,6 +191,8 @@ def open_booster(code: str, player: dict = Depends(current_player)):
             pool.setdefault(r["rarete"], []).append(r["id"])
 
         ids = draw_pack([slots[k] for k in sorted(slots)], pool)
+        packs = progression.consume_pack(conn, player["id"])  # 429 si la réserve est vide
+        xp_before = conn.execute("SELECT xp FROM players WHERE id = %s", (player["id"],)).fetchone()["xp"]
 
         owned = {r["card_id"] for r in conn.execute("SELECT card_id FROM player_cards WHERE player_id = %s AND card_id = ANY(%s)",
                                                     (player["id"], ids)).fetchall()}
@@ -208,6 +202,12 @@ def open_booster(code: str, player: dict = Depends(current_player)):
             conn.execute("""INSERT INTO player_cards (player_id, card_id) VALUES (%s, %s)
                             ON CONFLICT (player_id, card_id) DO UPDATE SET quantite = player_cards.quantite + 1""", (player["id"], cid))
         rows = {r["id"]: r for r in conn.execute(CARD_SELECT + " WHERE c.id = ANY(%s)", (ids,)).fetchall()}
+        discovered = {cid for cid in ids if cid not in owned}
+        gain = progression.XP_BOOSTER + sum(progression.XP_NEW_CARD[rows[cid]["rarete"]] for cid in discovered)
+        progression.add_xp(conn, player["id"], gain)
+        gain += progression.sync_achievements(conn, player["id"])
+        prog = progression.summary(xp_before + gain)
+        packs = progression.public_packs(progression.pack_state(conn, player["id"]))  # la capacité peut avoir augmenté
 
     seen = set()
     cartes = []
@@ -215,4 +215,5 @@ def open_booster(code: str, player: dict = Depends(current_player)):
         cartes.append({**card_out(rows[cid]), "nouvelle": cid not in owned and cid not in seen})
         seen.add(cid)
     return {"ouverture_id": opening["id"], "ouvert_le": opening["opened_at"], "cartes": cartes,
-            "boosters_restants": None if remaining is None else remaining - 1}
+            "boosters_restants": packs["stock"], "reserve": packs,
+            "xp_gagne": gain, "niveau_avant": progression.level_for(xp_before), "progression": prog}

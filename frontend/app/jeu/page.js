@@ -1,5 +1,5 @@
 "use client";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
 import { ORDER, RAR } from "@/components/Carte";
 import SachetOpening from "@/components/SachetOpening";
@@ -9,6 +9,7 @@ import Topbar from "@/components/Topbar";
 import OddsDialog from "@/components/OddsDialog";
 import { usePlayer } from "@/components/PlayerProvider";
 import { api } from "@/lib/api";
+import { mmss, useCountdown } from "@/components/Progression";
 
 /* Parcours : choisir une série dans le carrousel → le booster s'ouvre aussitôt (SachetOpening en autoStart :
    déchirure, puis les cartes de la moins rare à la plus rare) → récapitulatif. "stage" piloté ici. */
@@ -47,6 +48,9 @@ export default function PaquetsPage() {
 
   const left = stats?.boosters_restants;
   const noPacks = left === 0;
+  const res = stats?.reserve;
+  const next = useCountdown(res?.prochain_dans ?? null, refresh);
+  const gainRef = useRef(null); // XP gagnée à l'ouverture en cours, affichée avec le récapitulatif
   const plural = (n, w) => `${n} ${w}${n > 1 ? "s" : ""}`;
 
   const openSeries = () => {
@@ -60,12 +64,13 @@ export default function PaquetsPage() {
   const open = async () => {
     setError(null); setResult(null);
     const r = await api.open(chosen.code);
+    gainRef.current = { xp: r.xp_gagne, up: r.progression.niveau > r.niveau_avant ? r.progression : null };
     refresh();
     return r.cartes;
   };
   const done = cards => {
     const best = cards.reduce((b, c) => (!b || ORDER.indexOf(c.rarete) > ORDER.indexOf(b.rarete) ? c : b), null);
-    setResult({ news: cards.filter(c => c.nouvelle).length, best });
+    setResult({ news: cards.filter(c => c.nouvelle).length, best, ...gainRef.current });
   };
 
   return (
@@ -82,7 +87,7 @@ export default function PaquetsPage() {
               </div>
               {booster && (
                 <BoosterPanel booster={booster} owned={owned}>
-                  {left != null && <span>{noPacks ? "Reviens demain pour de nouveaux boosters" : `${plural(left, "booster")} disponible${left > 1 ? "s" : ""} aujourd'hui`}</span>}
+                  {res && <span>{noPacks ? `Réserve vide : prochain booster dans ${mmss(next ?? 0)}` : `${plural(res.stock, "booster")} en réserve sur ${res.max}${next != null ? ` · +1 dans ${mmss(next)}` : ""}`}</span>}
                 </BoosterPanel>
               )}
             </div>
@@ -100,6 +105,9 @@ export default function PaquetsPage() {
                   ? `${result.news ? plural(result.news, "nouvelle carte").replace("nouvelle cartes", "nouvelles cartes") : "Aucune nouvelle carte"} · meilleure carte : ${result.best.nom} (${RAR[result.best.rarete].label})`
                   : ""}
               </div>
+              {result?.xp > 0 && <div className="pa-xp">+{result.xp} XP</div>}
+              {result?.up && <div className="pa-up">Niveau {result.up.niveau} atteint ! · {result.up.rang.nom} · réserve de {result.up.reserve_max} boosters</div>}
+              {result && noPacks && <div className="sx-muted">Prochain booster dans {mmss(next ?? 0)}</div>}
               {result && (
                 <div className="ax-actions" style={{ justifyContent: "center" }}>
                   <button className="btn btn-secondary" type="button" onClick={backToSeries}><i className="ph ph-arrow-left" />Retour aux séries</button>

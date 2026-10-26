@@ -17,7 +17,7 @@ from typing import Literal
 from fastapi import APIRouter, Depends, HTTPException
 from pydantic import BaseModel, Field
 
-from . import db
+from . import db, progression
 from .common import CARD_SELECT, card_out, current_player
 from .settings import allows
 from .social import DEFAULT_PSEUDO, are_friends, parse_id
@@ -190,6 +190,8 @@ def play(body: BattleIn, player: dict = Depends(current_player)):
             VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s::jsonb) RETURNING id""",
                            (me, opp["id"], opp["nom"], body.mode, won, s["moi"], s["eux"], delta,
                             json.dumps(result["manches"]))).fetchone()["id"]
+        if won:
+            progression.add_xp(conn, me, progression.XP_BATTLE_WIN)
         if body.mode == "ami":
             verdict = "gagné" if won else "perdu" if lost else "fait match nul"
             conn.execute("INSERT INTO messages (sender, recipient, body) VALUES (%s, %s, %s)",

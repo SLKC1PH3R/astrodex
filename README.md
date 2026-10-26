@@ -123,7 +123,7 @@ cd frontend && npm install && BACKEND_URL=http://localhost:8000 npm run dev
 1. Pousse le dépôt sur GitHub (`SLKC1PH3R/Astrodex`).
 2. DNS : enregistrement `A` `astrodex.digitalstack.cloud` vers l'IP du VPS (inutile avec un wildcard).
 3. Dans Dokploy : **Create Service → Compose**, source GitHub, branche `main`, fichier `./docker-compose.yml`.
-4. Onglet **Environment** : définis `POSTGRES_PASSWORD` (long et aléatoire), `ADMIN_EMAILS` (ton e-mail, ou plusieurs séparés par des virgules : ces comptes ont accès à l'onglet Administration) et, si tu veux limiter, `PACKS_PER_DAY`.
+4. Onglet **Environment** : définis `POSTGRES_PASSWORD` (long et aléatoire), `ADMIN_EMAILS` (ton e-mail, ou plusieurs séparés par des virgules : ces comptes ont accès à l'onglet Administration) (la réserve de boosters — 1 toutes les 10 minutes, 10 à 20 selon le niveau — est réglée dans `backend/app/progression.py`).
 5. Onglet **Domains** : service `frontend`, hôte `astrodex.digitalstack.cloud`, port `3000`, HTTPS avec Let's Encrypt.
 6. **Deploy**, puis active **Auto Deploy**.
 

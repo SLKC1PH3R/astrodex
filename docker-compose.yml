@@ -29,7 +29,6 @@ services:
     environment:
       DATABASE_URL: postgresql://astrodex:${POSTGRES_PASSWORD}@astrodex-postgres:5432/astrodex
       IMPORT_CATALOG_ON_START: "true"
-      PACKS_PER_DAY: ${PACKS_PER_DAY:-0}
       ADMIN_EMAILS: ${ADMIN_EMAILS:-}
     expose:
       - "8000"

@@ -4,15 +4,17 @@ import Link from "next/link";
 import Topbar from "@/components/Topbar";
 import { api } from "@/lib/api";
 import { Avatar, fr } from "@/lib/social";
+import { Embleme } from "@/components/Progression";
 
 /* Onglet « Classement » : podium des trois premiers, tableau, ligne du joueur toujours visible.
    Types : collection (cartes différentes), semaine (nouvelles cartes des 7 derniers jours),
-   bataille (points de rang) et guildes (points de la semaine).
+   niveau (XP), bataille (points de rang) et guildes (points de la semaine).
    Styles : app/social.css (.sx-*, .rk-*). */
 
 const TYPES = [
   { id: "collection", label: "Collection", extra: "Légendaires", vide: "Ouvre un booster pour prendre la tête !" },
   { id: "semaine", label: "Cette semaine", extra: "Légendaires", vide: "Ouvre un booster pour prendre la tête !" },
+  { id: "niveau", label: "Niveau", extra: "Cartes", vide: "Ouvre des boosters pour gagner de l'XP !" },
   { id: "bataille", label: "Bataille", extra: "Victoires", vide: "Lance une bataille pour entrer au classement !" },
   { id: "guildes", label: "Guildes", extra: "Membres", vide: "Fonde la première guilde !" },
 ];
@@ -96,10 +98,11 @@ function Row({ j }) {
       <td>
         <Link className="rk-who" href={j.guilde ? "/jeu/guilde" : profile(j.id)}>
           <Avatar id={j.id} pseudo={j.pseudo} size={30} />{j.pseudo}{j.moi ? " (toi)" : ""}
+          {j.progression && <Embleme e={j.progression.embleme} size={22} title={`Rang ${j.progression.rang.nom}`} />}
           {j.titre && <span className="sx-muted">· {j.titre}</span>}
         </Link>
       </td>
-      <td className="num">{fr(j.valeur)}</td>
+      <td className="num">{j.progression ? <>Niv. {j.progression.niveau} <span className="sx-muted">· {fr(j.valeur)} XP</span></> : fr(j.valeur)}</td>
       <td className="num" style={{ color: j.guilde ? undefined : "#ffcf6b" }}>{fr(j.legendaires)}</td>
     </tr>
   );

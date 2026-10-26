@@ -6,8 +6,9 @@ import Carte from "@/components/Carte";
 import { usePlayer } from "@/components/PlayerProvider";
 import { api } from "@/lib/api";
 import { Avatar, fr } from "@/lib/social";
+import { Embleme, LevelBar } from "@/components/Progression";
 
-/* Onglet « Profil » : bannière (pseudo, titre), chiffres clés, vitrine de 5 cartes favorites,
+/* Onglet « Profil » : bannière (pseudo, titre, emblème), niveau et XP, chiffres clés, vitrine de 5 cartes favorites,
    progression par série. /jeu/profil?id=… affiche le profil public d'un autre joueur (lecture seule).
    Styles : app/social.css (.sx-*, .pf-*). */
 
@@ -48,7 +49,10 @@ export default function ProfilPage() {
               <img src="/media/saturne.webp" alt="" />
               <Avatar id={p.id} pseudo={p.pseudo} size={104} style={{ boxShadow: "0 0 0 4px var(--color-bg), 0 0 0 6px var(--color-accent)" }} />
               <div className="pf-id">
-                {p.titre && <span className="sx-tag">TITRE · {p.titre.toUpperCase()}</span>}
+                <span style={{ display: "flex", alignItems: "center", gap: 10, flexWrap: "wrap" }}>
+                  <Embleme e={p.progression.embleme} size={30} title={`Emblème ${p.progression.embleme.nom}`} />
+                  {p.titre && <span className="sx-tag">TITRE · {p.titre.toUpperCase()}</span>}
+                </span>
                 <h2>{p.pseudo}</h2>
                 <span className="sx-muted" style={{ color: "var(--color-neutral-300)" }}>
                   Collectionneur depuis le {new Date(p.inscrit_le).toLocaleDateString("fr-FR", { day: "numeric", month: "long", year: "numeric" })}
@@ -60,6 +64,13 @@ export default function ProfilPage() {
                   <button type="button" className="sx-btn alt" onClick={() => setPicking(true)}>Changer la vitrine</button>
                 </div>
               )}
+            </section>
+
+            <section className="pf-level" aria-label="Niveau">
+              <Embleme e={p.progression.rang} size={58} />
+              <div className="pf-level-id"><span>Rang</span><b>{p.progression.rang.nom}</b><span>{fr(p.progression.xp)} XP au total</span></div>
+              <LevelBar prog={p.progression} />
+              {mine && <div className="pf-level-id" style={{ minWidth: 120 }}><span>Réserve</span><b>{p.progression.reserve_max} boosters</b><span>+1 tous les 4 niveaux</span></div>}
             </section>
 
             <div className="pf-stats">
@@ -110,15 +121,16 @@ export default function ProfilPage() {
 function EditDialog({ p, onClose, onSave }) {
   const [pseudo, setPseudo] = useState(p.pseudo === "Joueur" ? "" : p.pseudo);
   const [titre, setTitre] = useState(p.titre || "");
+  const [embleme, setEmbleme] = useState(p.progression.embleme.id);
   const [err, setErr] = useState(null);
   const submit = async e => {
     e.preventDefault();
-    try { await onSave({ ...(pseudo.trim() ? { pseudo } : {}), titre }); onClose(); }
+    try { await onSave({ ...(pseudo.trim() ? { pseudo } : {}), titre, embleme }); onClose(); }
     catch (x) { setErr(x.message); }
   };
   return (
     <div className="sx-modal-bg" onClick={onClose}>
-      <form className="sx-modal" style={{ width: "min(460px, 100%)" }} onClick={e => e.stopPropagation()} onSubmit={submit} role="dialog" aria-modal="true" aria-labelledby="pf-edit">
+      <form className="sx-modal" style={{ width: "min(560px, 100%)" }} onClick={e => e.stopPropagation()} onSubmit={submit} role="dialog" aria-modal="true" aria-labelledby="pf-edit">
         <h2 id="pf-edit">Modifier le profil</h2>
         <div className="pf-form">
           <label>Pseudo<input className="input" value={pseudo} onChange={e => setPseudo(e.target.value)} minLength={2} maxLength={24} placeholder="ex. orion42" /></label>
@@ -128,7 +140,20 @@ function EditDialog({ p, onClose, onSave }) {
               {p.titres_disponibles.map(t => <option key={t} value={t}>{t}</option>)}
             </select>
           </label>
-          {p.titres_disponibles.length === 0 && <span className="sx-muted">Débloque des succès pour gagner des titres.</span>}
+          {p.titres_disponibles.length === 0 && <span className="sx-muted">Débloque des succès et monte de niveau pour gagner des titres.</span>}
+          <span className="sx-muted">Titres de niveau : {p.titres_niveau.map(t => `${t.titre} (niv. ${t.niveau})${t.debloque ? " ✓" : ""}`).join(" · ")}</span>
+          <fieldset style={{ border: 0, padding: 0, margin: 0, display: "flex", flexDirection: "column", gap: 8 }}>
+            <legend style={{ fontSize: 13, color: "var(--color-neutral-300)", marginBottom: 6 }}>Emblème affiché</legend>
+            <div className="pf-embs">
+              {p.emblemes.map(e => (
+                <button key={e.id} type="button" className="pf-emb-pick" aria-pressed={embleme === e.id} disabled={!e.debloque} onClick={() => setEmbleme(e.id)}
+                  aria-label={e.debloque ? `Emblème ${e.nom}` : `Emblème ${e.nom}, débloqué au niveau ${e.niveau}`}>
+                  <Embleme e={e} size={40} off={!e.debloque} />
+                  {e.nom}<small>{e.debloque ? "Débloqué" : `Niveau ${e.niveau}`}</small>
+                </button>
+              ))}
+            </div>
+          </fieldset>
           {err && <span style={{ color: "#ffb3b3", fontSize: 13 }}>{err}</span>}
         </div>
         <div className="sx-modal-foot">
