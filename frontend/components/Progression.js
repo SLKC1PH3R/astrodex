@@ -5,8 +5,25 @@ import { useEffect, useRef, useState } from "react";
    Les données viennent de l'API (progression : niveau, xp, rang, emblème ; reserve : stock, max, prochain_dans).
    Styles : app/observatoire.css (.pg-*). */
 
+/* Ornements dessinés (public/ornements/, découpés de la planche fournie par Jeremy) :
+   niveau-5 … niveau-40 : emblème de chaque palier de niveau (un par rang à partir de la Comète) ;
+   titre-5 … titre-40 : bannière du titre de niveau ; ranked-1 … ranked-8 et ranked-plaque-* : rangs classés de bataille. */
+export const LEVEL_TITLES = [[5, "Rêveur d'étoiles"], [10, "Chasseur de comètes"], [15, "Arpenteur lunaire"], [20, "Pilote interplanétaire"],
+  [25, "Dompteur de soleils"], [30, "Voyageur interstellaire"], [35, "Architecte des nébuleuses"], [40, "Légende de la galaxie"]];
+export const ornementSrc = niveau => (niveau >= 5 ? `/ornements/niveau-${Math.min(40, Math.floor(niveau / 5) * 5)}.webp` : null);
+const RATIO = 180 / 116; // proportions des emblèmes découpés
+
+/* Emblème d'un rang : l'ornement dessiné du palier (à partir du niveau 5), sinon une pastille colorée. */
 export function Embleme({ e, size = 44, title, off = false }) {
   if (!e) return null;
+  const src = ornementSrc(e.niveau);
+  if (src) {
+    return (
+      // eslint-disable-next-line @next/next/no-img-element
+      <img className={`pg-orn${off ? " off" : ""}`} src={src} alt={title || ""} title={title || `Emblème ${e.nom}`}
+        style={{ height: size, width: Math.round(size * RATIO) }} aria-hidden={title ? undefined : "true"} />
+    );
+  }
   return (
     <span className={`pg-emb${off ? " off" : ""}`} style={{ "--ec": e.couleur, "--es": `${size}px` }} title={title || `Emblème ${e.nom}`} aria-hidden={title ? undefined : "true"}>
       <i className={`ph-fill ${e.icone}`} />
@@ -50,4 +67,26 @@ export function useCountdown(seconds, onZero) {
     return () => clearInterval(t);
   }, [seconds]);
   return left;
+}
+
+/* Titre affiché : bannière dessinée pour les titres de niveau, pastille pour les titres de succès. */
+export function TitreAffiche({ titre, height = 58 }) {
+  if (!titre) return null;
+  const lvl = LEVEL_TITLES.find(([, t]) => t === titre)?.[0];
+  if (lvl) {
+    // eslint-disable-next-line @next/next/no-img-element
+    return <img className="pg-banner" src={`/ornements/titre-${lvl}.webp`} alt={`Titre : ${titre}`} style={{ height, width: Math.round(height * 636 / 116) }} />;
+  }
+  return <span className="sx-tag">TITRE · {titre.toUpperCase()}</span>;
+}
+
+/* Rang classé de bataille (palier 1 à 8) : blason seul, ou blason avec sa plaque (nom et devise dessinés). */
+export function BlasonClasse({ rang, size = 48, plaque = false }) {
+  if (!rang?.palier) return null;
+  if (plaque) {
+    // eslint-disable-next-line @next/next/no-img-element
+    return <img className="pg-banner" src={`/ornements/ranked-plaque-${rang.palier}.webp`} alt={`Rang ${rang.nom} · ${rang.devise}`} style={{ height: size, width: Math.round(size * 630 / 112) }} />;
+  }
+  // eslint-disable-next-line @next/next/no-img-element
+  return <img className="pg-orn" src={`/ornements/ranked-${rang.palier}.webp`} alt="" title={`Rang ${rang.nom}`} style={{ height: size, width: Math.round(size * 230 / 112) }} aria-hidden="true" />;
 }

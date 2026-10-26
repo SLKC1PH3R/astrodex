@@ -4,6 +4,7 @@ import Topbar from "@/components/Topbar";
 import MiniCarte from "@/components/MiniCarte";
 import { api } from "@/lib/api";
 import { ago, fr, until } from "@/lib/social";
+import { BlasonClasse } from "@/components/Progression";
 import { prefersReduced } from "@/lib/motion";
 
 /* Onglet « Bataille » : composer sa main de 5 cartes, choisir un mode (rapide, classée, défi d'un ami),
@@ -98,6 +99,7 @@ function Arena({ r, onAgain, onBack }) {
         <>
           <div className={`bt-verdict bt-res ${verdict}`}>{RESULT[verdict]} {r.score.moi}–{r.score.eux}</div>
           {r.mode === "classee" && <p className="sx-muted" style={{ textAlign: "center", margin: 0 }}>{r.points > 0 ? "+" : ""}{r.points} point{Math.abs(r.points) > 1 ? "s" : ""} de rang · {r.rang.nom} ({fr(r.rang.points)} pts)</p>}
+          {r.mode === "classee" && <div style={{ display: "flex", justifyContent: "center" }}><BlasonClasse rang={r.rang} size={64} plaque /></div>}
           <div style={{ display: "flex", justifyContent: "center", gap: 10, flexWrap: "wrap" }}>
             <button type="button" className="sx-btn" onClick={onAgain}>Rejouer</button>
             <button type="button" className="sx-btn alt" onClick={onBack}>Retour</button>
@@ -139,7 +141,8 @@ export default function BataillePage() {
       <section className="sx-page">
         {d && (
           <div className="bt-head">
-            <span className="bt-chip"><i className="ph-fill ph-shield-star" aria-hidden="true" style={{ color: "#ffcf6b" }} />Rang <b>{d.rang.nom}</b> · {fr(d.rang.points)} pts</span>
+            <BlasonClasse rang={d.rang} size={76} plaque />
+            <span className="bt-chip">Points de rang <b>{fr(d.rang.points)}</b></span>
             <span className="bt-chip">Victoires <b>{fr(d.stats.victoires)}</b></span>
             <span className="bt-chip">Parties <b>{fr(d.stats.parties)}</b></span>
             {d.rang.prochain && <span className="sx-muted">Encore {fr(d.rang.prochain_seuil - d.rang.points)} pts pour {d.rang.prochain}</span>}
@@ -192,7 +195,20 @@ export default function BataillePage() {
               </section>
             </div>
 
-            <aside className="sx-side sx-pane" aria-labelledby="bt-hist" style={{ display: "flex", flexDirection: "column", gap: 4 }}>
+            <div className="sx-side" style={{ display: "flex", flexDirection: "column", gap: 20 }}>
+            {d?.paliers && (
+              <section className="sx-pane" aria-labelledby="bt-tiers" style={{ gap: 6 }}>
+                <h2 id="bt-tiers" className="sx-lbl" style={{ marginBottom: 6 }}>Rangs classés · saison en cours</h2>
+                {d.paliers.map(t => (
+                  <div key={t.palier} className={`bt-tier${t.palier === d.rang.palier ? " on" : ""}${t.palier > d.rang.palier ? " off" : ""}`}>
+                    <BlasonClasse rang={t} size={40} />
+                    <span><b>{t.nom}</b><small>{t.devise}</small></span>
+                    <span className="bt-tier-pts">{t.seuil ? `${fr(t.seuil)} pts` : "Départ"}</span>
+                  </div>
+                ))}
+              </section>
+            )}
+            <aside className="sx-pane" aria-labelledby="bt-hist" style={{ display: "flex", flexDirection: "column", gap: 4 }}>
               <h2 id="bt-hist" className="sx-lbl" style={{ marginBottom: 6 }}>Dernières batailles</h2>
               {d && hist.length === 0 && <span className="sx-muted">Aucune bataille pour l'instant.</span>}
               {hist.map(h => {
@@ -208,6 +224,7 @@ export default function BataillePage() {
                 <button type="button" className="sx-btn alt sm" onClick={() => api.historiqueBatailles().then(setAllHist).catch(() => {})}>Voir tout l'historique</button>
               )}
             </aside>
+            </div>
           </div>
         )}
       </section>

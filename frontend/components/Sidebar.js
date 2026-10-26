@@ -60,7 +60,7 @@ export default function Sidebar() {
 
       <div className="ob-user">
         {stats?.progression
-          ? <Link href="/jeu/profil" aria-label={`Ton profil, ${pseudo}`}><Embleme e={stats.progression.embleme} size={34} /></Link>
+          ? <Link href="/jeu/profil" aria-label={`Ton profil, ${pseudo}`}><Embleme e={stats.progression.embleme} size={26} /></Link>
           : <Link className="ob-avatar" href="/jeu/profil" aria-label={`Ton profil, ${pseudo}`}>{pseudo[0].toUpperCase()}</Link>}
         <div>
           <b>{pseudo}</b>

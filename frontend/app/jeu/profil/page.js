@@ -6,7 +6,7 @@ import Carte from "@/components/Carte";
 import { usePlayer } from "@/components/PlayerProvider";
 import { api } from "@/lib/api";
 import { Avatar, fr } from "@/lib/social";
-import { Embleme, LevelBar } from "@/components/Progression";
+import { Embleme, LEVEL_TITLES, LevelBar, TitreAffiche } from "@/components/Progression";
 
 /* Onglet « Profil » : bannière (pseudo, titre, emblème), niveau et XP, chiffres clés, vitrine de 5 cartes favorites,
    progression par série. /jeu/profil?id=… affiche le profil public d'un autre joueur (lecture seule).
@@ -50,8 +50,8 @@ export default function ProfilPage() {
               <Avatar id={p.id} pseudo={p.pseudo} size={104} style={{ boxShadow: "0 0 0 4px var(--color-bg), 0 0 0 6px var(--color-accent)" }} />
               <div className="pf-id">
                 <span style={{ display: "flex", alignItems: "center", gap: 10, flexWrap: "wrap" }}>
-                  <Embleme e={p.progression.embleme} size={30} title={`Emblème ${p.progression.embleme.nom}`} />
-                  {p.titre && <span className="sx-tag">TITRE · {p.titre.toUpperCase()}</span>}
+                  {!LEVEL_TITLES.some(([, t]) => t === p.titre) && <Embleme e={p.progression.embleme} size={56} title={`Emblème ${p.progression.embleme.nom}`} />}
+                  <TitreAffiche titre={p.titre} height={70} />
                 </span>
                 <h2>{p.pseudo}</h2>
                 <span className="sx-muted" style={{ color: "var(--color-neutral-300)" }}>
@@ -148,7 +148,7 @@ function EditDialog({ p, onClose, onSave }) {
               {p.emblemes.map(e => (
                 <button key={e.id} type="button" className="pf-emb-pick" aria-pressed={embleme === e.id} disabled={!e.debloque} onClick={() => setEmbleme(e.id)}
                   aria-label={e.debloque ? `Emblème ${e.nom}` : `Emblème ${e.nom}, débloqué au niveau ${e.niveau}`}>
-                  <Embleme e={e} size={40} off={!e.debloque} />
+                  <Embleme e={e} size={46} off={!e.debloque} />
                   {e.nom}<small>{e.debloque ? "Débloqué" : `Niveau ${e.niveau}`}</small>
                 </button>
               ))}

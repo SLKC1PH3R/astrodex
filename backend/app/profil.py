@@ -170,7 +170,11 @@ def ranking(type: Literal["collection", "semaine", "bataille", "niveau"] = "coll
                     FROM players p WHERE EXISTS (SELECT 1 FROM battles b WHERE b.player_id = p.id))
                 SELECT *, rank() OVER (ORDER BY valeur DESC, legendaires DESC) AS rang
                 FROM scores ORDER BY rang, pseudo""", {"def": DEFAULT_PSEUDO}).fetchall()
-        return _ranking_out(type, label, rows, player, limit)
+        out = _ranking_out(type, label, rows, player, limit)
+        from .battle import rank_of  # import tardif : battle importe des modules qui importent celui-ci
+        for j in out["joueurs"] + ([out["moi"]] if out["moi"] else []):
+            j["classe"] = rank_of(j["valeur"])
+        return out
     expr, label = RANKINGS[type]
     with db.connection() as conn:
         rows = conn.execute(f"""

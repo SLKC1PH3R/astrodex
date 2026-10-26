@@ -11,11 +11,11 @@ def test_curve_and_caps():
     assert pg.level_for(0) == 1 and pg.level_for(99) == 1 and pg.level_for(100) == 2
     assert pg.level_for(pg.xp_for_level(40)) == 40 and pg.level_for(10 ** 9) == 40
     assert [pg.pack_cap(n) for n in (1, 3, 4, 20, 39, 40)] == [10, 10, 11, 15, 19, 20]
-    assert pg.rank_for(1)["nom"] == "Poussière d'étoile" and pg.rank_for(40)["nom"] == "Galaxie"
-    assert pg.rank_for(12)["nom"] == "Lune" and pg.level_titles(10) == ["Rêveur d'étoiles", "Chasseur de comètes"]
+    assert pg.rank_for(1)["nom"] == "Poussière d'étoile" and pg.rank_for(40)["nom"] == "Légende"
+    assert pg.rank_for(12)["nom"] == "Comète" and pg.rank_for(15)["nom"] == "Lune" and pg.level_titles(10) == ["Rêveur d'étoiles", "Chasseur de comètes"]
     s = pg.summary(150)
     assert s["niveau"] == 2 and s["xp_niveau"] == 100 and s["xp_suivant"] == pg.xp_for_level(3)
-    assert pg.summary(150, "galaxie")["embleme"]["id"] == "poussiere"  # emblème verrouillé : on retombe sur celui du rang
+    assert pg.summary(150, "legende")["embleme"]["id"] == "poussiere"  # emblème verrouillé : on retombe sur celui du rang
 
 
 psycopg = pytest.importorskip("psycopg")
@@ -61,7 +61,7 @@ def test_reserve_and_xp(client):
 
     prof = client.get("/api/me/profil", headers=h).json()
     assert prof["progression"]["xp"] >= 110 and prof["emblemes"][0]["debloque"] and not prof["emblemes"][-1]["debloque"]
-    assert client.patch("/api/me/profil", headers=h, json={"embleme": "galaxie"}).status_code == 422
+    assert client.patch("/api/me/profil", headers=h, json={"embleme": "legende"}).status_code == 422
     assert client.patch("/api/me/profil", headers=h, json={"embleme": "poussiere"}).json()["progression"]["embleme"]["id"] == "poussiere"
     assert client.patch("/api/me/profil", headers=h, json={"titre": "Légende de la galaxie"}).status_code == 422
     rk = client.get("/api/classement?type=niveau", headers=h).json()
@@ -72,4 +72,4 @@ def test_reserve_and_xp(client):
         c.execute("UPDATE players SET xp = %s WHERE id = %s", (pg.xp_for_level(40), p["id"]))
     me = client.get("/api/me", headers=h).json()
     assert me["progression"]["niveau"] == 40 and me["reserve"]["max"] == 20
-    assert client.patch("/api/me/profil", headers=h, json={"titre": "Légende de la galaxie", "embleme": "galaxie"}).status_code == 200
+    assert client.patch("/api/me/profil", headers=h, json={"titre": "Légende de la galaxie", "embleme": "legende"}).status_code == 200

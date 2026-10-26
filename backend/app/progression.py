@@ -41,17 +41,18 @@ def pack_cap(level: int) -> int:
     return min(PACK_MAX_CAP, PACK_BASE_CAP + level // 4)
 
 
-# Rangs : du plus petit objet céleste à la galaxie. (niveau de départ, nom, emblème, couleur, icône Phosphor)
+# Rangs, alignés sur les ornements dessinés (frontend/public/ornements/niveau-<N>.webp) :
+# (niveau de départ, nom, emblème, couleur, icône Phosphor de secours)
 RANKS = [
     (1, "Poussière d'étoile", "poussiere", "#9aa1b9", "ph-sparkle"),
-    (5, "Comète", "comete", "#7fc8e8", "ph-shooting-star"),
-    (10, "Lune", "lune", "#c7c8c2", "ph-moon"),
-    (15, "Planète", "planete", "#5ee0c0", "ph-planet"),
-    (20, "Géante gazeuse", "geante", "#e8b97f", "ph-globe-hemisphere-west"),
-    (25, "Étoile", "etoile", "#ffcf6b", "ph-sun"),
-    (30, "Géante rouge", "geante-rouge", "#ff8f6b", "ph-sun-dim"),
-    (35, "Nébuleuse", "nebuleuse", "#c58bff", "ph-cloud"),
-    (40, "Galaxie", "galaxie", "#aebfa2", "ph-spiral"),
+    (5, "Nuée stellaire", "nuee", "#5fd3c8", "ph-sparkle"),
+    (10, "Comète", "comete", "#4f8dff", "ph-shooting-star"),
+    (15, "Lune", "lune", "#b9a6ff", "ph-moon"),
+    (20, "Vaisseau", "vaisseau", "#e8b45a", "ph-rocket"),
+    (25, "Étoile", "etoile", "#ff8a3d", "ph-sun"),
+    (30, "Spirale", "spirale", "#b06bff", "ph-spiral"),
+    (35, "Nébuleuse", "nebuleuse", "#3fd6c6", "ph-cloud"),
+    (40, "Légende", "legende", "#f0c95e", "ph-crown"),
 ]
 # Titres exclusifs débloqués par niveau
 LEVEL_TITLES = [
