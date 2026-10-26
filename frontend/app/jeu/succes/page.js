@@ -32,7 +32,7 @@ export default function SuccesPage() {
 
   return (
     <>
-      <Topbar title="Succès" sub="Débloque des titres à afficher sur ton profil" />
+      <Topbar title="Succès" sub="Chaque succès rapporte 100 XP, et certains un titre à afficher sur ton profil" />
       <section className="sx-page">
         {error && <p className="ax-notice"><strong>Oups.</strong> {error}</p>}
         {data && (
@@ -66,6 +66,7 @@ export default function SuccesPage() {
                         <div className="sx-bar" style={{ "--bc": st.ic, height: 6 }} role="progressbar" aria-valuemin={0} aria-valuemax={a.cible} aria-valuenow={a.valeur}
                           aria-label={`Progression : ${a.nom}`}><i style={{ width: `${(a.valeur / Math.max(1, a.cible)) * 100}%` }} /></div>
                       )}
+                      <span className="ac-reward">+100 XP</span>
                       {a.titre && <span className="ac-reward">Titre « {a.titre} »</span>}
                     </div>
                   </article>

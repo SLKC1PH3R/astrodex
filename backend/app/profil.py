@@ -8,6 +8,7 @@ from fastapi import APIRouter, Depends, HTTPException
 from pydantic import BaseModel, Field
 
 from . import db
+from . import progression
 from .achievements import achievements_for, unlocked_titles
 from .common import CARD_SELECT, card_out, current_player
 from .settings import allows
@@ -44,8 +45,13 @@ def player_stats(conn, player_id) -> dict:
     return {**{k: int(v) for k, v in st.items()}, "amis": amis, **commerce, "series": {s["code"]: s for s in series}}
 
 
+def titles_for(stats: dict, level: int) -> list[str]:
+    """Titres affichables : ceux des succès débloqués et ceux des niveaux atteints."""
+    return unlocked_titles(stats) + progression.level_titles(level)
+
+
 def _profile(conn, player: dict, *, me: bool) -> dict:
-    p = conn.execute("SELECT id, pseudo, created_at, favoris, titre FROM players WHERE id = %s", (player["id"],)).fetchone()
+    p = conn.execute("SELECT id, pseudo, created_at, favoris, titre, xp, embleme FROM players WHERE id = %s", (player["id"],)).fetchone()
     stats = player_stats(conn, p["id"])
     fav_ids = [i for i in (p["favoris"] or [])]
     favs = {r["id"]: card_out(r) for r in conn.execute(CARD_SELECT + " WHERE c.id = ANY(%s)", (fav_ids,)).fetchall()} if fav_ids else {}
@@ -56,15 +62,20 @@ def _profile(conn, player: dict, *, me: bool) -> dict:
         "succes": {"debloques": sum(a["debloque"] for a in ach), "total": len(ach)},
         "series": list(stats["series"].values()),
         "favoris": [favs[i] for i in fav_ids if i in favs],
+        "progression": progression.summary(p["xp"], p["embleme"]),
     }
     if me:
-        out["titres_disponibles"] = unlocked_titles(stats)
+        lvl = out["progression"]["niveau"]
+        out["titres_disponibles"] = titles_for(stats, lvl)
+        out["titres_niveau"] = [{"niveau": n, "titre": t, "debloque": lvl >= n} for n, t in progression.LEVEL_TITLES]
+        out["emblemes"] = progression.emblems(lvl)
     return out
 
 
 @router.get("/api/me/profil")
 def my_profile(player: dict = Depends(current_player)):
     with db.connection() as conn:
+        progression.sync_achievements(conn, player["id"])
         return _profile(conn, player, me=True)
 
 
@@ -87,6 +98,7 @@ class ProfileIn(BaseModel):
     pseudo: str | None = Field(default=None, min_length=2, max_length=24)
     titre: str | None = Field(default=None, max_length=60)
     favoris: list[int] | None = Field(default=None, max_length=5)
+    embleme: str | None = Field(default=None, max_length=40)
 
 
 @router.patch("/api/me/profil")
@@ -98,9 +110,15 @@ def update_profile(body: ProfileIn, player: dict = Depends(current_player)):
                 raise HTTPException(422, "Pseudo trop court")
             conn.execute("UPDATE players SET pseudo = %s WHERE id = %s", (pseudo, player["id"]))
         if body.titre is not None:
-            if body.titre and body.titre not in unlocked_titles(player_stats(conn, player["id"])):
+            lvl = progression.level_for(conn.execute("SELECT xp FROM players WHERE id = %s", (player["id"],)).fetchone()["xp"])
+            if body.titre and body.titre not in titles_for(player_stats(conn, player["id"]), lvl):
                 raise HTTPException(422, "Ce titre n'est pas encore débloqué")
             conn.execute("UPDATE players SET titre = %s WHERE id = %s", (body.titre or None, player["id"]))
+        if body.embleme is not None:
+            lvl = progression.level_for(conn.execute("SELECT xp FROM players WHERE id = %s", (player["id"],)).fetchone()["xp"])
+            if body.embleme and not any(e["id"] == body.embleme and e["debloque"] for e in progression.emblems(lvl)):
+                raise HTTPException(422, "Cet emblème n'est pas encore débloqué")
+            conn.execute("UPDATE players SET embleme = %s WHERE id = %s", (body.embleme or None, player["id"]))
         if body.favoris is not None:
             ids = list(dict.fromkeys(body.favoris))  # sans doublon, ordre conservé
             owned = {r["card_id"] for r in conn.execute(
@@ -114,6 +132,7 @@ def update_profile(body: ProfileIn, player: dict = Depends(current_player)):
 @router.get("/api/me/succes")
 def my_achievements(player: dict = Depends(current_player)):
     with db.connection() as conn:
+        progression.sync_achievements(conn, player["id"])
         ach = achievements_for(player_stats(conn, player["id"]))
     return {"debloques": sum(a["debloque"] for a in ach), "total": len(ach), "succes": ach}
 
@@ -126,9 +145,21 @@ RANKINGS = {
 
 
 @router.get("/api/classement")
-def ranking(type: Literal["collection", "semaine", "bataille"] = "collection", limit: int = 50,
+def ranking(type: Literal["collection", "semaine", "bataille", "niveau"] = "collection", limit: int = 50,
             player: dict = Depends(current_player)):
     limit = max(1, min(limit, 100))
+    if type == "niveau":
+        with db.connection() as conn:
+            rows = conn.execute("""
+                SELECT p.id, coalesce(p.pseudo, %(def)s) AS pseudo, p.titre, p.xp AS valeur, p.embleme,
+                       (SELECT count(*) FROM player_cards pc WHERE pc.player_id = p.id) AS legendaires,
+                       rank() OVER (ORDER BY p.xp DESC) AS rang
+                FROM players p WHERE p.xp > 0 ORDER BY rang, pseudo""", {"def": DEFAULT_PSEUDO}).fetchall()
+        out = _ranking_out(type, "XP", rows, player, limit)
+        by_id = {r["id"]: r for r in rows}
+        for j in out["joueurs"] + ([out["moi"]] if out["moi"] else []):
+            j["progression"] = progression.summary(j["valeur"], by_id[j["id"]]["embleme"])
+        return out
     if type == "bataille":
         label = "points de rang"
         with db.connection() as conn:

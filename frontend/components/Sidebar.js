@@ -5,6 +5,7 @@ import { usePathname, useRouter } from "next/navigation";
 import { ADMIN, GROUPS, SETTINGS, groupOf, hrefOf, itemsOf, sectionForPath } from "@/lib/menu";
 import { api, logout } from "@/lib/api";
 import { usePlayer } from "@/components/PlayerProvider";
+import { Embleme } from "@/components/Progression";
 
 /* Rail d'observatoire : le menu du jeu rangé en 5 groupes (lib/menu.js, GROUPS).
    Sur mobile (≤ 860 px), il devient une barre d'onglets en bas (les groupes) et une rangée de sous-onglets en haut
@@ -58,10 +59,12 @@ export default function Sidebar() {
       </nav>
 
       <div className="ob-user">
-        <Link className="ob-avatar" href="/jeu/profil" aria-label={`Ton profil, ${pseudo}`}>{pseudo[0].toUpperCase()}</Link>
+        {stats?.progression
+          ? <Link href="/jeu/profil" aria-label={`Ton profil, ${pseudo}`}><Embleme e={stats.progression.embleme} size={34} /></Link>
+          : <Link className="ob-avatar" href="/jeu/profil" aria-label={`Ton profil, ${pseudo}`}>{pseudo[0].toUpperCase()}</Link>}
         <div>
           <b>{pseudo}</b>
-          {stats && <small>{stats.cartes_uniques.toLocaleString("fr-FR")} CARTES</small>}
+          {stats && <small>{stats.progression ? `NIV. ${stats.progression.niveau} · ` : ""}{stats.cartes_uniques.toLocaleString("fr-FR")} CARTES</small>}
         </div>
         <Link className="ob-icon" href={hrefOf(SETTINGS.slug)} aria-label="Paramètres" aria-current={path === hrefOf(SETTINGS.slug) ? "page" : undefined}>
           <i className="ph ph-gear" aria-hidden="true" />

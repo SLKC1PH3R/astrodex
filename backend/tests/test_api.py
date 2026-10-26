@@ -53,7 +53,7 @@ def test_player_opens_boosters_and_collection_grows(client):
     total = 0
     for code in ("S1A", "S1B", "S1C", "S2A", "S3A", "S3B", "S4A"):
         allowed = {c["id"] for c in client.get(f"/api/boosters/{code}/cartes").json()}
-        for _ in range(3):
+        for _ in range(1):  # 7 boosters : la réserve d'un nouveau joueur en contient 10
             r = client.post(f"/api/boosters/{code}/open", headers=h)
             assert r.status_code == 200
             cards = r.json()["cartes"]
@@ -61,7 +61,7 @@ def test_player_opens_boosters_and_collection_grows(client):
             assert {c["id"] for c in cards} <= allowed  # chaque carte vient du contenu du booster
             total += 5
     me = client.get("/api/me", headers=h).json()
-    assert me["boosters_ouverts"] == 21 and me["cartes_total"] == total
+    assert me["boosters_ouverts"] == 7 and me["reserve"]["stock"] == 3 and me["cartes_total"] == total
     prog = {b["code"]: b for b in client.get("/api/me/progression", headers=h).json()}
     assert sorted(prog) == ["S1A", "S1B", "S1C", "S2A", "S3A", "S3B", "S4A"]
     assert prog["S1C"]["total"] == 23 and 1 <= prog["S1C"]["possedees"] <= 23
