@@ -27,15 +27,18 @@ HAND = 5
 WIN_ROUNDS = 3
 SWING = 0.15
 RANKED_WIN, RANKED_LOSS = 25, 15
-RANKS = [(0, "Bronze"), (100, "Argent"), (250, "Or"), (500, "Platine"), (900, "Diamant"), (1400, "Nébuleuse")]
+# Rangs classés : (points requis, nom, devise). Ornements : frontend/public/ornements/ranked-<palier>.webp
+RANKS = [(0, "Bronze", "Combattant déterminé"), (100, "Argent", "Guerrier aguerri"), (250, "Or", "Champion redouté"),
+         (500, "Platine", "Maître tacticien"), (900, "Diamant", "Légende en devenir"), (1400, "Maître", "Élite de la galaxie"),
+         (2000, "Grand Maître", "Terreur galactique"), (2800, "Légendaire", "Mythe éternel")]
 BOTS = ["Sentinelle d'Orion", "Veilleur de Véga", "Gardien d'Andromède", "Pilote de Cassiopée", "Éclaireur de Lyra",
         "Navigateur du Cygne", "Sentinelle de Persée", "Vigie de la Licorne"]
 
 
 def rank_of(points: int) -> dict:
-    i = max(k for k, (seuil, _) in enumerate(RANKS) if points >= seuil)
+    i = max(k for k, r in enumerate(RANKS) if points >= r[0])
     nxt = RANKS[i + 1] if i + 1 < len(RANKS) else None
-    return {"nom": RANKS[i][1], "points": points, "seuil": RANKS[i][0],
+    return {"nom": RANKS[i][1], "devise": RANKS[i][2], "palier": i + 1, "points": points, "seuil": RANKS[i][0],
             "prochain": nxt[1] if nxt else None, "prochain_seuil": nxt[0] if nxt else None}
 
 
@@ -137,7 +140,8 @@ def battle_home(player: dict = Depends(current_player)):
                                     count(*) AS parties FROM battles WHERE player_id = %s""", (me,)).fetchone()
         pts = conn.execute("SELECT points_rang FROM players WHERE id = %s", (me,)).fetchone()["points_rang"]
         return {"main": hand, "stats": st, "rang": rank_of(pts), "saison_fin": season_end(),
-                "historique": _history(conn, me, 10), "taille_main": HAND, "manches_gagnantes": WIN_ROUNDS}
+                "historique": _history(conn, me, 10), "taille_main": HAND, "manches_gagnantes": WIN_ROUNDS,
+                "paliers": [{"palier": i + 1, "nom": n, "devise": d, "seuil": s} for i, (s, n, d) in enumerate(RANKS)]}
 
 
 @router.get("/api/me/bataille/historique")

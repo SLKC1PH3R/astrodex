@@ -264,3 +264,5 @@
 .pa-xp { font-family: var(--ob-mono, inherit); font-size: 12px; letter-spacing: .12em; text-transform: uppercase; color: var(--ob-sage, #aebfa2); }
 .pa-up { font-family: var(--font-heading); font-size: 22px; font-weight: 700; color: #ffcf6b; }
 @media (max-width: 640px) { .pf-level { flex-wrap: wrap; } }
+.pg-orn, .pg-banner { flex: none; object-fit: contain; display: block; }
+.pg-orn.off { filter: grayscale(1) brightness(.45); }

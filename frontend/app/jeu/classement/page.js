@@ -4,7 +4,7 @@ import Link from "next/link";
 import Topbar from "@/components/Topbar";
 import { api } from "@/lib/api";
 import { Avatar, fr } from "@/lib/social";
-import { Embleme } from "@/components/Progression";
+import { BlasonClasse, Embleme } from "@/components/Progression";
 
 /* Onglet « Classement » : podium des trois premiers, tableau, ligne du joueur toujours visible.
    Types : collection (cartes différentes), semaine (nouvelles cartes des 7 derniers jours),
@@ -98,7 +98,9 @@ function Row({ j }) {
       <td>
         <Link className="rk-who" href={j.guilde ? "/jeu/guilde" : profile(j.id)}>
           <Avatar id={j.id} pseudo={j.pseudo} size={30} />{j.pseudo}{j.moi ? " (toi)" : ""}
-          {j.progression && <Embleme e={j.progression.embleme} size={22} title={`Rang ${j.progression.rang.nom}`} />}
+          {j.progression && <Embleme e={j.progression.embleme} size={30} title={`Rang ${j.progression.rang.nom}`} />}
+          {j.classe && <BlasonClasse rang={j.classe} size={30} />}
+          {j.classe && <span className="sx-muted">{j.classe.nom}</span>}
           {j.titre && <span className="sx-muted">· {j.titre}</span>}
         </Link>
       </td>
