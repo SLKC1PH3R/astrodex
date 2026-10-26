@@ -102,8 +102,8 @@ export default function PaquetsPage() {
               </div>
               {result && (
                 <div className="ax-actions" style={{ justifyContent: "center" }}>
+                  <button className="btn btn-secondary" type="button" onClick={backToSeries}><i className="ph ph-arrow-left" />Retour aux séries</button>
                   <button className="btn btn-primary" type="button" disabled={noPacks} onClick={again}><i className="ph ph-package" />Ouvrir un autre booster</button>
-                  <button className="btn btn-secondary" type="button" onClick={backToSeries}>Changer de booster</button>
                   <button className="btn btn-secondary" type="button" onClick={() => router.push("/jeu/collection")}>Voir la collection</button>
                 </div>
               )}
