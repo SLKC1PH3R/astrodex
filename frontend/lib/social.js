@@ -27,8 +27,14 @@ export function ago(date) {
   return new Date(date).toLocaleDateString("fr-FR", { day: "numeric", month: "short" });
 }
 
-export function Avatar({ id, pseudo, size = 40, style }) {
-  return <span className="sx-av" aria-hidden="true" style={{ "--s": `${size}px`, background: avatarColor(id), ...style }}>{initial(pseudo)}</span>;
+/* img : id d'un cliché du catalogue choisi comme avatar (servi par /media), sinon initiale sur pastille colorée. */
+export function Avatar({ id, pseudo, size = 40, style, img }) {
+  return (
+    <span className="sx-av" aria-hidden="true" style={{ "--s": `${size}px`, background: img ? "#0b0c0d" : avatarColor(id), ...style }}>
+      {/* eslint-disable-next-line @next/next/no-img-element */}
+      {img ? <img src={`/media/${img}.webp`} alt="" loading="lazy" /> : initial(pseudo)}
+    </span>
+  );
 }
 
 /* Temps restant : « 3 j 14 h », « 5 h 20 min », « 12 min ». */

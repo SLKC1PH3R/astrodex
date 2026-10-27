@@ -6,7 +6,7 @@ import Carte from "@/components/Carte";
 import { usePlayer } from "@/components/PlayerProvider";
 import { api } from "@/lib/api";
 import { Avatar, fr } from "@/lib/social";
-import { Embleme, LEVEL_TITLES, LevelBar, TitreAffiche } from "@/components/Progression";
+import { BlasonClasse, Embleme, LEVEL_TITLES, LevelBar, TitreAffiche } from "@/components/Progression";
 
 /* Onglet « Profil » : bannière (pseudo, titre, emblème), niveau et XP, chiffres clés, vitrine de 5 cartes favorites,
    progression par série. /jeu/profil?id=… affiche le profil public d'un autre joueur (lecture seule).
@@ -46,8 +46,8 @@ export default function ProfilPage() {
           <>
             <section className="pf-banner" aria-label="En-tête du profil">
               {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img src="/media/saturne.webp" alt="" />
-              <Avatar id={p.id} pseudo={p.pseudo} size={104} style={{ boxShadow: "0 0 0 4px var(--color-bg), 0 0 0 6px var(--color-accent)" }} />
+              <img src={`/media/${p.banniere || "saturne"}.webp`} alt="" data-fond={p.banniere || "saturne"} />
+              <Avatar id={p.id} pseudo={p.pseudo} img={p.avatar} size={104} style={{ boxShadow: "0 0 0 4px var(--color-bg), 0 0 0 6px var(--color-accent)" }} />
               <div className="pf-id">
                 <span style={{ display: "flex", alignItems: "center", gap: 10, flexWrap: "wrap" }}>
                   {!LEVEL_TITLES.some(([, t]) => t === p.titre) && <Embleme e={p.progression.embleme} size={56} title={`Emblème ${p.progression.embleme.nom}`} />}
@@ -58,12 +58,16 @@ export default function ProfilPage() {
                   Collectionneur depuis le {new Date(p.inscrit_le).toLocaleDateString("fr-FR", { day: "numeric", month: "long", year: "numeric" })}
                 </span>
               </div>
-              {mine && (
-                <div style={{ display: "flex", gap: 8, flexWrap: "wrap" }}>
+              <div className="pf-rk" aria-label={`Rang classé ${p.classe.nom}`}>
+                <BlasonClasse rang={p.classe} size={62} plaque />
+                <span>{p.parties ? `Bataille classée · ${fr(p.classe.points)} points` : "Bataille classée · aucune partie"}</span>
+                {mine && (
+                <div style={{ display: "flex", gap: 8, flexWrap: "wrap", justifyContent: "flex-end", marginTop: 8 }}>
                   <button type="button" className="sx-btn alt" onClick={() => setEditing(true)}>Modifier le profil</button>
                   <button type="button" className="sx-btn alt" onClick={() => setPicking(true)}>Changer la vitrine</button>
                 </div>
-              )}
+                )}
+              </div>
             </section>
 
             <section className="pf-level" aria-label="Niveau">
@@ -118,19 +122,24 @@ export default function ProfilPage() {
   );
 }
 
+const FS = { border: 0, padding: 0, margin: 0, display: "flex", flexDirection: "column", gap: 8 };
+const LG = { fontSize: 13, color: "var(--color-neutral-300)", marginBottom: 6 };
+
 function EditDialog({ p, onClose, onSave }) {
   const [pseudo, setPseudo] = useState(p.pseudo === "Joueur" ? "" : p.pseudo);
   const [titre, setTitre] = useState(p.titre || "");
   const [embleme, setEmbleme] = useState(p.progression.embleme.id);
+  const [avatar, setAvatar] = useState(p.avatar || "");
+  const [banniere, setBanniere] = useState(p.banniere || "saturne");
   const [err, setErr] = useState(null);
   const submit = async e => {
     e.preventDefault();
-    try { await onSave({ ...(pseudo.trim() ? { pseudo } : {}), titre, embleme }); onClose(); }
+    try { await onSave({ ...(pseudo.trim() ? { pseudo } : {}), titre, embleme, avatar, banniere }); onClose(); }
     catch (x) { setErr(x.message); }
   };
   return (
     <div className="sx-modal-bg" onClick={onClose}>
-      <form className="sx-modal" style={{ width: "min(560px, 100%)" }} onClick={e => e.stopPropagation()} onSubmit={submit} role="dialog" aria-modal="true" aria-labelledby="pf-edit">
+      <form className="sx-modal" style={{ width: "min(620px, 100%)", maxHeight: "calc(100vh - 40px)", overflowY: "auto" }} onClick={e => e.stopPropagation()} onSubmit={submit} role="dialog" aria-modal="true" aria-labelledby="pf-edit">
         <h2 id="pf-edit">Modifier le profil</h2>
         <div className="pf-form">
           <label>Pseudo<input className="input" value={pseudo} onChange={e => setPseudo(e.target.value)} minLength={2} maxLength={24} placeholder="ex. orion42" /></label>
@@ -142,8 +151,31 @@ function EditDialog({ p, onClose, onSave }) {
           </label>
           {p.titres_disponibles.length === 0 && <span className="sx-muted">Débloque des succès et monte de niveau pour gagner des titres.</span>}
           <span className="sx-muted">Titres de niveau : {p.titres_niveau.map(t => `${t.titre} (niv. ${t.niveau})${t.debloque ? " ✓" : ""}`).join(" · ")}</span>
-          <fieldset style={{ border: 0, padding: 0, margin: 0, display: "flex", flexDirection: "column", gap: 8 }}>
-            <legend style={{ fontSize: 13, color: "var(--color-neutral-300)", marginBottom: 6 }}>Emblème affiché</legend>
+          <fieldset style={FS}>
+            <legend style={LG}>Avatar</legend>
+            <div className="pf-pics">
+              <button type="button" className="pf-pic" aria-pressed={avatar === ""} onClick={() => setAvatar("")}>
+                <Avatar id={p.id} pseudo={pseudo || p.pseudo} size={52} />Initiale
+              </button>
+              {p.avatars.map(a => (
+                <button key={a.id} type="button" className="pf-pic" aria-pressed={avatar === a.id} onClick={() => setAvatar(a.id)}>
+                  <Avatar id={p.id} pseudo={p.pseudo} img={a.id} size={52} />{a.nom}
+                </button>
+              ))}
+            </div>
+          </fieldset>
+          <fieldset style={FS}>
+            <legend style={LG}>Fond de la bannière</legend>
+            <div className="pf-pics">
+              {p.bannieres.map(b => (
+                <button key={b.id} type="button" className="pf-pic" aria-pressed={banniere === b.id} onClick={() => setBanniere(b.id)}>
+                  <span className="pf-thumb" style={{ backgroundImage: `url(/media/${b.id}.webp)` }} />{b.nom}
+                </button>
+              ))}
+            </div>
+          </fieldset>
+          <fieldset style={FS}>
+            <legend style={LG}>Emblème affiché</legend>
             <div className="pf-embs">
               {p.emblemes.map(e => (
                 <button key={e.id} type="button" className="pf-emb-pick" aria-pressed={embleme === e.id} disabled={!e.debloque} onClick={() => setEmbleme(e.id)}

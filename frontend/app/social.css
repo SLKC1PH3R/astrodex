@@ -44,7 +44,8 @@
 
 /* Avatars à initiale */
 .sx-av { flex: none; display: grid; place-items: center; border-radius: 50%; font-weight: 700; color: #fff;
-  width: var(--s, 40px); height: var(--s, 40px); font-size: calc(var(--s, 40px) * .4); }
+  width: var(--s, 40px); height: var(--s, 40px); font-size: calc(var(--s, 40px) * .4); overflow: hidden; }
+.sx-av > img { width: 100%; height: 100%; object-fit: cover; transform: scale(1.12); }
 
 /* Fenêtre modale */
 .sx-modal-bg { position: fixed; inset: 0; z-index: 40; display: grid; place-items: center; padding: 20px; background: rgba(6,7,8,.78); backdrop-filter: blur(6px); }
@@ -158,3 +159,6 @@
 .ms-time { font-size: 11px; color: var(--color-neutral-500); align-self: center; padding: 6px 0 2px; }
 .ms-form { display: flex; gap: 8px; padding: 14px 20px; border-top: 1px solid color-mix(in srgb, var(--color-text) 8%, transparent); }
 .ms-form .input { flex: 1; min-height: 44px; box-sizing: border-box; }
+/* Les globes (tout sauf Saturne et ses anneaux) sont recadrés plus petits pour qu'on lise la planète entière */
+.pf-banner > img:not([data-fond="saturne"]) { width: 560px; height: 560px; right: -40px; top: -170px; opacity: .55; }
+@media (max-width: 760px) { .pf-rk { align-items: flex-start; margin-left: 0; } }

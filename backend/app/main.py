@@ -142,10 +142,10 @@ def me(player: dict = Depends(current_player)):
                    (SELECT coalesce(sum(quantite), 0) FROM player_cards WHERE player_id = %(p)s) AS cartes_total,
                    (SELECT count(*) FROM cards WHERE NOT retired) AS catalogue""", {"p": player["id"]}).fetchone()
         progression.sync_achievements(conn, player["id"])
-        row = conn.execute("SELECT xp, embleme FROM players WHERE id = %s", (player["id"],)).fetchone()
+        row = conn.execute("SELECT xp, embleme, avatar FROM players WHERE id = %s", (player["id"],)).fetchone()
         packs = progression.public_packs(progression.pack_state(conn, player["id"]))
     return {**player, **st, "boosters_restants": packs["stock"], "reserve": packs,
-            "progression": progression.summary(row["xp"], row["embleme"])}
+            "progression": progression.summary(row["xp"], row["embleme"]), "avatar": row["avatar"]}
 
 
 @app.get("/api/me/progression")
