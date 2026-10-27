@@ -45,13 +45,33 @@ def player_stats(conn, player_id) -> dict:
     return {**{k: int(v) for k, v in st.items()}, "amis": amis, **commerce, "series": {s["code"]: s for s in series}}
 
 
+# Fonds de bannière proposés sur le profil : clichés de planètes du catalogue (servis par /media)
+BANNIERES = [("saturne", "Saturne"), ("jupiter", "Jupiter"), ("terre", "Terre"), ("mars", "Mars"), ("neptune", "Neptune"),
+             ("uranus", "Uranus"), ("venus", "Vénus"), ("mercure", "Mercure"), ("lune", "Lune"), ("pluton", "Pluton"),
+             ("io", "Io"), ("europe", "Europe"), ("titan", "Titan"), ("soleil_eruption", "Soleil")]
+BANNIERE_IDS = {b for b, _ in BANNIERES}
+# Avatars : mêmes clichés, plus quelques nébuleuses ; None = initiale du pseudo sur pastille colorée
+AVATARS = BANNIERES + [("ganymede", "Ganymède"), ("encelade", "Encelade"), ("neb-pillars_m16", "Piliers de la création"),
+                       ("neb-horsehead", "Tête de Cheval"), ("neb-cat_eye", "Œil de Chat"), ("neb-lagoon", "Lagune")]
+AVATAR_IDS = {a for a, _ in AVATARS}
+
+
+def rank_of(points: int) -> dict:
+    from .battle import rank_of as _r  # import tardif : battle importe des modules qui importent celui-ci
+    return _r(points)
+
+
+def avatar_of(value: str | None) -> str | None:
+    return value if value in AVATAR_IDS else None
+
+
 def titles_for(stats: dict, level: int) -> list[str]:
     """Titres affichables : ceux des succès débloqués et ceux des niveaux atteints."""
     return unlocked_titles(stats) + progression.level_titles(level)
 
 
 def _profile(conn, player: dict, *, me: bool) -> dict:
-    p = conn.execute("SELECT id, pseudo, created_at, favoris, titre, xp, embleme FROM players WHERE id = %s", (player["id"],)).fetchone()
+    p = conn.execute("SELECT id, pseudo, created_at, favoris, titre, xp, embleme, banniere, avatar, points_rang FROM players WHERE id = %s", (player["id"],)).fetchone()
     stats = player_stats(conn, p["id"])
     fav_ids = [i for i in (p["favoris"] or [])]
     favs = {r["id"]: card_out(r) for r in conn.execute(CARD_SELECT + " WHERE c.id = ANY(%s)", (fav_ids,)).fetchall()} if fav_ids else {}
@@ -63,12 +83,18 @@ def _profile(conn, player: dict, *, me: bool) -> dict:
         "series": list(stats["series"].values()),
         "favoris": [favs[i] for i in fav_ids if i in favs],
         "progression": progression.summary(p["xp"], p["embleme"]),
+        "banniere": p["banniere"] if p["banniere"] in BANNIERE_IDS else "saturne",
+        "avatar": avatar_of(p["avatar"]),
+        "classe": rank_of(p["points_rang"]),
+        "parties": conn.execute("SELECT count(*) AS n FROM battles WHERE player_id = %s", (p["id"],)).fetchone()["n"],
     }
     if me:
         lvl = out["progression"]["niveau"]
         out["titres_disponibles"] = titles_for(stats, lvl)
         out["titres_niveau"] = [{"niveau": n, "titre": t, "debloque": lvl >= n} for n, t in progression.LEVEL_TITLES]
         out["emblemes"] = progression.emblems(lvl)
+        out["bannieres"] = [{"id": b, "nom": n} for b, n in BANNIERES]
+        out["avatars"] = [{"id": a, "nom": n} for a, n in AVATARS]
     return out
 
 
@@ -99,6 +125,8 @@ class ProfileIn(BaseModel):
     titre: str | None = Field(default=None, max_length=60)
     favoris: list[int] | None = Field(default=None, max_length=5)
     embleme: str | None = Field(default=None, max_length=40)
+    banniere: str | None = Field(default=None, max_length=40)
+    avatar: str | None = Field(default=None, max_length=40)  # "" = revenir à l'initiale
 
 
 @router.patch("/api/me/profil")
@@ -119,6 +147,14 @@ def update_profile(body: ProfileIn, player: dict = Depends(current_player)):
             if body.embleme and not any(e["id"] == body.embleme and e["debloque"] for e in progression.emblems(lvl)):
                 raise HTTPException(422, "Cet emblème n'est pas encore débloqué")
             conn.execute("UPDATE players SET embleme = %s WHERE id = %s", (body.embleme or None, player["id"]))
+        if body.banniere is not None:
+            if body.banniere not in BANNIERE_IDS:
+                raise HTTPException(422, "Fond de bannière inconnu")
+            conn.execute("UPDATE players SET banniere = %s WHERE id = %s", (body.banniere, player["id"]))
+        if body.avatar is not None:
+            if body.avatar and body.avatar not in AVATAR_IDS:
+                raise HTTPException(422, "Avatar inconnu")
+            conn.execute("UPDATE players SET avatar = %s WHERE id = %s", (body.avatar or None, player["id"]))
         if body.favoris is not None:
             ids = list(dict.fromkeys(body.favoris))  # sans doublon, ordre conservé
             owned = {r["card_id"] for r in conn.execute(
@@ -151,7 +187,7 @@ def ranking(type: Literal["collection", "semaine", "bataille", "niveau"] = "coll
     if type == "niveau":
         with db.connection() as conn:
             rows = conn.execute("""
-                SELECT p.id, coalesce(p.pseudo, %(def)s) AS pseudo, p.titre, p.xp AS valeur, p.embleme,
+                SELECT p.id, coalesce(p.pseudo, %(def)s) AS pseudo, p.titre, p.avatar, p.xp AS valeur, p.embleme,
                        (SELECT count(*) FROM player_cards pc WHERE pc.player_id = p.id) AS legendaires,
                        rank() OVER (ORDER BY p.xp DESC) AS rang
                 FROM players p WHERE p.xp > 0 ORDER BY rang, pseudo""", {"def": DEFAULT_PSEUDO}).fetchall()
@@ -165,13 +201,12 @@ def ranking(type: Literal["collection", "semaine", "bataille", "niveau"] = "coll
         with db.connection() as conn:
             rows = conn.execute("""
                 WITH scores AS (
-                    SELECT p.id, coalesce(p.pseudo, %(def)s) AS pseudo, p.titre, p.points_rang AS valeur,
+                    SELECT p.id, coalesce(p.pseudo, %(def)s) AS pseudo, p.titre, p.avatar, p.points_rang AS valeur,
                            (SELECT count(*) FROM battles b WHERE b.player_id = p.id AND b.won) AS legendaires
                     FROM players p WHERE EXISTS (SELECT 1 FROM battles b WHERE b.player_id = p.id))
                 SELECT *, rank() OVER (ORDER BY valeur DESC, legendaires DESC) AS rang
                 FROM scores ORDER BY rang, pseudo""", {"def": DEFAULT_PSEUDO}).fetchall()
         out = _ranking_out(type, label, rows, player, limit)
-        from .battle import rank_of  # import tardif : battle importe des modules qui importent celui-ci
         for j in out["joueurs"] + ([out["moi"]] if out["moi"] else []):
             j["classe"] = rank_of(j["valeur"])
         return out
@@ -179,7 +214,7 @@ def ranking(type: Literal["collection", "semaine", "bataille", "niveau"] = "coll
     with db.connection() as conn:
         rows = conn.execute(f"""
             WITH scores AS (
-                SELECT p.id, coalesce(p.pseudo, %(def)s) AS pseudo, p.titre, {expr} AS valeur,
+                SELECT p.id, coalesce(p.pseudo, %(def)s) AS pseudo, p.titre, p.avatar, {expr} AS valeur,
                        count(pc.card_id) FILTER (WHERE c.rarete = 'L') AS legendaires
                 FROM players p JOIN player_cards pc ON pc.player_id = p.id JOIN cards c ON c.id = pc.card_id
                 GROUP BY p.id)
@@ -192,6 +227,7 @@ def _ranking_out(type: str, label: str, rows: list, player: dict, limit: int) ->
     """Pour « bataille », le champ legendaires porte le nombre de victoires (critère de départage)."""
     me = next((r for r in rows if r["id"] == player["id"]), None)
     fmt = lambda r: {"rang": r["rang"], "id": r["id"], "pseudo": r["pseudo"], "titre": r["titre"],  # noqa: E731
+                     "avatar": avatar_of(r["avatar"]),
                      "valeur": r["valeur"], "legendaires": r["legendaires"], "moi": r["id"] == player["id"]}
     return {"type": type, "libelle": label, "joueurs": [fmt(r) for r in rows[:limit]],
             "moi": fmt(me) if me else None, "participants": len(rows)}

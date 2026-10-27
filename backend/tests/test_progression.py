@@ -64,7 +64,17 @@ def test_reserve_and_xp(client):
     assert client.patch("/api/me/profil", headers=h, json={"embleme": "legende"}).status_code == 422
     assert client.patch("/api/me/profil", headers=h, json={"embleme": "poussiere"}).json()["progression"]["embleme"]["id"] == "poussiere"
     assert client.patch("/api/me/profil", headers=h, json={"titre": "Légende de la galaxie"}).status_code == 422
+    assert prof["banniere"] == "saturne" and len(prof["bannieres"]) >= 10
+    assert client.patch("/api/me/profil", headers=h, json={"banniere": "pas-une-planete"}).status_code == 422
+    assert client.patch("/api/me/profil", headers=h, json={"banniere": "jupiter"}).json()["banniere"] == "jupiter"
+    assert client.get(f"/api/joueurs/{p['id']}/profil", headers=h).json()["banniere"] == "jupiter"
+    assert prof["avatar"] is None and prof["classe"]["nom"] == "Bronze" and prof["parties"] == 0
+    assert client.patch("/api/me/profil", headers=h, json={"avatar": "../etc"}).status_code == 422
+    assert client.patch("/api/me/profil", headers=h, json={"avatar": "neb-horsehead"}).json()["avatar"] == "neb-horsehead"
+    assert client.get("/api/me", headers=h).json()["avatar"] == "neb-horsehead"
     rk = client.get("/api/classement?type=niveau", headers=h).json()
+    assert rk["moi"]["avatar"] == "neb-horsehead"
+    assert client.patch("/api/me/profil", headers=h, json={"avatar": ""}).json()["avatar"] is None
     assert rk["libelle"] == "XP" and rk["moi"]["progression"]["niveau"] >= 1
 
     # beaucoup d'XP : capacité de réserve et titres de niveau débloqués

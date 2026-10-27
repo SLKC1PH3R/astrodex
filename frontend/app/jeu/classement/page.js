@@ -63,7 +63,7 @@ export default function ClassementPage() {
                   <div key={pl.i} className="rk-pod">
                     {pl.i === 0 && <i className="ph-fill ph-crown-simple" aria-hidden="true" style={{ color: "#ffcf6b", fontSize: 26 }} />}
                     <Link href={j.guilde ? "/jeu/guilde" : profile(j.id)} aria-label={j.guilde ? j.pseudo : `Profil de ${j.pseudo}`}>
-                      <Avatar id={j.id} pseudo={j.pseudo} size={pl.s} style={{ boxShadow: `0 0 0 3px ${pl.c}` }} />
+                      <Avatar id={j.id} pseudo={j.pseudo} img={j.avatar} size={pl.s} style={{ boxShadow: `0 0 0 3px ${pl.c}` }} />
                     </Link>
                     <b>{j.pseudo}{j.moi ? " (toi)" : ""}</b>
                     <span className="sx-muted">{fr(j.valeur)} {data.libelle}</span>
@@ -97,7 +97,7 @@ function Row({ j }) {
       <td>{j.rang}</td>
       <td>
         <Link className="rk-who" href={j.guilde ? "/jeu/guilde" : profile(j.id)}>
-          <Avatar id={j.id} pseudo={j.pseudo} size={30} />{j.pseudo}{j.moi ? " (toi)" : ""}
+          <Avatar id={j.id} pseudo={j.pseudo} img={j.avatar} size={30} />{j.pseudo}{j.moi ? " (toi)" : ""}
           {j.progression && <Embleme e={j.progression.embleme} size={30} title={`Rang ${j.progression.rang.nom}`} />}
           {j.classe && <BlasonClasse rang={j.classe} size={30} />}
           {j.classe && <span className="sx-muted">{j.classe.nom}</span>}
