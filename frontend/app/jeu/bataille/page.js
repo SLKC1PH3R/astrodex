@@ -98,7 +98,7 @@ function Arena({ r, onAgain, onBack }) {
       {done && (
         <>
           <div className={`bt-verdict bt-res ${verdict}`}>{RESULT[verdict]} {r.score.moi}–{r.score.eux}</div>
-          {r.mode === "classee" && <p className="sx-muted" style={{ textAlign: "center", margin: 0 }}>{r.points > 0 ? "+" : ""}{r.points} point{Math.abs(r.points) > 1 ? "s" : ""} de rang · {r.rang.nom} ({fr(r.rang.points)} pts)</p>}
+          {r.mode === "classee" && <p className="sx-muted" style={{ textAlign: "center", margin: 0 }}>{r.points > 0 ? "+" : ""}{r.points} point{Math.abs(r.points) > 1 ? "s" : ""} de rang · {r.rang.libelle} ({fr(r.rang.points)} pts)</p>}
           {r.mode === "classee" && <div style={{ display: "flex", justifyContent: "center" }}><BlasonClasse rang={r.rang} size={64} plaque /></div>}
           <div style={{ display: "flex", justifyContent: "center", gap: 10, flexWrap: "wrap" }}>
             <button type="button" className="sx-btn" onClick={onAgain}>Rejouer</button>
@@ -142,10 +142,19 @@ export default function BataillePage() {
         {d && (
           <div className="bt-head">
             <BlasonClasse rang={d.rang} size={76} plaque />
+            <span className="bt-chip">Division <b>{d.rang.libelle}</b></span>
             <span className="bt-chip">Points de rang <b>{fr(d.rang.points)}</b></span>
             <span className="bt-chip">Victoires <b>{fr(d.stats.victoires)}</b></span>
             <span className="bt-chip">Parties <b>{fr(d.stats.parties)}</b></span>
-            {d.rang.prochain && <span className="sx-muted">Encore {fr(d.rang.prochain_seuil - d.rang.points)} pts pour {d.rang.prochain}</span>}
+            {d.rang.prochain && (
+              <div className="bt-div" aria-label={`Progression vers ${d.rang.prochain}`}>
+                <span className="sx-muted">Encore {fr(d.rang.prochain_seuil - d.rang.points)} pts pour {d.rang.prochain}</span>
+                <div className="sx-bar"><i style={{ width: `${((d.rang.points - d.rang.seuil) / (d.rang.prochain_seuil - d.rang.seuil)) * 100}%` }} /></div>
+                {d.rang.prochain_rang && d.rang.prochain_rang !== d.rang.prochain && (
+                  <small>{d.rang.prochain_rang} à {fr(d.rang.prochain_rang_seuil)} pts</small>
+                )}
+              </div>
+            )}
           </div>
         )}
         {err && <p role="alert" className="cm-msg err">{err}</p>}
@@ -202,7 +211,8 @@ export default function BataillePage() {
                 {d.paliers.map(t => (
                   <div key={t.palier} className={`bt-tier${t.palier === d.rang.palier ? " on" : ""}${t.palier > d.rang.palier ? " off" : ""}`}>
                     <BlasonClasse rang={t} size={40} />
-                    <span><b>{t.nom}</b><small>{t.devise}</small></span>
+                    <span><b>{t.nom}{t.palier === d.rang.palier && d.rang.division ? ` ${d.rang.division}` : ""}</b>
+                      <small>{t.devise}</small>{t.divisions ? <small>{t.divisions} divisions × {fr(t.pas)} pts</small> : null}</span>
                     <span className="bt-tier-pts">{t.seuil ? `${fr(t.seuil)} pts` : "Départ"}</span>
                   </div>
                 ))}

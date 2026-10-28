@@ -100,7 +100,7 @@ function Row({ j }) {
           <Avatar id={j.id} pseudo={j.pseudo} img={j.avatar} size={30} />{j.pseudo}{j.moi ? " (toi)" : ""}
           {j.progression && <Embleme e={j.progression.embleme} size={30} title={`Rang ${j.progression.rang.nom}`} />}
           {j.classe && <BlasonClasse rang={j.classe} size={30} />}
-          {j.classe && <span className="sx-muted">{j.classe.nom}</span>}
+          {j.classe && <span className="sx-muted">{j.classe.libelle}</span>}
           {j.titre && <span className="sx-muted">· {j.titre}</span>}
         </Link>
       </td>
