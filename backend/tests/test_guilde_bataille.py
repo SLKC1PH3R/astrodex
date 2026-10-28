@@ -44,7 +44,10 @@ def test_simulate_rules():
     wall = [card(20 + i, 10, 99, 50) for i in range(5)]
     r = simulate(wall, [card(30 + i, 10, 99, 40) for i in range(5)], random.Random(2))
     assert all(m["raison"] == "plus puissante" for m in r["manches"])  # personne ne perce : la plus puissante gagne
-    assert rank_of(0)["nom"] == "Bronze" and rank_of(260)["nom"] == "Or" and rank_of(5000)["prochain"] is None
+    assert rank_of(0)["libelle"] == "Bronze 1" and rank_of(0)["prochain"] == "Bronze 2" and rank_of(0)["prochain_seuil"] == 200
+    assert rank_of(999)["libelle"] == "Bronze 5" and rank_of(1000)["libelle"] == "Argent 1" and rank_of(2600)["nom"] == "Or"
+    assert rank_of(14999)["libelle"] == "Maître 5" and rank_of(15000)["libelle"] == "Grand Maître" and rank_of(15000)["division"] is None
+    assert rank_of(15000)["prochain_seuil"] - 15000 == 2800 and rank_of(17800)["palier"] == 8 and rank_of(99999)["prochain"] is None
 
 
 def test_battle_flow(client):

@@ -58,9 +58,9 @@ export default function ProfilPage() {
                   Collectionneur depuis le {new Date(p.inscrit_le).toLocaleDateString("fr-FR", { day: "numeric", month: "long", year: "numeric" })}
                 </span>
               </div>
-              <div className="pf-rk" aria-label={`Rang classé ${p.classe.nom}`}>
+              <div className="pf-rk" aria-label={`Rang classé ${p.classe.libelle}`}>
                 <BlasonClasse rang={p.classe} size={62} plaque />
-                <span>{p.parties ? `Bataille classée · ${fr(p.classe.points)} points` : "Bataille classée · aucune partie"}</span>
+                <span>{p.parties ? `${p.classe.libelle} · ${fr(p.classe.points)} points` : "Bataille classée · aucune partie"}</span>
                 {mine && (
                 <div style={{ display: "flex", gap: 8, flexWrap: "wrap", justifyContent: "flex-end", marginTop: 8 }}>
                   <button type="button" className="sx-btn alt" onClick={() => setEditing(true)}>Modifier le profil</button>

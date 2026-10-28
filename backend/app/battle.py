@@ -28,18 +28,49 @@ WIN_ROUNDS = 3
 SWING = 0.15
 RANKED_WIN, RANKED_LOSS = 25, 15
 # Rangs classés : (points requis, nom, devise). Ornements : frontend/public/ornements/ranked-<palier>.webp
-RANKS = [(0, "Bronze", "Combattant déterminé"), (100, "Argent", "Guerrier aguerri"), (250, "Or", "Champion redouté"),
-         (500, "Platine", "Maître tacticien"), (900, "Diamant", "Légende en devenir"), (1400, "Maître", "Élite de la galaxie"),
-         (2000, "Grand Maître", "Terreur galactique"), (2800, "Légendaire", "Mythe éternel")]
+# Bronze → Maître sont découpés en 5 divisions (1 → 5) ; Grand Maître et Légendaire n'en ont pas.
+# Calibrage : +25 / -15 → +5 points par partie en moyenne à 50 % de victoires, donc ~3 000 parties pour Grand Maître
+# (15 000 points), puis 2 800 points de plus pour Légendaire (~560 parties).
+RANKS = [(0, "Bronze", "Combattant déterminé"), (1000, "Argent", "Guerrier aguerri"), (2500, "Or", "Champion redouté"),
+         (4500, "Platine", "Maître tacticien"), (7000, "Diamant", "Légende en devenir"), (10500, "Maître", "Élite de la galaxie"),
+         (15000, "Grand Maître", "Terreur galactique"), (17800, "Légendaire", "Mythe éternel")]
+DIVISIONS = 5
+DIVIDED = 6  # nombre de rangs découpés en divisions (Bronze … Maître)
+
+
+def _steps() -> list[tuple[int, int, int | None]]:
+    """Toutes les marches de l'échelle : (seuil, index du rang, division ou None)."""
+    out = []
+    for i, (seuil, _, _) in enumerate(RANKS):
+        if i < DIVIDED:
+            width = (RANKS[i + 1][0] - seuil) // DIVISIONS
+            out += [(seuil + k * width, i, k + 1) for k in range(DIVISIONS)]
+        else:
+            out.append((seuil, i, None))
+    return out
+
+
+STEPS = _steps()
+
+
+def _label(i: int, div: int | None) -> str:
+    return RANKS[i][1] + (f" {div}" if div else "")
+
+
 BOTS = ["Sentinelle d'Orion", "Veilleur de Véga", "Gardien d'Andromède", "Pilote de Cassiopée", "Éclaireur de Lyra",
         "Navigateur du Cygne", "Sentinelle de Persée", "Vigie de la Licorne"]
 
 
 def rank_of(points: int) -> dict:
-    i = max(k for k, r in enumerate(RANKS) if points >= r[0])
-    nxt = RANKS[i + 1] if i + 1 < len(RANKS) else None
-    return {"nom": RANKS[i][1], "devise": RANKS[i][2], "palier": i + 1, "points": points, "seuil": RANKS[i][0],
-            "prochain": nxt[1] if nxt else None, "prochain_seuil": nxt[0] if nxt else None}
+    """nom = rang (pour l'ornement), libelle = rang et division (« Bronze 3 »), seuil / prochain_seuil = bornes de la marche."""
+    k = max(j for j, st in enumerate(STEPS) if points >= st[0])
+    seuil, i, div = STEPS[k]
+    nxt = STEPS[k + 1] if k + 1 < len(STEPS) else None
+    return {"nom": RANKS[i][1], "division": div, "libelle": _label(i, div), "devise": RANKS[i][2], "palier": i + 1,
+            "points": points, "seuil": seuil, "prochain": _label(nxt[1], nxt[2]) if nxt else None,
+            "prochain_seuil": nxt[0] if nxt else None,
+            "prochain_rang": RANKS[i + 1][1] if i + 1 < len(RANKS) else None,
+            "prochain_rang_seuil": RANKS[i + 1][0] if i + 1 < len(RANKS) else None}
 
 
 def season_end() -> datetime:
@@ -141,7 +172,9 @@ def battle_home(player: dict = Depends(current_player)):
         pts = conn.execute("SELECT points_rang FROM players WHERE id = %s", (me,)).fetchone()["points_rang"]
         return {"main": hand, "stats": st, "rang": rank_of(pts), "saison_fin": season_end(),
                 "historique": _history(conn, me, 10), "taille_main": HAND, "manches_gagnantes": WIN_ROUNDS,
-                "paliers": [{"palier": i + 1, "nom": n, "devise": d, "seuil": s} for i, (s, n, d) in enumerate(RANKS)]}
+                "paliers": [{"palier": i + 1, "nom": n, "devise": d, "seuil": s, "divisions": DIVISIONS if i < DIVIDED else 0,
+                             "pas": (RANKS[i + 1][0] - s) // DIVISIONS if i < DIVIDED else None}
+                            for i, (s, n, d) in enumerate(RANKS)]}
 
 
 @router.get("/api/me/bataille/historique")
